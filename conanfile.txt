@@ -1,0 +1,7 @@
+[requires]
+drogon/1.8.4
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
