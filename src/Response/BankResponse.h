@@ -7,7 +7,7 @@ public:
     std::string ispb;
     std::string name;
     std::optional<int> code;
-    std::string fullName;
+    std::string fullname;
 };
 
 class BankResponse: public BankResponse{
