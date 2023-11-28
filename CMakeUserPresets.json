@@ -1,0 +1,9 @@
+{
+  "version": 4,
+  "vendor": {
+    "conan": {}
+  },
+  "include": [
+    "/media/arthur/AcerSSD/Projects/OpenSource/BrasilAPI/brasilapi/build/CMakePresets.json"
+  ]
+}
