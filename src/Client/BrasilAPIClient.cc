@@ -10,6 +10,6 @@ void BrasilAPIClient::getAllBanks(std::function<void(const BankResponse&)> callb
     banksFacade.getAllBanks(callback);
 }
 
-void BrasilAPIClient::getBanksByCode(int code, std::function<void(const BankResponse&)> callback) {
+void BrasilAPIClient::getBanksByCode(int code, std::function<void(const Json::Value&)> callback) {
     banksFacade.getBanksByCode(code, callback);
 }
