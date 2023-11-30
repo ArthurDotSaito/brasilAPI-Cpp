@@ -1,5 +1,4 @@
 #include "BanksFacade.h"
-#include "BankResponse.h"
 
 void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback) {
    auto req = drogon::HttpRequest::newHttpRequest();

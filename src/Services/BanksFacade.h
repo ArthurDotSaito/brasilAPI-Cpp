@@ -1,4 +1,5 @@
 #include "BrasilAPIFacadeBase.h"
+#include "Response/BankResponse.h"
 #include <json/json.h>
 #include <functional>
 

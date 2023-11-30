@@ -1,3 +1,6 @@
+#ifndef BANK_RESPONSE_H
+#define BANK_RESPONSE_H
+
 #include<string>
 #include<optional> 
 #include<vector>
@@ -10,7 +13,9 @@ public:
     std::string fullname;
 };
 
-class BankResponse: public BankResponse{
+class BankResponse{
 public:
     std::vector<Bank> banks;
 };
+
+#endif // BANK_RESPONSE_H
