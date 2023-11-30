@@ -4,8 +4,9 @@
 #include "BrasilAPIFacadeBase.h"
 #include "Utils/BrasilAPIException.h"
 
-void BrasilAPIFacadeBase::ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& url) {
+void BrasilAPIFacadeBase::ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& path) {
     if (response->getStatusCode() > 400) {
+        std::string url = baseUrl + path;
         std::string contentString = std::string(response->getBody());
         Json::Reader reader;
         Json::Value jsonResponse;
@@ -19,7 +20,7 @@ void BrasilAPIFacadeBase::ensureSuccess(const drogon::HttpResponsePtr& response,
             }
         }
 
-        throw BrasilAPIException(message, response->getStatusCode(), url);
+        throw BrasilAPIException(message, response->getStatusCode(), path);
 
     }
 }

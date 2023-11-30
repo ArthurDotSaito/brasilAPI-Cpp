@@ -7,6 +7,7 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
    req->setPath("/banks/v1");
 
    httpClient->sendRequest(req, [this, callback](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
+        ensureSuccess(response, "/banks/v1");
         Json::Reader reader;
         Json::Value jsonResponse;
         std::string responseBody = std::string(response->getBody());
