@@ -10,18 +10,16 @@ int main() {
     BrasilAPIClient brasilAPI;
     brasilAPI.setUserAgent("MeuApp/1.0");
     
-
-    std::cout << "Iniciando a solicitação de bancos..." << std::endl;
+    std::cout << "Starting banks API request..." << std::endl;
 
     brasilAPI.getAllBanks([](const BankResponse& response) {
-        std::cout << "Callback recebido." << std::endl;
+        std::cout << "Callback received." << std::endl;
         if (response.banks.empty()) {
-        
-            std::cout << "Nenhum banco recebido." << std::endl;
+            std::cout << "No banks returned." << std::endl;
         } else {
-            std::cout << "Bancos recebidos:" << std::endl;
+            std::cout << "Banks received:" << std::endl;
             for (const auto& bank : response.banks) {
-                std::cout << "Nome do Banco: " << bank.name << std::endl;
+                std::cout << "Bank name: " << bank.name << std::endl;
             }
         }
          drogon::app().quit();
@@ -30,6 +28,6 @@ int main() {
     drogon::app()
         .setLogLevel(trantor::Logger::LogLevel::kTrace)
         .run();
-    std::cout << "Programa finalizado." << std::endl;
+    std::cout << "Program end." << std::endl;
     return 0;
 }
