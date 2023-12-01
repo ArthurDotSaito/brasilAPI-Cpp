@@ -9,6 +9,7 @@
 int main() {
     BrasilAPIClient brasilAPI;
     brasilAPI.setUserAgent("MeuApp/1.0");
+    
 
     std::cout << "Iniciando a solicitação de bancos..." << std::endl;
 
@@ -26,7 +27,9 @@ int main() {
          drogon::app().quit();
     });
 
-    drogon::app().run();
+    drogon::app()
+        .setLogLevel(trantor::Logger::LogLevel::kTrace)
+        .run();
     std::cout << "Programa finalizado." << std::endl;
     return 0;
 }

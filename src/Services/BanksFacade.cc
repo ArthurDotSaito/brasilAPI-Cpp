@@ -1,19 +1,27 @@
 #include "BanksFacade.h"
+#include <Utils/BrasilAPIException.h>
 
 void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/banks/v1");
+    req->setPath("/api/banks/v1");
     
     std::cout << "Iniciando a solicitação para: " << baseUrl + req->getPath() << std::endl;
 
     httpClient->sendRequest(req, [this, callback](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
         std::cout << "Solicitação HTTP bem-sucedida, processando resposta..." << std::endl;
-        ensureSuccess(response, "/banks/v1");
+        std::cout << "Status code: " << response->getStatusCode() << std::endl;
+        std::cout << "Response headers: " << std::endl;
+         for (auto& header : response->headers()) {
+            std::cout << header.first << ": " << header.second << std::endl;
+        }
    
         Json::Reader reader;
         Json::Value jsonResponse;
         std::string responseBody = std::string(response->getBody());
+        std::cout << "Response body: " << responseBody << std::endl;
+
+        std::cout << "respostaBody" << responseBody;
 
         if (!reader.parse(responseBody, jsonResponse)) {
             std::cerr << "Falha ao analisar a resposta JSON: " << responseBody << std::endl;
@@ -24,6 +32,7 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
 
         BankResponse bankResponse;
         try {
+            ensureSuccess(response, "/banks/v1");
             for (const auto& jsonBank : jsonResponse) {
                 Bank bank;
                 bank.ispb = jsonBank["ispb"].asString();
@@ -34,10 +43,14 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
                 bank.fullname = jsonBank["fullName"].asString();
                 bankResponse.banks.push_back(bank);
             }
-        } catch (const std::exception& e) {
-            std::cerr << "Exceção ao construir BankResponse: " << e.what() << std::endl;
+        } catch (const BrasilAPIException& e) {
+            std::cerr << "Erro ao acessar a BrasilAPI: " << e.what() << std::endl;
+            // Imprime o status code e o corpo da resposta para diagnóstico
+            std::cerr << "Status code: " << response->getStatusCode() << std::endl;
+            std::cerr << "Response body: " << response->getBody() << std::endl;
             return;
         }
+
 
         std::cout << "BankResponse construído, invocando callback..." << std::endl;
         callback(bankResponse);

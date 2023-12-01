@@ -4,7 +4,7 @@
 class BrasilAPIFacadeBase{
     protected:
         std::shared_ptr<drogon::HttpClient> httpClient;
-        const std::string baseUrl = "https://brasilapi.com.br/api";
+        const std::string baseUrl = "https://brasilapi.com.br";
 
     public:
         BrasilAPIFacadeBase(){
