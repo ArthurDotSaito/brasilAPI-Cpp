@@ -1,5 +1,6 @@
 #include <drogon/HttpClient.h>
 
+
 class BrasilAPIFacadeBase{
     protected:
         std::shared_ptr<drogon::HttpClient> httpClient;
@@ -8,6 +9,7 @@ class BrasilAPIFacadeBase{
     public:
         BrasilAPIFacadeBase(){
             httpClient = drogon::HttpClient::newHttpClient(baseUrl);
+            
         }
         void ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& url);
 };

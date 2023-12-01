@@ -5,7 +5,7 @@
 int main(){
     drogon::app()
         .loadConfigFile("config.json")
-        .setLogLevel(trantor::Logger::kWarn)
+        .setLogLevel(trantor::Logger::LogLevel::kTrace)
         .run();
     
     return 0;
