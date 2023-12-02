@@ -1,0 +1,4 @@
+/media/arthur/AcerSSD/Projects/OpenSource/BrasilAPI/brasilapi/CMakeFiles/rebuild_cache.dir
+/media/arthur/AcerSSD/Projects/OpenSource/BrasilAPI/brasilapi/CMakeFiles/edit_cache.dir
+/media/arthur/AcerSSD/Projects/OpenSource/BrasilAPI/brasilapi/CMakeFiles/gtest_main.dir
+/media/arthur/AcerSSD/Projects/OpenSource/BrasilAPI/brasilapi/CMakeFiles/gtest.dir

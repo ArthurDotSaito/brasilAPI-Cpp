@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
-project(brasilapi-cc)
+project(brasilapi-cc VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(GTest REQUIRED)
 find_package(Drogon REQUIRED)
 message(STATUS "Drogon include directories: ${DROGON_INCLUDE_DIRS}")
-find_package(GTest REQUIRED)
 
 # Define source files
 file(GLOB_RECURSE PROJECT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
@@ -22,6 +22,11 @@ add_executable(${PROJECT_NAME} src/main.cc)
 target_link_libraries(${PROJECT_NAME} PRIVATE brasilapi)
 
 # Test
+file(GLOB TEST_SOURCES "src/Tests/*.cc")
+add_executable(tests ${TEST_SOURCES})
+target_include_directories(tests PRIVATE ${CONAN_INCLUDE_DIRS_GTEST})
+target_link_libraries(tests PRIVATE brasilapi GTest::GTest GTest::Main)
+
 add_executable(test_brasilapi_client src/Examples/mainExample.cc)
 target_include_directories(test_brasilapi_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(test_brasilapi_client PRIVATE brasilapi)
