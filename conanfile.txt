@@ -1,5 +1,6 @@
 [requires]
 drogon/1.8.4
+gtest/1.11.0 
 
 [generators]
 CMakeDeps

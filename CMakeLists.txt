@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Drogon REQUIRED)
 message(STATUS "Drogon include directories: ${DROGON_INCLUDE_DIRS}")
+find_package(GTest REQUIRED)
 
 # Define source files
 file(GLOB_RECURSE PROJECT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
