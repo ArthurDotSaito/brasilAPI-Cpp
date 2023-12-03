@@ -11,11 +11,16 @@ public:
     std::string name;
     std::optional<int> code;
     std::string fullname;
+
+    Json::Value toJsonValue() const;
+    static Bank fromJsonValue(const Json::Value& jsonValue);
 };
 
 class BankResponse{
 public:
     std::vector<Bank> banks;
+    Json::Value toJsonValue() const;
+    static BankResponse fromJsonValue(const Json::Value& jsonValue);
 };
 
 #endif // BANK_RESPONSE_H
