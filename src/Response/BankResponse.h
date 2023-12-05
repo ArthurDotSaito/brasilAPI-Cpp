@@ -4,8 +4,10 @@
 #include<string>
 #include<optional> 
 #include<vector>
+#include <json/json.h>
+#include "BaseResponse.h"
 
-class Bank {
+class Bank:public BaseResponse {
 public:
     std::string ispb;
     std::string name;
@@ -16,11 +18,12 @@ public:
     static Bank fromJsonValue(const Json::Value& jsonValue);
 };
 
-class BankResponse{
+class BankResponse: public BaseResponse{
 public:
     std::vector<Bank> banks;
     Json::Value toJsonValue() const;
     static BankResponse fromJsonValue(const Json::Value& jsonValue);
 };
+
 
 #endif // BANK_RESPONSE_H
