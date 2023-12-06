@@ -23,3 +23,24 @@ TEST_F(BrasilAPIClientTests, TestGetAllBanks) {
 
     EXPECT_FALSE(response.banks.empty());
 }
+
+TEST_F(BrasilAPIClientTests, TestGetBankByCode) {
+    //Arrange
+    std::promise<Bank> promise;
+    auto future = promise.get_future();
+
+    //Act
+    brasilAPI.getBanksByCode(1, [&promise](const Bank& response) {
+        promise.set_value(response);
+    });
+
+    future.wait();
+    auto response = future.get();
+    //Assert
+
+    EXPECT_FALSE(response.name.empty());
+    EXPECT_FALSE(response.fullname.empty());
+    EXPECT_FALSE(response.ispb.empty());
+    EXPECT_TRUE(response.code.has_value());
+    EXPECT_EQ(response.code.value(), 1);
+}
