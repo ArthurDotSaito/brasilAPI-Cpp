@@ -9,7 +9,7 @@ Json::Value Bank::toJsonValue() const {
     jsonValue["name"] = name;
     if (code.has_value()) {
         jsonValue["code"] = *code;  
-    jsonValue["fullname"] = fullname;
+    jsonValue["fullName"] = fullName;
 
     return jsonValue;
     };
@@ -25,7 +25,7 @@ Bank Bank::fromJsonValue(const Json::Value& jsonValue){
         bank.code = jsonValue["code"].asInt();
     }
 
-    bank.fullname = jsonValue["fullname"].asString();
+    bank.fullName = jsonValue["fullName"].asString();
 
     return bank;
 };

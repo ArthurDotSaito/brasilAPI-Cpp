@@ -1,5 +1,5 @@
-#include "Client/BrasilAPIClient.h"
 #include <gtest/gtest.h>
+#include "../../Client/BrasilAPIClient.h"
 
 class BrasilAPIClientTests : public ::testing::Test {
 protected:
@@ -39,7 +39,7 @@ TEST_F(BrasilAPIClientTests, TestGetBankByCode) {
     //Assert
 
     EXPECT_FALSE(response.name.empty());
-    EXPECT_FALSE(response.fullname.empty());
+    EXPECT_FALSE(response.fullName.empty());
     EXPECT_FALSE(response.ispb.empty());
     EXPECT_TRUE(response.code.has_value());
     EXPECT_EQ(response.code.value(), 1);

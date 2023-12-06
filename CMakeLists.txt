@@ -22,14 +22,15 @@ add_executable(${PROJECT_NAME} src/main.cc)
 target_link_libraries(${PROJECT_NAME} PRIVATE brasilapi)
 
 # Test
-file(GLOB TEST_SOURCES "src/Tests/*.cc")
+set(TEST_SOURCES
+    src/Tests/Services/BanksTest.cc
+    src/Tests/main-test.cc 
+)
 add_executable(tests ${TEST_SOURCES})
-target_include_directories(tests PRIVATE ${CONAN_INCLUDE_DIRS_GTEST})
+target_include_directories(tests PRIVATE ${GTEST_INCLUDE_DIRS})
+target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)  
 target_link_libraries(tests PRIVATE brasilapi GTest::GTest GTest::Main)
 
-add_executable(test_brasilapi_client src/Examples/mainExample.cc)
-target_include_directories(test_brasilapi_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(test_brasilapi_client PRIVATE brasilapi)
 
 # Instalação e exportação
 install(TARGETS brasilapi

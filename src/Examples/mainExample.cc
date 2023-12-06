@@ -29,7 +29,7 @@ int main() {
         std::cout << "Callback received." << std::endl;
         std::cout << "Bank Name: " << bank.name << std::endl;
         std::cout << "Bank Code: " << (bank.code.has_value() ? std::to_string(bank.code.value()) : "N/A") << std::endl;
-        std::cout << "Fullname: " << bank.fullname << std::endl;
+        std::cout << "Fullname: " << bank.fullName << std::endl;
         drogon::app().quit();
     });
 

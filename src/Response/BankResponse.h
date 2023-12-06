@@ -12,7 +12,7 @@ public:
     std::string ispb;
     std::string name;
     std::optional<int> code;
-    std::string fullname;
+    std::string fullName;
 
     Json::Value toJsonValue() const;
     static Bank fromJsonValue(const Json::Value& jsonValue);
