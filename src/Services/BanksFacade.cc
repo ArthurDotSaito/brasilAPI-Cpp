@@ -5,9 +5,10 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
     req->setPath("/api/banks/v1");
-    std::cout << "Iniciando a solicitação para: " << baseUrl + req->getPath() << std::endl;std::string baseUrl = "/api/banks/v1/";
+    std::string fullUrl = baseUrl + req->getPath();
+    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
     
-    httpClient->sendRequest(req, [this, callback, baseUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
+    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
         ensureSuccess(response, "api/banks/v1");
         Json::Reader reader;
         Json::Value jsonResponse;
@@ -19,7 +20,7 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
         }
 
         BankResponse bankResponse = BankResponse::fromJsonValue(jsonResponse);
-        bankResponse.calledURL = baseUrl;
+        bankResponse.calledURL = fullUrl;
         bankResponse.jsonResponse = responseBody;
         callback(bankResponse);
     });

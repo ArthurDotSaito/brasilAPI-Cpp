@@ -9,6 +9,7 @@ public:
 
     void getAllBanks(std::function<void(const BankResponse&)> callback);
     void getBanksByCode(int code, std::function<void(const Bank&)> callback);
+
 private:
     BanksFacade banksFacade;
     std::string userAgent;
