@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include "../../Client/BrasilAPIClient.h"
+#include <chrono>
+
 
 class BrasilAPIClientTests : public ::testing::Test {
 protected:
@@ -18,10 +20,12 @@ TEST_F(BrasilAPIClientTests, TestGetAllBanks) {
         promise.set_value(response);
     });
 
-    future.wait();
-    auto response = future.get();
-
-    EXPECT_FALSE(response.banks.empty());
+    if (future.wait_for(std::chrono::seconds(10)) == std::future_status::timeout) {
+        FAIL() << "Timeout waiting for response";
+    } else {
+        auto response = future.get();
+        EXPECT_FALSE(response.banks.empty());
+    }
 }
 
 TEST_F(BrasilAPIClientTests, TestGetBankByCode) {

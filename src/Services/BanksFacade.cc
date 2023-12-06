@@ -4,12 +4,11 @@
 void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
-    std::string baseUrl = "/api/banks/v1/";
-    req->setPath(baseUrl);
+    req->setPath("/api/banks/v1");
+    std::cout << "Iniciando a solicitação para: " << baseUrl + req->getPath() << std::endl;std::string baseUrl = "/api/banks/v1/";
     
-
     httpClient->sendRequest(req, [this, callback, baseUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        ensureSuccess(response, "/banks/v1");
+        ensureSuccess(response, "api/banks/v1");
         Json::Reader reader;
         Json::Value jsonResponse;
         std::string responseBody = std::string(response->getBody());
@@ -34,7 +33,7 @@ void BanksFacade::getBanksByCode(int code, std::function<void(const Bank&)> call
     std::string baseUrl = "/api/banks/v1/" + std::to_string(code);
 
     httpClient->sendRequest(req, [this, callback, baseUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        ensureSuccess(response, "/banks/v1/{code}");
+        ensureSuccess(response, "api/banks/v1/{code}");
         Json::Reader reader;
         Json::Value jsonResponse;
         std::string responseBody = std::string(response->getBody());

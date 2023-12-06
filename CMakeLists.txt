@@ -31,6 +31,9 @@ target_include_directories(tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_include_directories(tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)  
 target_link_libraries(tests PRIVATE brasilapi GTest::GTest GTest::Main)
 
+add_executable(test_brasilapi_client src/Examples/mainExample.cc)
+target_include_directories(test_brasilapi_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(test_brasilapi_client PRIVATE brasilapi)
 
 # Instalação e exportação
 install(TARGETS brasilapi

@@ -1,4 +1,4 @@
-// main.cpp para testar BrasilAPIClient
+// mainExample.cpp para testar BrasilAPIClient
 #include "Client/BrasilAPIClient.h"
 #include <iostream>
 #include <drogon/drogon.h>
@@ -22,7 +22,6 @@ int main() {
                 std::cout << "Bank name: " << bank.name << std::endl;
             }
         }
-         drogon::app().quit();
     });
 
     brasilAPI.getBanksByCode(1, [](const Bank& bank) {
