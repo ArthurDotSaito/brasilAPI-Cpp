@@ -14,21 +14,12 @@ int main() {
 
     brasilAPI.getAllBanks([](const BankResponse& response) {
         std::cout << "Callback received." << std::endl;
-        if (response.banks.empty()) {
-            std::cout << "No banks returned." << std::endl;
-        } else {
-            std::cout << "Banks received:" << std::endl;
-            for (const auto& bank : response.banks) {
-                std::cout << "Bank name: " << bank.name << std::endl;
-            }
-        }
+        std::cout << response.serialize() << std::endl;
     });
 
-    brasilAPI.getBanksByCode(1, [](const Bank& bank) {
+    brasilAPI.getBanksByCode(1, [](const Bank& response) {
         std::cout << "Callback received." << std::endl;
-        std::cout << "Bank Name: " << bank.name << std::endl;
-        std::cout << "Bank Code: " << (bank.code.has_value() ? std::to_string(bank.code.value()) : "N/A") << std::endl;
-        std::cout << "Fullname: " << bank.fullName << std::endl;
+        std::cout << response.serialize() << std::endl;
         drogon::app().quit();
     });
 
