@@ -2,8 +2,6 @@
 #define CEP_RESPONSE_H
 
 #include<string>
-#include<optional> 
-#include<vector>
 #include <json/json.h>
 #include "BaseResponse.h"
 
@@ -16,8 +14,20 @@ public:
     std::string street;
     std::string service;
 
-    Json::Value toJsonValue() const;
-    static CepResponse fromJsonValue(const Json::Value& jsonValue);
+    std::string serialize() const {
+        Json::Value jsonCep;
+        jsonCep["cep"] = cep;
+        jsonCep["state"] = state;
+        jsonCep["city"] = city;
+        jsonCep["neighborhood"] = neighborhood;
+        jsonCep["street"] = street;
+        jsonCep["service"] = service;
+
+        Json::StreamWriterBuilder builder;
+        builder["commentStyle"] = "None";
+        builder["indentation"] = "";  
+        return Json::writeString(builder, jsonCep);
+    }
 };
 
 #endif // CEP_RESPONSE_H
