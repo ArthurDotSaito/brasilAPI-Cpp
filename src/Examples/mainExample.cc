@@ -12,20 +12,8 @@ int main() {
     
     std::cout << "Starting banks API request..." << std::endl;
 
-    brasilAPI.getAllBanks([](const BankResponse& response) {
-        std::cout << "Callback received." << std::endl;
-        std::cout << response.serialize() << std::endl;
-    });
+    brasilAPI.getAllBanks();
+    brasilAPI.getBanksByCode(1);
 
-    brasilAPI.getBanksByCode(1, [](const Bank& response) {
-        std::cout << "Callback received." << std::endl;
-        std::cout << response.serialize() << std::endl;
-        drogon::app().quit();
-    });
-
-    drogon::app()
-        .setLogLevel(trantor::Logger::LogLevel::kTrace)
-        .run();
-    std::cout << "Program end." << std::endl;
     return 0;
 }
