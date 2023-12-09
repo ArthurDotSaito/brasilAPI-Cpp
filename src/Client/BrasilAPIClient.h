@@ -1,20 +1,33 @@
 #include "Services/BanksFacade.h"
 #include "Response/BankResponse.h"
+#include <drogon/drogon.h>
 
 class BrasilAPIClient {
 private:
-
     BanksFacade banksFacade;
     std::string userAgent;
+    std::thread eventLoopThread;
+    std::mutex mutex;
 
-
+    void startEventLoop() {
+        std::lock_guard<std::mutex> lock(mutex);
+        if (!eventLoopThread.joinable()) {
+            eventLoopThread = std::thread([]() {
+                drogon::app().run();
+            });
+        }
+    }
 public:
     BrasilAPIClient();
+    ~BrasilAPIClient();
 
     void setUserAgent(const std::string& userAgent);
 
+    // Funções que usam callbacks
     void getAllBanks(std::function<void(const BankResponse&)> callback);
-    std::string getAllBanks();
     void getBanksByCode(int code, std::function<void(const Bank&)> callback);
-    std::string getBanksByCode(int code);
+
+    // Funções que retornam std::future<std::string>
+    std::future<std::string> getAllBanksAsync();
+    std::future<std::string> getBanksByCodeAsync(int code);
 };

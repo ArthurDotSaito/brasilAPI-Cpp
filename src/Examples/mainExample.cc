@@ -12,8 +12,13 @@ int main() {
     
     std::cout << "Starting banks API request..." << std::endl;
 
-    brasilAPI.getAllBanks();
-    brasilAPI.getBanksByCode(1);
+    auto futureBanks = brasilAPI.getAllBanksAsync();
+    auto banksData = futureBanks.get(); 
+    std::cout << "Banks Data: " << banksData << std::endl;
+
+    auto futureBank = brasilAPI.getBanksByCodeAsync(1);
+    auto bankData = futureBank.get();
+    std::cout << "Bank Data: " << bankData << std::endl;
 
     return 0;
 }

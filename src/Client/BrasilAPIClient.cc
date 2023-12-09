@@ -1,7 +1,16 @@
 #include "BrasilAPIClient.h"
 #include <drogon/drogon.h>
 
-BrasilAPIClient::BrasilAPIClient() : banksFacade() {}
+BrasilAPIClient::BrasilAPIClient() : banksFacade() {
+    startEventLoop();
+}
+
+BrasilAPIClient::~BrasilAPIClient() {
+    if (eventLoopThread.joinable()) {
+        drogon::app().quit();
+        eventLoopThread.join();
+    }
+}
 
 void BrasilAPIClient::setUserAgent(const std::string& ua) {
     userAgent = ua;
@@ -15,36 +24,20 @@ void BrasilAPIClient::getBanksByCode(int code, std::function<void(const Bank&)> 
     banksFacade.getBanksByCode(code, callback);
 }
 
-std::string BrasilAPIClient::getAllBanks() {
-    std::promise<std::string> promise;
-    std::future<std::string> future = promise.get_future();
-
-    banksFacade.getAllBanks([this, &promise](const BankResponse& response) {
-        std::string serializedData = response.serialize();
-        std::cout << serializedData << std::endl;
-        promise.set_value(serializedData);
+std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
+    auto promisePtr = std::make_shared<std::promise<std::string>>();
+    auto future = promisePtr->get_future();
+    banksFacade.getAllBanks([this, promisePtr](const BankResponse& response) {
+        promisePtr->set_value(response.serialize());
     });
-
-    std::thread([this]() {
-        drogon::app().run();
-    }).detach();
-
-    return future.get(); 
+    return future;
 }
 
-std::string BrasilAPIClient::getBanksByCode(int code) {
-    std::promise<std::string> promise;
-    std::future<std::string> future = promise.get_future();
-
-    banksFacade.getBanksByCode(code, [this, &promise, code](const Bank& bank) {
-        std::string serializedData = bank.serialize();
-        std::cout << serializedData << std::endl;
-        promise.set_value(serializedData); 
+std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
+    auto promisePtr = std::make_shared<std::promise<std::string>>();
+    auto future = promisePtr->get_future();
+    banksFacade.getBanksByCode(code, [this, promisePtr, code](const Bank& bank) {
+        promisePtr->set_value(bank.serialize());
     });
-
-    std::thread([this]() {
-        drogon::app().run();
-    }).detach();
-
-    return future.get(); 
+    return future;
 }
