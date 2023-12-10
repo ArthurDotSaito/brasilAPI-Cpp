@@ -1,7 +1,7 @@
-#include "BanksFacade.h"
+#include "BanksHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback) {
+void BanksHandler::getAllBanks(std::function<void(const BankResponse&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
     req->setPath("/api/banks/v1");
@@ -35,9 +35,7 @@ void BanksFacade::getAllBanks(std::function<void(const BankResponse&)> callback)
     });
 }
 
-
-
-void BanksFacade::getBanksByCode(int code, std::function<void(const Bank&)> callback) {
+void BanksHandler::getBanksByCode(int code, std::function<void(const Bank&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
     req->setPath("/api/banks/v1/" + std::to_string(code));

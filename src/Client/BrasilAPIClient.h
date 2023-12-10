@@ -1,10 +1,10 @@
-#include "Services/BanksFacade.h"
+#include "Handlers/BanksHandler.h"
 #include "Response/BankResponse.h"
 #include <drogon/drogon.h>
 
 class BrasilAPIClient {
 private:
-    BanksFacade banksFacade;
+    BanksHandler banksHandler;
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;

@@ -1,10 +1,10 @@
 #ifndef BRASIL_API_EXCEPTION_H
 #define BRASIL_API_EXCEPTION_H
 
-#include "BrasilAPIFacadeBase.h"
+#include "BrasilAPIHandlerBase.h"
 #include "Utils/BrasilAPIException.h"
 
-void BrasilAPIFacadeBase::ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& path) {
+void BrasilAPIHandlerBase::ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& path) {
     if (response->getStatusCode() > 400) {
         std::string url = baseUrl + path;
         std::string contentString = std::string(response->getBody());
