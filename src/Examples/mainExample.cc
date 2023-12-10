@@ -24,5 +24,8 @@ int main() {
     auto cepData = futureCep.get();
     std::cout << "Cep Data: " << cepData << std::endl;
 
+    auto futureCepV2 = brasilAPI.getCepV2Async(89010025);
+    auto cepDataV2 = futureCepV2.get();
+    std::cout << "Cep Data V2: " << cepDataV2 << std::endl;
     return 0;
 }

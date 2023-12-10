@@ -5,6 +5,16 @@
 #include <json/json.h>
 #include "BaseResponse.h"
 
+struct Coordinates {
+    std::string longitude;
+    std::string latitude;
+};
+
+struct Location {
+    std::string type;
+    Coordinates coordinates;
+};
+
 class CepResponse:public BaseResponse {
 public:
     std::string cep;
@@ -13,6 +23,7 @@ public:
     std::string neighborhood;
     std::string street;
     std::string service;
+    Location location;
 
     std::string serialize() const {
         Json::Value jsonCep;
@@ -22,6 +33,13 @@ public:
         jsonCep["neighborhood"] = neighborhood;
         jsonCep["street"] = street;
         jsonCep["service"] = service;
+
+        Json::Value jsonLocation;
+        jsonLocation["type"] = location.type;
+        jsonLocation["coordinates"]["longitude"] = location.coordinates.longitude;
+        jsonLocation["coordinates"]["latitude"] = location.coordinates.latitude;
+
+        jsonCep["location"] = jsonLocation;
 
         Json::StreamWriterBuilder builder;
         builder["commentStyle"] = "None";
