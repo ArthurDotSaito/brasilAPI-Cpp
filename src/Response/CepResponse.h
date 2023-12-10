@@ -26,26 +26,27 @@ public:
     Location location;
 
     std::string serialize() const {
-        Json::Value jsonCep;
-        jsonCep["cep"] = cep;
-        jsonCep["state"] = state;
-        jsonCep["city"] = city;
-        jsonCep["neighborhood"] = neighborhood;
-        jsonCep["street"] = street;
-        jsonCep["service"] = service;
+    Json::Value jsonCep;
+    jsonCep["cep"] = cep;
+    jsonCep["state"] = state;
+    jsonCep["city"] = city;
+    jsonCep["neighborhood"] = neighborhood;
+    jsonCep["street"] = street;
+    jsonCep["service"] = service;
 
+    if (!location.coordinates.longitude.empty() && !location.coordinates.latitude.empty()) {
         Json::Value jsonLocation;
         jsonLocation["type"] = location.type;
         jsonLocation["coordinates"]["longitude"] = location.coordinates.longitude;
         jsonLocation["coordinates"]["latitude"] = location.coordinates.latitude;
-
         jsonCep["location"] = jsonLocation;
-
-        Json::StreamWriterBuilder builder;
-        builder["commentStyle"] = "None";
-        builder["indentation"] = "";  
-        return Json::writeString(builder, jsonCep);
     }
+
+    Json::StreamWriterBuilder builder;
+    builder["commentStyle"] = "None";
+    builder["indentation"] = "";  
+    return Json::writeString(builder, jsonCep);
+}
 };
 
 #endif // CEP_RESPONSE_H
