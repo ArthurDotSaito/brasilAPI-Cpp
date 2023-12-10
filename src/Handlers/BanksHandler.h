@@ -1,6 +1,5 @@
 #include "BrasilAPIHandlerBase.h"
 #include "Response/BankResponse.h"
-#include <json/json.h>
 #include <functional>
 
 class BanksHandler: public BrasilAPIHandlerBase{
