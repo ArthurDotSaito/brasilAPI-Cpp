@@ -1,5 +1,7 @@
-#include <drogon/HttpClient.h>
+#ifndef BRASIL_API_HANDLER_BASE_H
+#define BRASIL_API_HANDLER_BASE_H
 
+#include <drogon/HttpClient.h>
 
 class BrasilAPIHandlerBase{
     protected:
@@ -13,3 +15,5 @@ class BrasilAPIHandlerBase{
         }
         void ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& url);
 };
+
+#endif // BRASIL_API_HANDLER_BASE_H

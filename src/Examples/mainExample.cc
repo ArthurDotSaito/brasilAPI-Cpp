@@ -20,5 +20,9 @@ int main() {
     auto bankData = futureBank.get();
     std::cout << "Bank Data: " << bankData << std::endl;
 
+    auto futureCep = brasilAPI.getCepAsync(89010025);
+    auto cepData = futureCep.get();
+    std::cout << "Cep Data: " << cepData << std::endl;
+
     return 0;
 }

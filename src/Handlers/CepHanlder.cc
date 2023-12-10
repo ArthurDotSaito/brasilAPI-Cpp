@@ -1,4 +1,5 @@
 #include "CepHandler.h"
+#include <Utils/BrasilAPIException.h>
 
 void CepHandler::getCep(int cep, std::function<void(const CepResponse&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
