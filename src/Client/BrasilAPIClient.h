@@ -1,10 +1,13 @@
+#include <drogon/drogon.h>
 #include "Handlers/BanksHandler.h"
 #include "Response/BankResponse.h"
-#include <drogon/drogon.h>
+#include "Handlers/CepHandler.h"
+#include "Response/CepResponse.h"
 
 class BrasilAPIClient {
 private:
     BanksHandler banksHandler;
+    CepHandler cepHandler;
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;
@@ -26,8 +29,10 @@ public:
     // Funções que usam callbacks
     void getAllBanks(std::function<void(const BankResponse&)> callback);
     void getBanksByCode(int code, std::function<void(const Bank&)> callback);
+    void getCep(int cep, std::function<void(const CepResponse&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
     std::future<std::string> getBanksByCodeAsync(int code);
+    std::future<std::string> getCepAsync(int cep);
 };

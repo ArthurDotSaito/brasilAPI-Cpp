@@ -24,6 +24,10 @@ void BrasilAPIClient::getBanksByCode(int code, std::function<void(const Bank&)> 
     banksHandler.getBanksByCode(code, callback);
 }
 
+void BrasilAPIClient::getCep(int cep, std::function<void(const CepResponse&)> callback) {
+    cepHandler.getCep(cep, callback);
+}
+
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
     auto promisePtr = std::make_shared<std::promise<std::string>>();
     auto future = promisePtr->get_future();
@@ -38,6 +42,15 @@ std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
     auto future = promisePtr->get_future();
     banksHandler.getBanksByCode(code, [this, promisePtr, code](const Bank& bank) {
         promisePtr->set_value(bank.serialize());
+    });
+    return future;
+}
+
+std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
+    auto promisePtr = std::make_shared<std::promise<std::string>>();
+    auto future = promisePtr->get_future();
+    cepHandler.getCep(cep, [this, promisePtr, cep](const CepResponse& cepRespose) {
+        promisePtr->set_value(cepRespose.serialize());
     });
     return future;
 }

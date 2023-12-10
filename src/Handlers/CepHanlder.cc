@@ -19,6 +19,7 @@ void CepHandler::getCep(int cep, std::function<void(const CepResponse&)> callbac
             cepResponse.neighborhood = jsonResponse["neighborhood"].asString();
             cepResponse.street = jsonResponse["street"].asString();
             cepResponse.service = jsonResponse["service"].asString();
+            cepResponse.calledURL = fullUrl;
         } else {
             std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
             return;
