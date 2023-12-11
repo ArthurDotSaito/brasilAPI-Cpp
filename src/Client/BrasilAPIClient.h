@@ -10,6 +10,7 @@ class BrasilAPIClient {
 private:
     BanksHandler banksHandler;
     CepHandler cepHandler;
+    CNPJHandler cnpjHandler;
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;
