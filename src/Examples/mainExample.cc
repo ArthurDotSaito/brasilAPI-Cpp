@@ -27,5 +27,9 @@ int main() {
     auto futureCepV2 = brasilAPI.getCepV2Async(89010025);
     auto cepDataV2 = futureCepV2.get();
     std::cout << "Cep Data V2: " << cepDataV2 << std::endl;
+
+    auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
+    auto cnpjData = futureCNPJ.get();
+    std::cout << "CNPJ Data: " << cnpjData << std::endl;
     return 0;
 }

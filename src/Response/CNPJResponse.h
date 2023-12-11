@@ -54,7 +54,8 @@ public:
     std::optional<std::string> ddd_fax;
     int qualificacao_do_responsavel;
     double capital_social;
-    int porte;
+    int codigo_porte;
+    std::string porte;
     std::string descricao_porte;
     bool opcao_pelo_simples;
     std::optional<std::string> data_opcao_pelo_simples;
@@ -95,6 +96,7 @@ public:
         jsonCNPJ["ddd_fax"] = ddd_fax.has_value() ? ddd_fax.value() : Json::Value(Json::nullValue);
         jsonCNPJ["qualificacao_do_responsavel"] = qualificacao_do_responsavel;
         jsonCNPJ["capital_social"] = capital_social;
+        jsonCNPJ["codigo_porte"] = codigo_porte;
         jsonCNPJ["porte"] = porte;
         jsonCNPJ["descricao_porte"] = descricao_porte;
         jsonCNPJ["opcao_pelo_simples"] = opcao_pelo_simples;
