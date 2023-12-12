@@ -12,7 +12,7 @@ int main() {
     
     std::cout << "Starting banks API request..." << std::endl;
 
-    auto futureBanks = brasilAPI.getAllBanksAsync();
+/*     auto futureBanks = brasilAPI.getAllBanksAsync();
     auto banksData = futureBanks.get(); 
     std::cout << "Banks Data: " << banksData << std::endl;
 
@@ -31,12 +31,15 @@ int main() {
     auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
     auto cnpjData = futureCNPJ.get();
     std::cout << "CNPJ Data: " << cnpjData << std::endl;
-
+ */
 
     auto futureCorretoras = brasilAPI.getAllCorretorasAsync();
     auto corretorasData = futureCorretoras.get();
     std::cout << "Corretoras Data: " << corretorasData << std::endl;
 
-    
+    auto futureCorretora = brasilAPI.getCorretorasByCnpjAsync("02332886000104");
+    auto corretoraData = futureCorretora.get();
+    std::cout << "Corretora Data: " << corretoraData << std::endl;
+
     return 0;
 }

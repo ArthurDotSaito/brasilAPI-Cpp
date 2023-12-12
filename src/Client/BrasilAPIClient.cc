@@ -40,6 +40,10 @@ void BrasilAPIClient::getAllCorretoras(std::function<void(const CorretorasRespon
     corretorasHandler.getAllCorretoras(callback);
 }
 
+void BrasilAPIClient::getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras&)> callback) {
+    corretorasHandler.getCorretorasByCnpj(cnpj, callback);
+}
+
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
     auto promisePtr = std::make_shared<std::promise<std::string>>();
     auto future = promisePtr->get_future();
@@ -89,6 +93,15 @@ std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
     auto promisePtr = std::make_shared<std::promise<std::string>>();
     auto future = promisePtr->get_future();
     corretorasHandler.getAllCorretoras([this, promisePtr](const CorretorasResponse& corretorasResponse) {
+        promisePtr->set_value(corretorasResponse.serialize());
+    });
+    return future;
+}
+
+std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string cnpj) {
+    auto promisePtr = std::make_shared<std::promise<std::string>>();
+    auto future = promisePtr->get_future();
+    corretorasHandler.getCorretorasByCnpj(cnpj, [cnpj,this, promisePtr](const Corretoras& corretorasResponse) {
         promisePtr->set_value(corretorasResponse.serialize());
     });
     return future;

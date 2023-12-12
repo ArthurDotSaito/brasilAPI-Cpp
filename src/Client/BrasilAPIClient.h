@@ -39,7 +39,7 @@ public:
     void getCepV2(int cep, std::function<void(const CepResponse&)> callback);
     void getCNPJ(std::string cnpj, std::function<void(const CNPJResponse&)> callback);
     void getAllCorretoras(std::function<void(const CorretorasResponse&)> callback);
-    void getCorretorasByCnpj(int cnpj, std::function<void(const Corretoras&)> callback);
+    void getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
@@ -48,5 +48,5 @@ public:
     std::future<std::string> getCepV2Async(int cep);
     std::future<std::string> getCNPJAsync(std::string cnpj);
     std::future<std::string> getAllCorretorasAsync();
-    std::future<std::string> getCorretorasByCnpjAsync(int cnpj);
+    std::future<std::string> getCorretorasByCnpjAsync(std::string cnpj);
 };

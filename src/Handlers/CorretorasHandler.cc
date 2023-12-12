@@ -48,10 +48,10 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
     });
 }
 
-void CorretorasHandler::getCorretorasByCnpj(int cnpj, std::function<void(const Corretoras&)> callback){
+void CorretorasHandler::getCorretorasByCnpj(std::string cnpj,std::function<void(const Corretoras&)> callback){
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/vcm/corretoras/v1/" + std::to_string(cnpj));
+    req->setPath("/api/vcm/corretoras/v1/" + cnpj);
     std::string fullUrl = baseUrl + req->getPath();
 
  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
@@ -89,5 +89,4 @@ void CorretorasHandler::getCorretorasByCnpj(int cnpj, std::function<void(const C
 
         callback(corretoras);
     });
-
 }
