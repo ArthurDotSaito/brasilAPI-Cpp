@@ -49,5 +49,45 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
 }
 
 void CorretorasHandler::getCorretorasByCnpj(int cnpj, std::function<void(const Corretoras&)> callback){
-    //TODO
+    auto req = drogon::HttpRequest::newHttpRequest();
+    req->setMethod(drogon::HttpMethod::Get);
+    req->setPath("/api/vcm/corretoras/v1/" + std::to_string(cnpj));
+    std::string fullUrl = baseUrl + req->getPath();
+
+ httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
+        ensureSuccess(response, "/api/vcm/corretoras/v1/{cnpj}");
+        std::string responseBody = std::string(response->getBody());
+
+        Json::Value jsonResponse;
+        Json::Reader reader;
+        Corretoras corretoras;
+        if (reader.parse(responseBody, jsonResponse)) {
+            corretoras.bairro = jsonResponse["bairro"].asString();
+            corretoras.cep = jsonResponse["cep"].asString();
+            corretoras.cnpj = jsonResponse["cnpj"].asString();
+            corretoras.codigo_cvm = jsonResponse["codigo_cvm"].asString();
+            corretoras.complemento = jsonResponse["complemento"].asString();
+            corretoras.data_inicio_situacao = jsonResponse["data_inicio_situacao"].asString();
+            corretoras.data_patrimonio_liquido = jsonResponse["data_patrimonio_liquido"].asString();
+            corretoras.email = jsonResponse["email"].asString();
+            corretoras.logradouro = jsonResponse["logradouro"].asString();
+            corretoras.municipio = jsonResponse["municipio"].asString();
+            corretoras.nome_social = jsonResponse["nome_social"].asString();
+            corretoras.nome_comercial = jsonResponse["nome_comercial"].asString();
+            corretoras.pais = jsonResponse["pais"].asString();
+            corretoras.status = jsonResponse["status"].asString();
+            corretoras.telefone = jsonResponse["telefone"].asString();
+            corretoras.type = jsonResponse["type"].asString();
+            corretoras.uf = jsonResponse["uf"].asString();
+            corretoras.valor_patrimonio_liquido = jsonResponse["valor_patrimonio_liquido"].asString();
+            corretoras.calledURL = fullUrl;
+            corretoras.jsonResponse = responseBody;
+        } else {
+            std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+            return;
+        }
+
+        callback(corretoras);
+    });
+
 }
