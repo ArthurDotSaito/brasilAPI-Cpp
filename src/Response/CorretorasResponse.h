@@ -57,6 +57,7 @@ public:
 };
 
 class CorretorasResponse: public BaseResponse {
+public:
     std::vector<Corretoras> corretoras;
 
     std::string serialize() const {
@@ -90,6 +91,8 @@ class CorretorasResponse: public BaseResponse {
         builder["indentation"] = "";  
         return Json::writeString(builder, jsonRoot);
     }
+
+    
 
 };
 
