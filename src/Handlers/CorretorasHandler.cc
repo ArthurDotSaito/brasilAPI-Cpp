@@ -28,6 +28,7 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
                 corretora.complemento = jsonCorretoras["complemento"].asString();
                 corretora.data_inicio_situacao = jsonCorretoras["data_inicio_situacao"].asString();
                 corretora.data_patrimonio_liquido = jsonCorretoras["data_patrimonio_liquido"].asString();
+                corretora.data_registro = jsonCorretoras["data_registro"].asString();
                 corretora.email = jsonCorretoras["email"].asString();
                 corretora.logradouro = jsonCorretoras["logradouro"].asString();
                 corretora.municipio = jsonCorretoras["municipio"].asString();
@@ -51,12 +52,16 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
 void CorretorasHandler::getCorretorasByCnpj(std::string cnpj,std::function<void(const Corretoras&)> callback){
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/vcm/corretoras/v1/" + cnpj);
+    req->setPath("/api/cvm/corretoras/v1/" + cnpj);
     std::string fullUrl = baseUrl + req->getPath();
 
- httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        ensureSuccess(response, "/api/vcm/corretoras/v1/{cnpj}");
+    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
+        ensureSuccess(response, "/api/cvm/corretoras/v1/{cnpj}");
         std::string responseBody = std::string(response->getBody());
+
+        std::cout << "ResponseBody: " << responseBody << std::endl;
 
         Json::Value jsonResponse;
         Json::Reader reader;
@@ -80,6 +85,7 @@ void CorretorasHandler::getCorretorasByCnpj(std::string cnpj,std::function<void(
             corretoras.type = jsonResponse["type"].asString();
             corretoras.uf = jsonResponse["uf"].asString();
             corretoras.valor_patrimonio_liquido = jsonResponse["valor_patrimonio_liquido"].asString();
+            corretoras.data_registro = jsonResponse["data_registro"].asString();
             corretoras.calledURL = fullUrl;
             corretoras.jsonResponse = responseBody;
         } else {

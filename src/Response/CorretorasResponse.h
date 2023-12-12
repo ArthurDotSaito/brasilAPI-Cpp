@@ -15,6 +15,7 @@ public:
     std::string complemento;
     std::string data_inicio_situacao;
     std::string data_patrimonio_liquido;
+    std::string data_registro;
     std::string email;
     std::string logradouro;
     std::string municipio;
@@ -37,6 +38,7 @@ public:
         jsonCorretoras["complemento"] = complemento;
         jsonCorretoras["data_inicio_situacao"] = data_inicio_situacao;
         jsonCorretoras["data_patrimonio_liquido"] = data_patrimonio_liquido;
+        jsonCorretoras["data_registro"] = data_registro;
         jsonCorretoras["email"] = email;
         jsonCorretoras["logradouro"] = logradouro;
         jsonCorretoras["municipio"] = municipio;
@@ -72,6 +74,7 @@ public:
             jsonCorretoras["complemento"] = corretoras.complemento;
             jsonCorretoras["data_inicio_situacao"] = corretoras.data_inicio_situacao;
             jsonCorretoras["data_patrimonio_liquido"] = corretoras.data_patrimonio_liquido;
+            jsonCorretoras["data_registro"] = corretoras.data_registro;
             jsonCorretoras["email"] = corretoras.email;
             jsonCorretoras["logradouro"] = corretoras.logradouro;
             jsonCorretoras["municipio"] = corretoras.municipio;

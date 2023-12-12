@@ -101,8 +101,8 @@ std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
 std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string cnpj) {
     auto promisePtr = std::make_shared<std::promise<std::string>>();
     auto future = promisePtr->get_future();
-    corretorasHandler.getCorretorasByCnpj(cnpj, [cnpj,this, promisePtr](const Corretoras& corretorasResponse) {
-        promisePtr->set_value(corretorasResponse.serialize());
+    corretorasHandler.getCorretorasByCnpj(cnpj, [this, promisePtr, cnpj](const Corretoras& corretora) {
+        promisePtr->set_value(corretora.serialize());
     });
     return future;
 }
