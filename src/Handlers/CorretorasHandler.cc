@@ -1,5 +1,5 @@
 #include <Utils/BrasilAPIException.h>
-#include <CorretorasHandler.h>
+#include "CorretorasHandler.h"
 
 void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResponse&)> callback){
     auto req = drogon::HttpRequest::newHttpRequest();
@@ -24,7 +24,7 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
                 corretora.bairro = jsonCorretoras["bairro"].asString(); 
                 corretora.cep = jsonCorretoras["cep"].asString();
                 corretora.cnpj = jsonCorretoras["cnpj"].asString();
-                corretora.código_cvm = jsonCorretoras["código_cvm"].asString();
+                corretora.codigo_cvm = jsonCorretoras["codigo_cvm"].asString();
                 corretora.complemento = jsonCorretoras["complemento"].asString();
                 corretora.data_inicio_situacao = jsonCorretoras["data_inicio_situacao"].asString();
                 corretora.data_patrimonio_liquido = jsonCorretoras["data_patrimonio_liquido"].asString();

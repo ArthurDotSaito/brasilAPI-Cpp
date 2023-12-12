@@ -31,5 +31,12 @@ int main() {
     auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
     auto cnpjData = futureCNPJ.get();
     std::cout << "CNPJ Data: " << cnpjData << std::endl;
+
+
+    auto futureCorretoras = brasilAPI.getAllCorretorasAsync();
+    auto corretorasData = futureCorretoras.get();
+    std::cout << "Corretoras Data: " << corretorasData << std::endl;
+
+    
     return 0;
 }

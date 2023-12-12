@@ -11,7 +11,7 @@ public:
     std::string bairro;
     std::string cep;
     std::string cnpj;
-    std::string código_cvm;
+    std::string codigo_cvm;
     std::string complemento;
     std::string data_inicio_situacao;
     std::string data_patrimonio_liquido;
@@ -33,7 +33,7 @@ public:
         jsonCorretoras["bairro"] = bairro;
         jsonCorretoras["cep"] = cep;
         jsonCorretoras["cnpj"] = cnpj;
-        jsonCorretoras["código_cvm"] = código_cvm;
+        jsonCorretoras["codigo_cvm"] = codigo_cvm;
         jsonCorretoras["complemento"] = complemento;
         jsonCorretoras["data_inicio_situacao"] = data_inicio_situacao;
         jsonCorretoras["data_patrimonio_liquido"] = data_patrimonio_liquido;
@@ -68,7 +68,7 @@ public:
             jsonCorretoras["bairro"] = corretoras.bairro;
             jsonCorretoras["cep"] = corretoras.cep;
             jsonCorretoras["cnpj"] = corretoras.cnpj;
-            jsonCorretoras["código_cvm"] = corretoras.código_cvm;
+            jsonCorretoras["codigo_cvm"] = corretoras.codigo_cvm;
             jsonCorretoras["complemento"] = corretoras.complemento;
             jsonCorretoras["data_inicio_situacao"] = corretoras.data_inicio_situacao;
             jsonCorretoras["data_patrimonio_liquido"] = corretoras.data_patrimonio_liquido;
