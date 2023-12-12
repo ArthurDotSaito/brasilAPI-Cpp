@@ -5,12 +5,15 @@
 #include "Response/CepResponse.h"
 #include "Handlers/CNPJHandler.h"
 #include "Response/CNPJResponse.h"
+#include "Handlers/CorretorasHandler.h"
+#include "Response/CorretorasResponse.h"    
 
 class BrasilAPIClient {
 private:
     BanksHandler banksHandler;
     CepHandler cepHandler;
     CNPJHandler cnpjHandler;
+    CorretorasHandler corretorasHandler;
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;
@@ -35,6 +38,8 @@ public:
     void getCep(int cep, std::function<void(const CepResponse&)> callback);
     void getCepV2(int cep, std::function<void(const CepResponse&)> callback);
     void getCNPJ(std::string cnpj, std::function<void(const CNPJResponse&)> callback);
+    void getAllCorretoras(std::function<void(const CorretorasResponse&)> callback);
+    void getCorretorasByCnpj(int cnpj, std::function<void(const Corretoras&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
@@ -42,4 +47,6 @@ public:
     std::future<std::string> getCepAsync(int cep);
     std::future<std::string> getCepV2Async(int cep);
     std::future<std::string> getCNPJAsync(std::string cnpj);
+    std::future<std::string> getAllCorretorasAsync();
+    std::future<std::string> getCorretorasByCnpjAsync(int cnpj);
 };
