@@ -7,6 +7,8 @@
 #include "Response/CNPJResponse.h"
 #include "Handlers/CorretorasHandler.h"
 #include "Response/CorretorasResponse.h"    
+#include "Handlers/CptecHandler.h"
+#include "Response/CptecCidadesResponse.h"
 
 class BrasilAPIClient {
 private:
@@ -14,6 +16,7 @@ private:
     CepHandler cepHandler;
     CNPJHandler cnpjHandler;
     CorretorasHandler corretorasHandler;
+    CptecHandler cptecHandler;
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;
@@ -40,6 +43,7 @@ public:
     void getCNPJ(std::string cnpj, std::function<void(const CNPJResponse&)> callback);
     void getAllCorretoras(std::function<void(const CorretorasResponse&)> callback);
     void getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras&)> callback);
+    void listAllCities(std::function<void(const CptecCidadesResponse&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
@@ -49,4 +53,5 @@ public:
     std::future<std::string> getCNPJAsync(std::string cnpj);
     std::future<std::string> getAllCorretorasAsync();
     std::future<std::string> getCorretorasByCnpjAsync(std::string cnpj);
+    std::future<std::string> listAllCitiesAsync();
 };
