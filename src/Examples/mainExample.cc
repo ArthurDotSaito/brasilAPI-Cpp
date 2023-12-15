@@ -44,4 +44,5 @@ int main() {
     auto cptecData = futureCptec.get();
     std::cout << "Cptec Data: " << cptecData << std::endl;
     return 0;
+
 }

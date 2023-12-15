@@ -38,7 +38,7 @@ public:
     }
 };
 
-class CptecCidadesResponse : public BaseResponse {
+class CptecCapitaisResponse : public BaseResponse {
 public:
     std::vector<CptecCapitais> cptecCapitais;
 
