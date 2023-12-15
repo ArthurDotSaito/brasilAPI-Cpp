@@ -35,7 +35,7 @@ void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse&)
 void CptecHandler::searchByTerms(std::string cityName , std::function<void(const CptecCidadesResponse&)> callback){
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/cptec/v1/cidade" + cityName);
+    req->setPath("/api/cptec/v1/cidade/" + cityName);
     std::string fullUrl = baseUrl + req->getPath();
     std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
     

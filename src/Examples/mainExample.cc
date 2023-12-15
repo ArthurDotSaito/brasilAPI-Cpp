@@ -43,6 +43,10 @@ int main() {
     auto futureCptec = brasilAPI.listAllCitiesAsync();
     auto cptecData = futureCptec.get();
     std::cout << "Cptec Data: " << cptecData << std::endl;
-    return 0;
 
+    auto futureCptec2 = brasilAPI.searchByTermsAsync("Blumenau");
+    auto cptecData2 = futureCptec2.get();
+    std::cout << "Cptec Data: " << cptecData2 << std::endl;
+
+    return 0;
 }

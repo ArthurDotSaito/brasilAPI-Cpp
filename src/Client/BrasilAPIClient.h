@@ -44,6 +44,7 @@ public:
     void getAllCorretoras(std::function<void(const CorretorasResponse&)> callback);
     void getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras&)> callback);
     void listAllCities(std::function<void(const CptecCidadesResponse&)> callback);
+    void searchByTerms(std::string cityName , std::function<void(const CptecCidadesResponse&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
@@ -54,4 +55,5 @@ public:
     std::future<std::string> getAllCorretorasAsync();
     std::future<std::string> getCorretorasByCnpjAsync(std::string cnpj);
     std::future<std::string> listAllCitiesAsync();
+    std::future<std::string> searchByTermsAsync(std::string cityName);
 };
