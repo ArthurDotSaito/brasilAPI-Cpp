@@ -31,8 +31,7 @@ int main() {
     auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
     auto cnpjData = futureCNPJ.get();
     std::cout << "CNPJ Data: " << cnpjData << std::endl;
- */
-
+ 
     auto futureCorretoras = brasilAPI.getAllCorretorasAsync();
     auto corretorasData = futureCorretoras.get();
     std::cout << "Corretoras Data: " << corretorasData << std::endl;
@@ -40,6 +39,9 @@ int main() {
     auto futureCorretora = brasilAPI.getCorretorasByCnpjAsync("02332886000104");
     auto corretoraData = futureCorretora.get();
     std::cout << "Corretora Data: " << corretoraData << std::endl;
-
+*/
+    auto futureCptec = brasilAPI.listAllCitiesAsync();
+    auto cptecData = futureCptec.get();
+    std::cout << "Cptec Data: " << cptecData << std::endl;
     return 0;
 }

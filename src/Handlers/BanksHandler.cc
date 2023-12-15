@@ -7,7 +7,7 @@ void BanksHandler::getAllBanks(std::function<void(const BankResponse&)> callback
     req->setPath("/api/banks/v1");
     std::string fullUrl = baseUrl + req->getPath();
     std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
-    
+        
     httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
         ensureSuccess(response, "api/banks/v1");
         std::string responseBody = std::string(response->getBody());
