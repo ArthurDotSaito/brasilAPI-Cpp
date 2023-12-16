@@ -1,31 +1,31 @@
 #ifndef CEP_RESPONSE_H
 #define CEP_RESPONSE_H
 
-#include<string>
-#include <json/json.h>
 #include "BaseResponse.h"
+#include <json/json.h>
+#include <string>
 
 struct Coordinates {
-    std::string longitude;
-    std::string latitude;
+  std::string longitude;
+  std::string latitude;
 };
 
 struct Location {
-    std::string type;
-    Coordinates coordinates;
+  std::string type;
+  Coordinates coordinates;
 };
 
-class CepResponse:public BaseResponse {
-public:
-    std::string cep;
-    std::string state;
-    std::string city;
-    std::string neighborhood;
-    std::string street;
-    std::string service;
-    Location location;
+class CepResponse : public BaseResponse {
+  public:
+  std::string cep;
+  std::string state;
+  std::string city;
+  std::string neighborhood;
+  std::string street;
+  std::string service;
+  Location location;
 
-    std::string serialize() const {
+  std::string serialize() const {
     Json::Value jsonCep;
     jsonCep["cep"] = cep;
     jsonCep["state"] = state;
@@ -35,18 +35,18 @@ public:
     jsonCep["service"] = service;
 
     if (!location.coordinates.longitude.empty() && !location.coordinates.latitude.empty()) {
-        Json::Value jsonLocation;
-        jsonLocation["type"] = location.type;
-        jsonLocation["coordinates"]["longitude"] = location.coordinates.longitude;
-        jsonLocation["coordinates"]["latitude"] = location.coordinates.latitude;
-        jsonCep["location"] = jsonLocation;
+      Json::Value jsonLocation;
+      jsonLocation["type"] = location.type;
+      jsonLocation["coordinates"]["longitude"] = location.coordinates.longitude;
+      jsonLocation["coordinates"]["latitude"] = location.coordinates.latitude;
+      jsonCep["location"] = jsonLocation;
     }
 
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";
-    builder["indentation"] = "";  
+    builder["indentation"] = "";
     return Json::writeString(builder, jsonCep);
-}
+  }
 };
 
 #endif // CEP_RESPONSE_H

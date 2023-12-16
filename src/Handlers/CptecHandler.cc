@@ -158,3 +158,47 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
     }
   });
 }
+
+void CptecHandler::getCidadesClimaByCidade(std::string cityCode, std::function<void(const CidadeClimaResponse &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/clima/previsao/" + cityCode);
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/clima/clima/{cityCode}");
+      std::string responseBody = std::string(response->getBody());
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse)) {
+        CidadeClimaResponse cidadeClimaResponse;
+        cidadeClimaResponse.cidade = jsonResponse["cidade"].asString();
+        cidadeClimaResponse.estado = jsonResponse["estado"].asString();
+        cidadeClimaResponse.atualizado_em = jsonResponse["atualizado_em"].asString();
+
+        const Json::Value jsonClimaArray = jsonResponse["clima"];
+        for (const auto &jsonClima : jsonClimaArray) {
+          ClimaDiario climaDiario;
+          climaDiario.data = jsonClima["data"].asString();
+          climaDiario.condicao = jsonClima["condicao"].asString();
+          climaDiario.min = jsonClima["min"].asInt();
+          climaDiario.max = jsonClima["max"].asInt();
+          climaDiario.indice_uv = jsonClima["indice_uv"].asInt();
+          climaDiario.condicao_desc = jsonClima["condicao_desc"].asString();
+          cidadeClimaResponse.clima.push_back(climaDiario);
+        }
+
+        callback(cidadeClimaResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
+      }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
+}
