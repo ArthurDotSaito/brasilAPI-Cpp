@@ -1,12 +1,12 @@
 #ifndef CORRETORAS_RESPONSE_H
 #define CORRETORAS_RESPONSE_H
 
-#include<string>
+#include <string>
 #include <json/json.h>
 #include "BaseResponse.h"
 
-
-class Corretoras:public BaseResponse {
+class Corretoras : public BaseResponse
+{
 public:
     std::string bairro;
     std::string cep;
@@ -28,8 +28,8 @@ public:
     std::string uf;
     std::string valor_patrimonio_liquido;
 
-
-    std::string serialize() const {
+    std::string serialize() const
+    {
         Json::Value jsonCorretoras;
         jsonCorretoras["bairro"] = bairro;
         jsonCorretoras["cep"] = cep;
@@ -53,19 +53,22 @@ public:
 
         Json::StreamWriterBuilder builder;
         builder["commentStyle"] = "None";
-        builder["indentation"] = "";  
+        builder["indentation"] = "";
         return Json::writeString(builder, jsonCorretoras);
     }
 };
 
-class CorretorasResponse: public BaseResponse {
+class CorretorasResponse : public BaseResponse
+{
 public:
     std::vector<Corretoras> corretoras;
 
-    std::string serialize() const {
+    std::string serialize() const
+    {
         Json::Value jsonRoot;
 
-        for (const auto& corretoras : corretoras) {
+        for (const auto &corretoras : corretoras)
+        {
             Json::Value jsonCorretoras;
             jsonCorretoras["bairro"] = corretoras.bairro;
             jsonCorretoras["cep"] = corretoras.cep;
@@ -91,12 +94,9 @@ public:
 
         Json::StreamWriterBuilder builder;
         builder["commentStyle"] = "None";
-        builder["indentation"] = "";  
+        builder["indentation"] = "";
         return Json::writeString(builder, jsonRoot);
     }
-
-    
-
 };
 
 #endif // CORRETORAS_RESPONSE_H

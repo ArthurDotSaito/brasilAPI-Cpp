@@ -1,11 +1,12 @@
 #ifndef CONDICOESAEROPORTO_RESPONSE_H
 #define CONDICOESAEROPORTO_RESPONSE_H
 
-#include<string>
+#include <string>
 #include <json/json.h>
 #include "BaseResponse.h"
 
-class CptecAeroporto:public BaseResponse {
+class CptecAeroporto : public BaseResponse
+{
 public:
     std::string codigo_icao;
     std::string atualizado_em;
@@ -18,7 +19,8 @@ public:
     std::string condicao_Desc;
     int temp;
 
-    std::string serialize() const {
+    std::string serialize() const
+    {
         Json::Value jsonCptecCapitais;
         jsonCptecCapitais["codigo_icao"] = codigo_icao;
         jsonCptecCapitais["atualizado_em"] = atualizado_em;
@@ -33,7 +35,7 @@ public:
 
         Json::StreamWriterBuilder builder;
         builder["commentStyle"] = "None";
-        builder["indentation"] = "";  
+        builder["indentation"] = "";
         return Json::writeString(builder, jsonCptecCapitais);
     }
 };

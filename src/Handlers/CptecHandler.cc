@@ -1,168 +1,160 @@
 #include "CptecHandler.h"
 #include "Utils/BrasilAPIException.h"
 
+void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/cidade");
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
-void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse&)> callback) {
-    auto req = drogon::HttpRequest::newHttpRequest();
-    req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/cptec/v1/cidade");
-    std::string fullUrl = baseUrl + req->getPath();
-    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
-    
-    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        try{
-            ensureSuccess(response, "/api/cptec/v1/cidade");
-            std::string responseBody = std::string(response->getBody());
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/cidade");
+      std::string responseBody = std::string(response->getBody());
 
-            CptecCidadesResponse cptecCidadesResponse;
-            cptecCidadesResponse.calledURL = fullUrl;
-            cptecCidadesResponse.jsonResponse = responseBody;
+      CptecCidadesResponse cptecCidadesResponse;
+      cptecCidadesResponse.calledURL = fullUrl;
+      cptecCidadesResponse.jsonResponse = responseBody;
 
-            Json::Value jsonResponse;
-            Json::Reader reader;
-            if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) 
-            {
-                for (const auto& jsonCptec : jsonResponse) {
-                    CptecCidades cidade;
-                    cidade.nome = jsonCptec["nome"].asString();
-                    cidade.estado = jsonCptec["estado"].asString();
-                    cidade.id = jsonCptec["id"].asInt();
-                    cptecCidadesResponse.cptecCidades.push_back(cidade);
-                }
-            }
-            callback(cptecCidadesResponse);
-            
-        }catch(const BrasilAPIException& e){
-            std::cerr << "Error: " << e.what() << std::endl;
-            return;
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonCptec : jsonResponse) {
+          CptecCidades cidade;
+          cidade.nome = jsonCptec["nome"].asString();
+          cidade.estado = jsonCptec["estado"].asString();
+          cidade.id = jsonCptec["id"].asInt();
+          cptecCidadesResponse.cptecCidades.push_back(cidade);
         }
-    });
+      }
+      callback(cptecCidadesResponse);
+
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
 }
 
-void CptecHandler::searchByTerms(std::string cityName , std::function<void(const CptecCidadesResponse&)> callback){
-    auto req = drogon::HttpRequest::newHttpRequest();
-    req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/cptec/v1/cidade/" + cityName);
-    std::string fullUrl = baseUrl + req->getPath();
-    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
-    
-    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        try{
-            ensureSuccess(response, "/api/cptec/v1/cidade/{cityName}");
-            std::string responseBody = std::string(response->getBody());
+void CptecHandler::searchByTerms(std::string cityName, std::function<void(const CptecCidadesResponse &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/cidade/" + cityName);
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
-            CptecCidadesResponse cptecCidadesResponse;
-            cptecCidadesResponse.calledURL = fullUrl;
-            cptecCidadesResponse.jsonResponse = responseBody;
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/cidade/{cityName}");
+      std::string responseBody = std::string(response->getBody());
 
-            Json::Value jsonResponse;
-            Json::Reader reader;
-            if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) 
-            {
-                for (const auto& jsonCptec : jsonResponse) {
-                    CptecCidades cidade;
-                    cidade.nome = jsonCptec["nome"].asString();
-                    cidade.estado = jsonCptec["estado"].asString();
-                    cidade.id = jsonCptec["id"].asInt();
-                    cptecCidadesResponse.cptecCidades.push_back(cidade);
-                }
-            }
-            callback(cptecCidadesResponse);
-        }catch(const BrasilAPIException& e){
-            std::cerr << "Error: " << e.what() << std::endl;
-            return;
+      CptecCidadesResponse cptecCidadesResponse;
+      cptecCidadesResponse.calledURL = fullUrl;
+      cptecCidadesResponse.jsonResponse = responseBody;
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonCptec : jsonResponse) {
+          CptecCidades cidade;
+          cidade.nome = jsonCptec["nome"].asString();
+          cidade.estado = jsonCptec["estado"].asString();
+          cidade.id = jsonCptec["id"].asInt();
+          cptecCidadesResponse.cptecCidades.push_back(cidade);
         }
-    });
+      }
+      callback(cptecCidadesResponse);
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
 }
 
-void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse&)> callback) {
-    auto req = drogon::HttpRequest::newHttpRequest();
-    req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/cptec/v1/clima/capital");
-    std::string fullUrl = baseUrl + req->getPath();
-    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
-    
-    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        try{
-            ensureSuccess(response, "/api/cptec/v1/clima/capital");
-            std::string responseBody = std::string(response->getBody());
+void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/clima/capital");
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
-            CptecCapitaisResponse cptecCapitaisResponse;
-            cptecCapitaisResponse.calledURL = fullUrl;
-            cptecCapitaisResponse.jsonResponse = responseBody;
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/clima/capital");
+      std::string responseBody = std::string(response->getBody());
 
-            Json::Value jsonResponse;
-            Json::Reader reader;
-            if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) 
-            {
-                for (const auto& jsonCptec : jsonResponse) {
-                    CptecCapitais capitais;
+      CptecCapitaisResponse cptecCapitaisResponse;
+      cptecCapitaisResponse.calledURL = fullUrl;
+      cptecCapitaisResponse.jsonResponse = responseBody;
 
-                    capitais.codigo_icao = jsonCptec["codigo_icao"].asString();
-                    capitais.atualizado_em = jsonCptec["atualizado_em"].asString();
-                    capitais.pressao_atmosferica = jsonCptec["pressao_atmosferica"].asString();
-                    capitais.visibilidade = jsonCptec["visibilidade"].asString();
-                    capitais.vento = jsonCptec["vento"].asInt();
-                    capitais.direcao_vento = jsonCptec["direcao_vento"].asInt();
-                    capitais.umidade = jsonCptec["umidade"].asInt();
-                    capitais.condicao = jsonCptec["condicao"].asString();
-                    capitais.condicao_Desc = jsonCptec["condicao_Desc"].asString();
-                    capitais.temp = jsonCptec["temp"].asInt();
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonCptec : jsonResponse) {
+          CptecCapitais capitais;
 
-                    cptecCapitaisResponse.cptecCapitais.push_back(capitais);
-                }
-            }
-            callback(cptecCapitaisResponse);
+          capitais.codigo_icao = jsonCptec["codigo_icao"].asString();
+          capitais.atualizado_em = jsonCptec["atualizado_em"].asString();
+          capitais.pressao_atmosferica = jsonCptec["pressao_atmosferica"].asString();
+          capitais.visibilidade = jsonCptec["visibilidade"].asString();
+          capitais.vento = jsonCptec["vento"].asInt();
+          capitais.direcao_vento = jsonCptec["direcao_vento"].asInt();
+          capitais.umidade = jsonCptec["umidade"].asInt();
+          capitais.condicao = jsonCptec["condicao"].asString();
+          capitais.condicao_Desc = jsonCptec["condicao_Desc"].asString();
+          capitais.temp = jsonCptec["temp"].asInt();
 
-        }catch(const BrasilAPIException& e){
-            std::cerr << "Error: " << e.what() << std::endl;
-            return;
+          cptecCapitaisResponse.cptecCapitais.push_back(capitais);
         }
-    });
+      }
+      callback(cptecCapitaisResponse);
+
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
 }
 
-void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto&)> callback) {
-    auto req = drogon::HttpRequest::newHttpRequest();
-    req->setMethod(drogon::HttpMethod::Get);
-    req->setPath("/api/cptec/v1/clima/aeroporto/" + icao);
-    std::string fullUrl = baseUrl + req->getPath();
-    std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
-    
-    httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        try{
-            ensureSuccess(response, "/api/cptec/v1/clima/aeroporto/{icaoCode}");
-            std::string responseBody = std::string(response->getBody());
+void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/clima/aeroporto/" + icao);
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
-            Json::Value jsonResponse;
-            Json::Reader reader;
-            CptecAeroporto cptecAeroporto;
-            if (reader.parse(responseBody, jsonResponse)) 
-            {
-                cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
-                cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
-                cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
-                cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
-                cptecAeroporto.vento = jsonResponse["vento"].asInt();
-                cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
-                cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
-                cptecAeroporto.condicao = jsonResponse["condicao"].asString();
-                cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
-                cptecAeroporto.temp = jsonResponse["temp"].asInt();
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/clima/aeroporto/{icaoCode}");
+      std::string responseBody = std::string(response->getBody());
 
-                cptecAeroporto.calledURL = fullUrl;
-                cptecAeroporto.jsonResponse = responseBody;            
-            }
-            else 
-            {
-                std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
-                return;
-            }
-            callback(cptecAeroporto);
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      CptecAeroporto cptecAeroporto;
+      if (reader.parse(responseBody, jsonResponse)) {
+        cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
+        cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
+        cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
+        cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
+        cptecAeroporto.vento = jsonResponse["vento"].asInt();
+        cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
+        cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
+        cptecAeroporto.condicao = jsonResponse["condicao"].asString();
+        cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
+        cptecAeroporto.temp = jsonResponse["temp"].asInt();
 
-        }catch(const BrasilAPIException& e){
-            std::cerr << "Error: " << e.what() << std::endl;
-            return;
-        }
-        
-    });
+        cptecAeroporto.calledURL = fullUrl;
+        cptecAeroporto.jsonResponse = responseBody;
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
+      }
+      callback(cptecAeroporto);
+
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
 }
