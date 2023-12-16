@@ -39,7 +39,7 @@ int main() {
     auto futureCorretora = brasilAPI.getCorretorasByCnpjAsync("02332886000104");
     auto corretoraData = futureCorretora.get();
     std::cout << "Corretora Data: " << corretoraData << std::endl;
-*/
+
     auto futureCptec = brasilAPI.listAllCitiesAsync();
     auto cptecData = futureCptec.get();
     std::cout << "Cptec Data: " << cptecData << std::endl;
@@ -47,6 +47,10 @@ int main() {
     auto futureCptec2 = brasilAPI.searchByTermsAsync("Blumenau");
     auto cptecData2 = futureCptec2.get();
     std::cout << "Cptec Data: " << cptecData2 << std::endl;
-
+    */
+    auto futureCptec3 = brasilAPI.getCapitaisAsync();  
+    auto cptecData3 = futureCptec3.get();
+    std::cout << "Cptec Data: " << cptecData3 << std::endl;
+    
     return 0;
 }

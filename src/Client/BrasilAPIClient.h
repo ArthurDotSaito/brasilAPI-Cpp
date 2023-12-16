@@ -9,7 +9,7 @@
 #include "Response/CorretorasResponse.h"    
 #include "Handlers/CptecHandler.h"
 #include "Response/CptecCidadesResponse.h"
-#include "CptecCapitaisResponse.h"
+#include "Response/CptecCapitaisResponse.h"
 
 class BrasilAPIClient {
 private:
