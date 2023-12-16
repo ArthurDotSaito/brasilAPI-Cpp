@@ -53,7 +53,7 @@ int main() {
     std::cout << "Cptec Data: " << cptecData3 << std::endl;
     */
 
-    auto futureCptec4 = brasilAPI.getCondicoesAeroportoAsync("SBAR");
+    auto futureCptec4 = brasilAPI.getCondicoesAeroportoAsync("SBAR1");
     auto cptecData4 = futureCptec4.get();
     std::cout << "Cptec Data: " << cptecData4 << std::endl;
 

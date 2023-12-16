@@ -1,4 +1,5 @@
 #include "CptecHandler.h"
+#include "Utils/BrasilAPIException.h"
 
 
 void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse&)> callback) {
@@ -109,30 +110,40 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
     std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
     
     httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr& response) {
-        ensureSuccess(response, "/api/cptec/v1/clima/aeroporto/{icaoCode}");
-        std::string responseBody = std::string(response->getBody());
+        try{
+            ensureSuccess(response, "/api/cptec/v1/clima/aeroporto/{icaoCode}");
+            std::string responseBody = std::string(response->getBody());
 
-        Json::Value jsonResponse;
-        Json::Reader reader;
-        CptecAeroporto cptecAeroporto;
-        if (reader.parse(responseBody, jsonResponse)) {
-            cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
-            cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
-            cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
-            cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
-            cptecAeroporto.vento = jsonResponse["vento"].asInt();
-            cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
-            cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
-            cptecAeroporto.condicao = jsonResponse["condicao"].asString();
-            cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
-            cptecAeroporto.temp = jsonResponse["temp"].asInt();
+            Json::Value jsonResponse;
+            Json::Reader reader;
+            CptecAeroporto cptecAeroporto;
+            if (reader.parse(responseBody, jsonResponse)) 
+            {
+                cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
+                cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
+                cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
+                cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
+                cptecAeroporto.vento = jsonResponse["vento"].asInt();
+                cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
+                cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
+                cptecAeroporto.condicao = jsonResponse["condicao"].asString();
+                cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
+                cptecAeroporto.temp = jsonResponse["temp"].asInt();
 
-            cptecAeroporto.calledURL = fullUrl;
-            cptecAeroporto.jsonResponse = responseBody;            
-        }else {
-            std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+                cptecAeroporto.calledURL = fullUrl;
+                cptecAeroporto.jsonResponse = responseBody;            
+            }
+            else 
+            {
+                std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+                return;
+            }
+            callback(cptecAeroporto);
+
+        }catch(const BrasilAPIException& e){
+            std::cerr << "Error: " << e.what() << std::endl;
             return;
         }
-        callback(cptecAeroporto);
+        
     });
 }

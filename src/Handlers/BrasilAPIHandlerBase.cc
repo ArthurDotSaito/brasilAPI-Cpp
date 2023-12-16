@@ -5,7 +5,7 @@
 #include "Utils/BrasilAPIException.h"
 
 void BrasilAPIHandlerBase::ensureSuccess(const drogon::HttpResponsePtr& response, const std::string& path) {
-    if (response->getStatusCode() > 400) {
+    if (response->getStatusCode() >= 400) {
         std::string url = baseUrl + path;
         std::string contentString = std::string(response->getBody());
         Json::Reader reader;
@@ -15,7 +15,8 @@ void BrasilAPIHandlerBase::ensureSuccess(const drogon::HttpResponsePtr& response
        if (reader.parse(contentString, jsonResponse)) {
             if (jsonResponse.isObject() && jsonResponse.isMember("message")) {
                 message = jsonResponse["message"].asString();
-            } else {
+            } 
+            else {
                 message += " - Response: " + contentString;
             }
         }
