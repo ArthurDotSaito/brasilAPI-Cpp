@@ -30,8 +30,8 @@ void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse&)
                     cptecCidadesResponse.cptecCidades.push_back(cidade);
                 }
             }
-
             callback(cptecCidadesResponse);
+            
         }catch(const BrasilAPIException& e){
             std::cerr << "Error: " << e.what() << std::endl;
             return;
