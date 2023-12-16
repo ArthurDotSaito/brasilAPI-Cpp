@@ -52,6 +52,10 @@ void BrasilAPIClient::searchByTerms(std::string cityName , std::function<void(co
     cptecHandler.searchByTerms(cityName, callback);
 }
 
+void BrasilAPIClient::getCapitais(std::function<void(const CptecCapitaisResponse&)> callback) {
+    cptecHandler.getCapitais(callback);
+}
+
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
     auto promisePtr = std::make_shared<std::promise<std::string>>();
     auto future = promisePtr->get_future();
@@ -129,6 +133,15 @@ std::future<std::string> BrasilAPIClient::searchByTermsAsync(std::string cityNam
     auto future = promisePtr->get_future();
     cptecHandler.searchByTerms(cityName, [this, promisePtr, cityName](const CptecCidadesResponse& cidades) {
         promisePtr->set_value(cidades.serialize());
+    });
+    return future;
+}
+
+std::future<std::string> BrasilAPIClient::getCapitaisAsync() {
+    auto promisePtr = std::make_shared<std::promise<std::string>>();
+    auto future = promisePtr->get_future();
+    cptecHandler.getCapitais([this, promisePtr](const CptecCapitaisResponse& capitais) {
+        promisePtr->set_value(capitais.serialize());
     });
     return future;
 }
