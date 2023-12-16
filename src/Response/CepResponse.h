@@ -44,7 +44,7 @@ class CepResponse : public BaseResponse {
 
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";
-    builder["indentation"] = "";
+    builder["indentation"] = "  ";
     return Json::writeString(builder, jsonCep);
   }
 };

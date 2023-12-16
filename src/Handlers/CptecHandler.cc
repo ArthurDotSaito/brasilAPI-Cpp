@@ -159,10 +159,10 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
   });
 }
 
-void CptecHandler::getCidadesClimaByCidade(std::string cityCode, std::function<void(const CidadeClimaResponse &)> callback) {
+void CptecHandler::getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
-  req->setPath("/api/cptec/v1/clima/previsao/" + cityCode);
+  req->setPath("/api/cptec/v1/clima/previsao/" + std::to_string(cityCode));
   std::string fullUrl = baseUrl + req->getPath();
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
