@@ -11,6 +11,7 @@
 #include "Response/CptecCidadesResponse.h"
 #include "Response/CptecCapitaisResponse.h"
 
+
 class BrasilAPIClient {
 private:
     BanksHandler banksHandler;
@@ -18,6 +19,7 @@ private:
     CNPJHandler cnpjHandler;
     CorretorasHandler corretorasHandler;
     CptecHandler cptecHandler;
+
     std::string userAgent;
     std::thread eventLoopThread;
     std::mutex mutex;
@@ -47,6 +49,7 @@ public:
     void listAllCities(std::function<void(const CptecCidadesResponse&)> callback);
     void searchByTerms(std::string cityName , std::function<void(const CptecCidadesResponse&)> callback);
     void getCapitais(std::function<void(const CptecCapitaisResponse&)> callback);
+    void getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto&)> callback);
 
     // Funções que retornam std::future<std::string>
     std::future<std::string> getAllBanksAsync();
@@ -59,4 +62,5 @@ public:
     std::future<std::string> listAllCitiesAsync();
     std::future<std::string> searchByTermsAsync(std::string cityName);
     std::future<std::string> getCapitaisAsync();
+    std::future<std::string> getCondicoesAeroportoAsync(std::string icao);
 };

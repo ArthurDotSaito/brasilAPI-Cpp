@@ -5,7 +5,7 @@
 #include <json/json.h>
 #include "BaseResponse.h"
 
-class CptecCapitais:public BaseResponse {
+class CptecAeroporto:public BaseResponse {
 public:
     std::string codigo_icao;
     std::string atualizado_em;

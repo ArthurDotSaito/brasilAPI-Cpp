@@ -101,7 +101,7 @@ void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse&)>
     });
 }
 
-void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(const CptecCapitais&)> callback) {
+void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto&)> callback) {
     auto req = drogon::HttpRequest::newHttpRequest();
     req->setMethod(drogon::HttpMethod::Get);
     req->setPath("/api/cptec/v1/clima/aeroporto/" + icao);
@@ -114,25 +114,25 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
 
         Json::Value jsonResponse;
         Json::Reader reader;
-        CptecCapitais cptecCapitais;
+        CptecAeroporto cptecAeroporto;
         if (reader.parse(responseBody, jsonResponse)) {
-            cptecCapitais.codigo_icao = jsonResponse["codigo_icao"].asString();
-            cptecCapitais.atualizado_em = jsonResponse["atualizado_em"].asString();
-            cptecCapitais.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
-            cptecCapitais.visibilidade = jsonResponse["visibilidade"].asString();
-            cptecCapitais.vento = jsonResponse["vento"].asInt();
-            cptecCapitais.direcao_vento = jsonResponse["direcao_vento"].asInt();
-            cptecCapitais.umidade = jsonResponse["umidade"].asInt();
-            cptecCapitais.condicao = jsonResponse["condicao"].asString();
-            cptecCapitais.condicao_Desc = jsonResponse["condicao_Desc"].asString();
-            cptecCapitais.temp = jsonResponse["temp"].asInt();
+            cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
+            cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
+            cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
+            cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
+            cptecAeroporto.vento = jsonResponse["vento"].asInt();
+            cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
+            cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
+            cptecAeroporto.condicao = jsonResponse["condicao"].asString();
+            cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
+            cptecAeroporto.temp = jsonResponse["temp"].asInt();
 
-            cptecCapitais.calledURL = fullUrl;
-            cptecCapitais.jsonResponse = responseBody;            
+            cptecAeroporto.calledURL = fullUrl;
+            cptecAeroporto.jsonResponse = responseBody;            
         }else {
             std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
             return;
         }
-        callback(cptecCapitais);
+        callback(cptecAeroporto);
     });
 }
