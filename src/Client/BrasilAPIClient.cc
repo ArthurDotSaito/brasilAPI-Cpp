@@ -155,6 +155,12 @@ std::future<std::string> BrasilAPIClient::getCondicoesAeroportoAsync(std::string
   return future;
 }
 
+/**
+ * @brief Previsão meteorológica de um dia de uma cidade
+ * Retorna Pervisão meteorológica para 1 dia na cidade informada.
+ *
+ * @param cityCode Código da cidade fornecido. Veja CptecCidade.
+ */
 std::future<std::string> BrasilAPIClient::getCidadesClimaByCidadeAsync(int cityCode) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -163,6 +169,15 @@ std::future<std::string> BrasilAPIClient::getCidadesClimaByCidadeAsync(int cityC
   return future;
 }
 
+/**
+ * @brief Previsão meteorológica para, até, 6 dias
+ * Retorna a previsão meteorológica para a cidade informada para um período de 1 até 6 dias.
+ * Devido a inconsistências encontradas nos retornos da CPTEC nossa API só consegue retornar com precisão o período máximo de 6
+ * dias.
+ *
+ * @param cityCode Código da cidade fornecido. Veja CptecCidade.
+ * @param days Quantidade de dias desejado para a previsão. Máximo de 6 dias.
+ */
 std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCode, int days) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
