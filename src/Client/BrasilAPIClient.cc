@@ -64,6 +64,10 @@ void BrasilAPIClient::getCidadesClimaByCidade(int cityCode, std::function<void(c
   cptecHandler.getCidadesClimaByCidade(cityCode, callback);
 }
 
+void BrasilAPIClient::previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback) {
+  cptecHandler.previsaoCidadeSeisDias(cityCode, days, callback);
+}
+
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -156,5 +160,13 @@ std::future<std::string> BrasilAPIClient::getCidadesClimaByCidadeAsync(int cityC
   auto future = promisePtr->get_future();
   cptecHandler.getCidadesClimaByCidade(
       cityCode, [this, promisePtr, cityCode](const CidadeClimaResponse &cidade) { promisePtr->set_value(cidade.serialize()); });
+  return future;
+}
+
+std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCode, int days) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  cptecHandler.previsaoCidadeSeisDias(cityCode, days,
+      [this, promisePtr, cityCode](const CidadeClimaResponse &cidade) { promisePtr->set_value(cidade.serialize()); });
   return future;
 }

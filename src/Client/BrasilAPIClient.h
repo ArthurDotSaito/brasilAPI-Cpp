@@ -49,6 +49,7 @@ class BrasilAPIClient {
   void getCapitais(std::function<void(const CptecCapitaisResponse &)> callback);
   void getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback);
   void getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback);
+  void previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -63,4 +64,5 @@ class BrasilAPIClient {
   std::future<std::string> getCapitaisAsync();
   std::future<std::string> getCondicoesAeroportoAsync(std::string icao);
   std::future<std::string> getCidadesClimaByCidadeAsync(int cityCode);
+  std::future<std::string> previsaoCidadeSeisDiasAsync(int cityCode, int days);
 };
