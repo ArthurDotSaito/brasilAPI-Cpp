@@ -123,6 +123,13 @@ std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string c
   return future;
 }
 
+/**
+ * @brief Buscar localidades
+ * Retorna listagem com todas as cidades junto a seus respectivos códigos presentes nos serviços da CPTEC. O Código destas cidades
+ * será utilizado para os serviços de meteorologia e a ondas (previsão oceânica) fornecido pelo centro. Leve em consideração que o
+ * WebService do CPTEC as vezes é instável, então se não encontrar uma determinada cidade na listagem completa, tente buscando por
+ * parte de seu nome no endpoint de busca.
+ */
 std::future<std::string> BrasilAPIClient::listAllCitiesAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -131,6 +138,13 @@ std::future<std::string> BrasilAPIClient::listAllCitiesAsync() {
   return future;
 }
 
+/**
+ * @brief Buscar localidades
+ * Retorna listagem com todas as cidades correspondentes ao termo pesquisado junto a seus respectivos códigos presentes nos
+ * serviços da CPTEC. O Código destas cidades será utilizado para os serviços de meteorologia e a ondas (previsão oceânica)
+ * fornecido pelo centro.
+ * @param cityName Nome ou parte do nome da cidade a ser buscada.
+ */
 std::future<std::string> BrasilAPIClient::searchByTermsAsync(std::string cityName) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -139,6 +153,10 @@ std::future<std::string> BrasilAPIClient::searchByTermsAsync(std::string cityNam
   return future;
 }
 
+/**
+ * @brief Condições atuais nas capitais
+ * Retorna condições meteorológicas atuais nas capitais do país, com base nas estações de solo de seu aeroporto.
+ */
 std::future<std::string> BrasilAPIClient::getCapitaisAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -147,6 +165,12 @@ std::future<std::string> BrasilAPIClient::getCapitaisAsync() {
   return future;
 }
 
+/**
+ * @brief Condições atuais em um aeroporto
+ * Retorna condições meteorológicas atuais no aeroporto solicitado.
+ * Este endpoint utiliza o código ICAO (4 dígitos) do aeroporto.
+ * @param icao Código ICAO (4 dígitos) do aeroporto desejado.
+ */
 std::future<std::string> BrasilAPIClient::getCondicoesAeroportoAsync(std::string icao) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
