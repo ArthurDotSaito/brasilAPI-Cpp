@@ -51,12 +51,12 @@ int main() {
       auto futureCptec3 = brasilAPI.getCapitaisAsync();
       auto cptecData3 = futureCptec3.get();
       std::cout << "Cptec Data: " << cptecData3 << std::endl;
+    */
 
-
-  auto futureCptec4 = brasilAPI.getCondicoesAeroportoAsync("SBAR1");
+  auto futureCptec4 = brasilAPI.getCondicoesAeroportoAsync("SBAR");
   auto cptecData4 = futureCptec4.get();
   std::cout << "Cptec Data: " << cptecData4 << std::endl;
-        */
+
   auto futureCptec5 = brasilAPI.getCidadesClimaByCidadeAsync(999);
   auto cptecData5 = futureCptec5.get();
   std::cout << "Cptec Data: " << cptecData5 << std::endl;
