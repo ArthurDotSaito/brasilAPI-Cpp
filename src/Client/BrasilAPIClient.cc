@@ -68,6 +68,10 @@ void BrasilAPIClient::previsaoCidadeSeisDias(int cityCode, int days, std::functi
   cptecHandler.previsaoCidadeSeisDias(cityCode, days, callback);
 }
 
+/**
+ * @brief Retorna informações de todos os bancos do Brasil.
+ * Retorna um array de objetos com informações de todos os bancos do Brasil.
+ */
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -75,6 +79,11 @@ std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
   return future;
 }
 
+/**
+ * @brief Busca as informações de um banco a partir de um código.
+ * Retorna um objeto com informações referentes ao banco pesquisado.
+ * @param cnpj código do banco para efetuar a busca.
+ */
 std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -82,6 +91,11 @@ std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
   return future;
 }
 
+/**
+ * @brief Serviço de busca por CEP com múltiplos providers de fallback.
+ * Retorna um objeto com informações referentes ao cep de busca.
+ * @param cnpj código cep para efetuar a busca.
+ */
 std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -91,7 +105,7 @@ std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
 }
 
 /**
- * @brief ersão 2 do serviço de busca por CEP com múltiplos providers de fallback.
+ * @brief versão 2 do serviço de busca por CEP com múltiplos providers de fallback.
  * Retorna um objeto com informações referentes ao cep de busca.
  * @param cnpj código cep para efetuar a busca.
  */
