@@ -115,6 +115,11 @@ std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
   return future;
 }
 
+/**
+ * @brief Busca por corretoras nos arquivos da CVM.
+ * Retorna um objeto com informações sobre a corretora solicitada.
+ * @param cnpj cnpj da corretora.
+ */
 std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string cnpj) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
