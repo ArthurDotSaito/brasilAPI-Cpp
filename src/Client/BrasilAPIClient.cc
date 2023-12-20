@@ -90,6 +90,11 @@ std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
   return future;
 }
 
+/**
+ * @brief ersão 2 do serviço de busca por CEP com múltiplos providers de fallback.
+ * Retorna um objeto com informações referentes ao cep de busca.
+ * @param cnpj código cep para efetuar a busca.
+ */
 std::future<std::string> BrasilAPIClient::getCepV2Async(int cep) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -98,6 +103,11 @@ std::future<std::string> BrasilAPIClient::getCepV2Async(int cep) {
   return future;
 }
 
+/**
+ * @brief Busca por CNPJ na API Minha Receita.
+ * Retorna um objeto com informações referentes ao cnpj solicitado.
+ * @param cnpj cnpj para efetuar a busca.
+ */
 std::future<std::string> BrasilAPIClient::getCNPJAsync(std::string cnpj) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -106,6 +116,10 @@ std::future<std::string> BrasilAPIClient::getCNPJAsync(std::string cnpj) {
   return future;
 }
 
+/**
+ * @brief retorna todas as corretoras nos arquivos da CVM.
+ * Retorna um array des objetos com informações sobre a corretora solicitada.
+ */
 std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
