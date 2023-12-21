@@ -48,7 +48,7 @@ class Onda {
   }
 };
 
-class CptecCidades : public BaseResponse {
+class CptecPrevisaoOceanica : public BaseResponse {
   public:
   std::string cidade;
   std::string estado;
@@ -56,27 +56,27 @@ class CptecCidades : public BaseResponse {
   std::vector<Onda> ondas;
 
   Json::Value toJson() const {
-    Json::Value jsonCptecCidades;
-    jsonCptecCidades["cidade"] = cidade;
-    jsonCptecCidades["estado"] = estado;
-    jsonCptecCidades["atualizado_em"] = atualizado_em;
+    Json::Value cptecPrevisaoOceanica;
+    cptecPrevisaoOceanica["cidade"] = cidade;
+    cptecPrevisaoOceanica["estado"] = estado;
+    cptecPrevisaoOceanica["atualizado_em"] = atualizado_em;
     Json::Value jsonOndasArray(Json::arrayValue);
     for (const auto &onda : ondas) {
       jsonOndasArray.append(onda.toJson());
     }
-    jsonCptecCidades["ondas"] = jsonOndasArray;
-    return jsonCptecCidades;
+    cptecPrevisaoOceanica["ondas"] = jsonOndasArray;
+    return cptecPrevisaoOceanica;
   }
 };
 
-class CptecCidadesResponse : public BaseResponse {
+class CptecPrevisaoOceanicaResponse : public BaseResponse {
   public:
-  std::vector<CptecCidades> cptecCidades;
+  std::vector<CptecPrevisaoOceanica> cptecPrevisaoOceanica;
 
   std::string serialize() const {
     Json::Value jsonRoot;
-    for (const auto &cptecCidade : cptecCidades) {
-      jsonRoot.append(cptecCidade.toJson());
+    for (const auto &cptecPrevisaoOceanica : cptecPrevisaoOceanica) {
+      jsonRoot.append(cptecPrevisaoOceanica.toJson());
     }
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";

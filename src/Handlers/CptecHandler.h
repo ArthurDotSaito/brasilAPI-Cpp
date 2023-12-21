@@ -3,6 +3,7 @@
 #include "Response/CondicoesAeroporto.h"
 #include "Response/CptecCapitaisResponse.h"
 #include "Response/CptecCidadesResponse.h"
+#include "Response/PrevisaoOceanica.h"
 
 class CptecHandler : public BrasilAPIHandlerBase {
   public:
@@ -12,4 +13,5 @@ class CptecHandler : public BrasilAPIHandlerBase {
   void getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback);
   void getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback);
   void previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback);
+  void previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback);
 };

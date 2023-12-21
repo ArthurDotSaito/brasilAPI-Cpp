@@ -212,7 +212,7 @@ void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
     try {
-      ensureSuccess(response, "/api/cptec/v1/clima/clima/{cityCode}/{days}");
+      ensureSuccess(response, "/api/cptec/v1/clima/{cityCode}/{days}");
       std::string responseBody = std::string(response->getBody());
 
       Json::Value jsonResponse;
@@ -236,6 +236,60 @@ void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<
         }
 
         callback(cidadeClimaResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
+      }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
+}
+
+void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/cptec/v1/ondas/" + std::to_string(cityCode));
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, "/api/cptec/v1/ondas/{cityCode}");
+      std::string responseBody = std::string(response->getBody());
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse)) {
+        CptecPrevisaoOceanica previsaoOceanica;
+        previsaoOceanica.cidade = jsonResponse["cidade"].asString();
+        previsaoOceanica.estado = jsonResponse["estado"].asString();
+        previsaoOceanica.atualizado_em = jsonResponse["atualizado_em"].asString();
+
+        const Json::Value jsonOndasArray = jsonResponse["ondas"];
+        for (const auto &jsonOnda : jsonOndasArray) {
+          Onda onda;
+          onda.data = jsonOnda["data"].asString();
+
+          const Json::Value jsonDadosOndasArray = jsonOnda["dados_ondas"];
+          for (const auto &jsonDadosOnda : jsonDadosOndasArray) {
+            DadosOnda dadosOnda;
+            dadosOnda.vento = jsonDadosOnda["vento"].asFloat();
+            dadosOnda.direcao_vento = jsonDadosOnda["direcao_vento"].asString();
+            dadosOnda.direcao_vento_desc = jsonDadosOnda["direcao_vento_desc"].asString();
+            dadosOnda.altura_onda = jsonDadosOnda["altura_onda"].asFloat();
+            dadosOnda.direcao_onda = jsonDadosOnda["direcao_onda"].asString();
+            dadosOnda.direcao_onda_desc = jsonDadosOnda["direcao_onda_desc"].asString();
+            dadosOnda.agitacao = jsonDadosOnda["agitacao"].asString();
+            dadosOnda.hora = jsonDadosOnda["hora"].asString();
+            onda.dados_ondas.push_back(dadosOnda);
+          }
+
+          previsaoOceanica.ondas.push_back(onda);
+        }
+
+        callback(previsaoOceanica);
       } else {
         std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
         return;
