@@ -281,7 +281,7 @@ void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const
             dadosOnda.altura_onda = jsonDadosOnda["altura_onda"].asFloat();
             dadosOnda.direcao_onda = jsonDadosOnda["direcao_onda"].asString();
             dadosOnda.direcao_onda_desc = jsonDadosOnda["direcao_onda_desc"].asString();
-            dadosOnda.agitacao = jsonDadosOnda["agitacao"].asString();
+            dadosOnda.agitation = jsonDadosOnda["agitation"].asString();
             dadosOnda.hora = jsonDadosOnda["hora"].asString();
             onda.dados_ondas.push_back(dadosOnda);
           }

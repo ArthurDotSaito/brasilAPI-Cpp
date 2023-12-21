@@ -14,7 +14,7 @@ class DadosOnda {
   float altura_onda;
   std::string direcao_onda;
   std::string direcao_onda_desc;
-  std::string agitacao;
+  std::string agitation;
   std::string hora;
 
   Json::Value toJson() const {
@@ -25,7 +25,7 @@ class DadosOnda {
     jsonDadosOnda["altura_onda"] = altura_onda;
     jsonDadosOnda["direcao_onda"] = direcao_onda;
     jsonDadosOnda["direcao_onda_desc"] = direcao_onda_desc;
-    jsonDadosOnda["agitacao"] = agitacao;
+    jsonDadosOnda["agitation"] = agitation;
     jsonDadosOnda["hora"] = hora;
     return jsonDadosOnda;
   }
@@ -61,7 +61,7 @@ class CptecPrevisaoOceanica : public BaseResponse {
     cptecPrevisaoOceanica["estado"] = estado;
     cptecPrevisaoOceanica["atualizado_em"] = atualizado_em;
 
-        Json::Value jsonOndasArray(Json::arrayValue);
+    Json::Value jsonOndasArray(Json::arrayValue);
     for (const auto &onda : ondas) {
       jsonOndasArray.append(onda.toJson());
     }
