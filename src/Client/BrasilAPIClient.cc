@@ -72,6 +72,11 @@ void BrasilAPIClient::previsaoOceanicaCidade(int cityCode, std::function<void(co
   cptecHandler.previsaoOceanicaCidade(cityCode, callback);
 }
 
+void BrasilAPIClient::previsaoOceanicaCidadeSeisDias(
+    int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback) {
+  cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -258,5 +263,22 @@ std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeAsync(int cityCo
   auto future = promisePtr->get_future();
   cptecHandler.previsaoOceanicaCidade(
       cityCode, [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Previsão oceânica para uma cidade, para até 6 dias
+ * Retorna a previsão oceânica para a cidade informada para um período de 1 até 6 dias.
+ * Devido a inconsistências encontradas nos retornos da CPTEC nossa API só consegue retornar com precisão o período máximo de 6
+ * dias.
+ *
+ * @param cityCode Código da cidade fornecido. Veja CptecCidade.
+ * @param days Quantidade de dias desejado para a previsão. Máximo de 6 dias.
+ */
+std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days,
+      [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
   return future;
 }
