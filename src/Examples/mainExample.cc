@@ -55,14 +55,18 @@ int main() {
   auto futureCptec4 = brasilAPI.getCondicoesAeroportoAsync("SBAR");
   auto cptecData4 = futureCptec4.get();
   std::cout << "Cptec Data: " << cptecData4 << std::endl;
-    */
+
   auto futureCptec5 = brasilAPI.getCidadesClimaByCidadeAsync(999);
   auto cptecData5 = futureCptec5.get();
   std::cout << "Cptec Data: " << cptecData5 << std::endl;
-
+ */
   auto futureCptec6 = brasilAPI.previsaoCidadeSeisDiasAsync(999, 6);
   auto cptecData6 = futureCptec6.get();
   std::cout << "Cptec Data: " << cptecData6 << std::endl;
+
+  auto futureCptec7 = brasilAPI.previsaoOceanicaCidadeAsync(241);
+  auto cptecData7 = futureCptec7.get();
+  std::cout << "Cptec Data: " << cptecData7 << std::endl;
 
   return 0;
 }

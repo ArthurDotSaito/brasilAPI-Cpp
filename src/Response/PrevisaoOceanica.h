@@ -60,12 +60,20 @@ class CptecPrevisaoOceanica : public BaseResponse {
     cptecPrevisaoOceanica["cidade"] = cidade;
     cptecPrevisaoOceanica["estado"] = estado;
     cptecPrevisaoOceanica["atualizado_em"] = atualizado_em;
-    Json::Value jsonOndasArray(Json::arrayValue);
+
+        Json::Value jsonOndasArray(Json::arrayValue);
     for (const auto &onda : ondas) {
       jsonOndasArray.append(onda.toJson());
     }
     cptecPrevisaoOceanica["ondas"] = jsonOndasArray;
     return cptecPrevisaoOceanica;
+  }
+
+  std::string serialize() const {
+    Json::StreamWriterBuilder builder;
+    builder["commentStyle"] = "None";
+    builder["indentation"] = "  ";
+    return Json::writeString(builder, this->toJson());
   }
 };
 

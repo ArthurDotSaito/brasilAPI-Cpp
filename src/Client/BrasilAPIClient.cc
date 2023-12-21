@@ -68,6 +68,10 @@ void BrasilAPIClient::previsaoCidadeSeisDias(int cityCode, int days, std::functi
   cptecHandler.previsaoCidadeSeisDias(cityCode, days, callback);
 }
 
+void BrasilAPIClient::previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback) {
+  cptecHandler.previsaoOceanicaCidade(cityCode, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -240,5 +244,19 @@ std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCo
   auto future = promisePtr->get_future();
   cptecHandler.previsaoCidadeSeisDias(cityCode, days,
       [this, promisePtr, cityCode](const CidadeClimaResponse &cidade) { promisePtr->set_value(cidade.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Previsão oceânica para uma cidade
+ * Retorna a previsão oceânica para a cidade informada.
+ *
+ * @param cityCode Código da cidade fornecido. Veja CptecCidade.
+ */
+std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeAsync(int cityCode) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  cptecHandler.previsaoOceanicaCidade(
+      cityCode, [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
   return future;
 }
