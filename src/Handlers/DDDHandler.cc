@@ -19,7 +19,7 @@ void DDDHandler::listStateAndCities(int ddd, std::function<void(const DDDRespons
         DDDResponse dddResponse;
         dddResponse.state = jsonResponse["state"].asString();
 
-        const Json::Value jsonCitiesArray = jsonResponse["ciites"];
+        const Json::Value jsonCitiesArray = jsonResponse["cities"];
         for (const auto &jsonCity : jsonCitiesArray) {
           std::string city = jsonCity.asString();
           dddResponse.cities.push_back(city);

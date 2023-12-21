@@ -77,6 +77,10 @@ void BrasilAPIClient::previsaoOceanicaCidadeSeisDias(
   cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days, callback);
 }
 
+void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback) {
+  dddHandler.listStateAndCities(ddd, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -280,5 +284,19 @@ std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeSeisDiasAsync(in
   auto future = promisePtr->get_future();
   cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days,
       [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Busca por DDD
+ * Retorna um objeto com informações referentes ao DDD solicitado.
+ * @param ddd ddd para efetuar a busca.
+ */
+
+std::future<std::string> BrasilAPIClient::listStateAndCitiesAsync(int ddd) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  dddHandler.listStateAndCities(
+      ddd, [this, promisePtr, ddd](const DDDResponse &dddResponse) { promisePtr->set_value(dddResponse.serialize()); });
   return future;
 }
