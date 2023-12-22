@@ -78,5 +78,8 @@ int main() {
   auto dddData = ddd.get();
   std::cout << "DDD Data: " << dddData << std::endl;
 
+  auto feriados = brasilAPI.getFeriadosAsync(2024);
+  auto feriadosData = feriados.get();
+  std::cout << "Feriados Data: " << feriadosData << std::endl;
   return 0;
 }

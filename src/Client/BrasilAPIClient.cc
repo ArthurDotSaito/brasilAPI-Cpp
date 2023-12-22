@@ -81,6 +81,10 @@ void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(const DDDRe
   dddHandler.listStateAndCities(ddd, callback);
 }
 
+void BrasilAPIClient::getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback) {
+  feriadosHandler.getFeriados(ano, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -298,5 +302,18 @@ std::future<std::string> BrasilAPIClient::listStateAndCitiesAsync(int ddd) {
   auto future = promisePtr->get_future();
   dddHandler.listStateAndCities(
       ddd, [this, promisePtr, ddd](const DDDResponse &dddResponse) { promisePtr->set_value(dddResponse.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Busca por feriados
+ * Retorna um objeto com informações referentes ao ano solicitado.
+ * @param ano ano para efetuar a busca.
+ */
+std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  feriadosHandler.getFeriados(ano,
+      [this, promisePtr, ano](const FeriadosResponse &feriadosResponse) { promisePtr->set_value(feriadosResponse.serialize()); });
   return future;
 }

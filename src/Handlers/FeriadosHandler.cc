@@ -4,7 +4,7 @@
 void FeriadosHandler::getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
-  req->setPath("/api/feriados/v1" + std::to_string(ano));
+  req->setPath("/api/feriados/v1/" + std::to_string(ano));
   std::string fullUrl = baseUrl + req->getPath();
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
