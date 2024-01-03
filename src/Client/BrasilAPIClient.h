@@ -5,6 +5,7 @@
 #include "Handlers/CptecHandler.h"
 #include "Handlers/DDDHandler.h"
 #include "Handlers/FeriadosHandler.h"
+#include "Handlers/FipeHandler.h"
 #include "Response/BankResponse.h"
 #include "Response/CNPJResponse.h"
 #include "Response/CepResponse.h"
@@ -12,6 +13,7 @@
 #include "Response/CptecCapitaisResponse.h"
 #include "Response/CptecCidadesResponse.h"
 #include "Response/DDD.h"
+#include "Response/FipeResponse.h"
 #include "Response/PrevisaoOceanica.h"
 
 #include <drogon/drogon.h>
@@ -25,6 +27,7 @@ class BrasilAPIClient {
   CptecHandler cptecHandler;
   DDDHandler dddHandler;
   FeriadosHandler feriadosHandler;
+  FipeHandler fipeHandler;
 
   std::string userAgent;
   std::thread eventLoopThread;
@@ -61,6 +64,8 @@ class BrasilAPIClient {
   void previsaoOceanicaCidadeSeisDias(int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback);
   void listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback);
   void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
+  void getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+      std::function<void(const FipeResponse &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -80,4 +85,9 @@ class BrasilAPIClient {
   std::future<std::string> previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> listStateAndCitiesAsync(int ddd);
   std::future<std::string> getFeriadosAsync(int ano);
+  std::future<std::string> getFipeAsync();
+  std::future<std::string> getFipeAsync(std::optional<std::string> tipoVeiculo);
+  std::future<std::string> getFipeAsync(std::optional<int> tabela_referencia);
+  std::future<std::string> getFipeAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
+  // ...
 };

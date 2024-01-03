@@ -85,6 +85,11 @@ void BrasilAPIClient::getFeriados(int ano, std::function<void(const FeriadosResp
   feriadosHandler.getFeriados(ano, callback);
 }
 
+void BrasilAPIClient::getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+    std::function<void(const FipeResponse &)> callback) {
+  fipeHandler.getFipe(tipoVeiculo, tabela_referencia, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -315,5 +320,50 @@ std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
   auto future = promisePtr->get_future();
   feriadosHandler.getFeriados(ano,
       [this, promisePtr, ano](const FeriadosResponse &feriadosResponse) { promisePtr->set_value(feriadosResponse.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Busca por tabela fipe
+ * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ */
+std::future<std::string> BrasilAPIClient::getFipeAsync() {
+  return getFipeAsync(std::nullopt, std::nullopt);
+}
+
+/**
+ * @brief Busca por tabela fipe
+ * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ */
+std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<std::string> tipoVeiculo) {
+  return getFipeAsync(tipoVeiculo, std::nullopt);
+}
+
+/**
+ * @brief Busca por tabela fipe
+ * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ */
+std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<int> tabela_referencia) {
+  return getFipeAsync(std::nullopt, tabela_referencia);
+}
+
+/**
+ * @brief Busca por tabela fipe
+ * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ */
+std::future<std::string> BrasilAPIClient::getFipeAsync(
+    std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  fipeHandler.getFipe(tipoVeiculo, tabela_referencia,
+      [this, promisePtr](const FipeResponse &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
 }

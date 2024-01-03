@@ -68,7 +68,7 @@ int main() {
   auto futureCptec7 = brasilAPI.previsaoOceanicaCidadeAsync(241);
   auto cptecData7 = futureCptec7.get();
   std::cout << "Cptec Data: " << cptecData7 << std::endl;
-  */
+
 
   auto futureCptec8 = brasilAPI.previsaoOceanicaCidadeSeisDiasAsync(241, 6);
   auto cptecData8 = futureCptec8.get();
@@ -81,5 +81,20 @@ int main() {
   auto feriados = brasilAPI.getFeriadosAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;
+  return 0;
+  */
+
+  auto fipe = brasilAPI.getFipeAsync();
+  auto fipeData = fipe.get();
+  std::cout << "Fipe Data: " << fipeData << std::endl;
+
+  fipe = brasilAPI.getFipeAsync("carros");
+  fipeData = fipe.get();
+  std::cout << "Fipe Data: " << fipeData << std::endl;
+
+  auto fipe = brasilAPI.getFipeAsync(102);
+  auto fipeData = fipe.get();
+  std::cout << "Fipe Data: " << fipeData << std::endl;
+
   return 0;
 }
