@@ -7,7 +7,7 @@ void FipeHandler::getFipe(const std::optional<std::string> &tipoVeiculo, const s
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
   std::stringstream queryStream;
-  pathStream << "/api/fipe/veiculos/v1";
+  pathStream << "/api/fipe/marcas/v1";
 
   if (tipoVeiculo) {
     pathStream << "/" << *tipoVeiculo;

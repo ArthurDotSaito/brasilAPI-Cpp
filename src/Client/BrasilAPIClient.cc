@@ -326,8 +326,11 @@ std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
 /**
  * @brief Busca por tabela fipe
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
- * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
+ * todos os tipos de veículos
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe
+ * atual.
  */
 std::future<std::string> BrasilAPIClient::getFipeAsync() {
   return getFipeAsync(std::nullopt, std::nullopt);
@@ -336,8 +339,11 @@ std::future<std::string> BrasilAPIClient::getFipeAsync() {
 /**
  * @brief Busca por tabela fipe
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
- * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
+ * todos os tipos de veículos
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe
+ * atual.
  */
 std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<std::string> tipoVeiculo) {
   return getFipeAsync(tipoVeiculo, std::nullopt);
@@ -346,8 +352,11 @@ std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<std::string
 /**
  * @brief Busca por tabela fipe
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
- * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
+ * todos os tipos de veículos
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe
+ * atual.
  */
 std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<int> tabela_referencia) {
   return getFipeAsync(std::nullopt, tabela_referencia);
@@ -356,8 +365,11 @@ std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<int> tabela
 /**
  * @brief Busca por tabela fipe
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
- * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional.
+ * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
+ * todos os tipos de veículos
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe
+ * atual.
  */
 std::future<std::string> BrasilAPIClient::getFipeAsync(
     std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia) {

@@ -88,13 +88,13 @@ int main() {
   auto fipeData = fipe.get();
   std::cout << "Fipe Data: " << fipeData << std::endl;
 
-  fipe = brasilAPI.getFipeAsync("carros");
-  fipeData = fipe.get();
-  std::cout << "Fipe Data: " << fipeData << std::endl;
+  auto fipe1 = brasilAPI.getFipeAsync("carros");
+  auto fipeData1 = fipe1.get();
+  std::cout << "Fipe Data: " << fipeData1 << std::endl;
 
-  auto fipe = brasilAPI.getFipeAsync(102);
-  auto fipeData = fipe.get();
-  std::cout << "Fipe Data: " << fipeData << std::endl;
+  auto fipe2 = brasilAPI.getFipeAsync(102);
+  auto fipeData2 = fipe2.get();
+  std::cout << "Fipe Data: " << fipeData2 << std::endl;
 
   return 0;
 }
