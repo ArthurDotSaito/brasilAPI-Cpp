@@ -3,5 +3,6 @@
 
 class FipeHandler : public BrasilAPIHandlerBase {
   public:
-  void getFipe(const std::string &tipoVeiculo, int tabela_referencia, std::function<void(const FipeResponse &)> callback);
+  void getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+      std::function<void(const FipeResponse &)> callback);
 };
