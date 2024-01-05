@@ -84,15 +84,15 @@ int main() {
   return 0;
   */
 
-  auto fipe = brasilAPI.getFipeAsync();
+  auto fipe = brasilAPI.listFipeMarcasAsync();
   auto fipeData = fipe.get();
   std::cout << "Fipe Data: " << fipeData << std::endl;
 
-  auto fipe1 = brasilAPI.getFipeAsync("carros");
+  auto fipe1 = brasilAPI.listFipeMarcasAsync("carros");
   auto fipeData1 = fipe1.get();
   std::cout << "Fipe Data: " << fipeData1 << std::endl;
 
-  auto fipe2 = brasilAPI.getFipeAsync(102);
+  auto fipe2 = brasilAPI.listFipeMarcasAsync(102);
   auto fipeData2 = fipe2.get();
   std::cout << "Fipe Data: " << fipeData2 << std::endl;
 

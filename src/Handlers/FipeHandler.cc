@@ -1,7 +1,7 @@
 #include "FipeHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void FipeHandler::getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+void FipeHandler::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
     std::function<void(const FipeMarcas &)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);

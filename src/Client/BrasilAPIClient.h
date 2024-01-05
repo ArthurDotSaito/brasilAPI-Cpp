@@ -46,6 +46,7 @@ class BrasilAPIClient {
 
   void setUserAgent(const std::string &userAgent);
 
+  // TODO: Revisar nome das funções (list vs get, etc)
   // Funções que usam callbacks
   void getAllBanks(std::function<void(const BankResponse &)> callback);
   void getBanksByCode(int code, std::function<void(const Bank &)> callback);
@@ -64,7 +65,7 @@ class BrasilAPIClient {
   void previsaoOceanicaCidadeSeisDias(int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback);
   void listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback);
   void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
-  void getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+  void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
       std::function<void(const FipeMarcas &)> callback);
 
   // Funções que retornam std::future<std::string>
@@ -85,9 +86,9 @@ class BrasilAPIClient {
   std::future<std::string> previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> listStateAndCitiesAsync(int ddd);
   std::future<std::string> getFeriadosAsync(int ano);
-  std::future<std::string> getFipeAsync();
-  std::future<std::string> getFipeAsync(std::optional<std::string> tipoVeiculo);
-  std::future<std::string> getFipeAsync(std::optional<int> tabela_referencia);
-  std::future<std::string> getFipeAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
+  std::future<std::string> listFipeMarcasAsync();
+  std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo);
+  std::future<std::string> listFipeMarcasAsync(std::optional<int> tabela_referencia);
+  std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
   // ...
 };

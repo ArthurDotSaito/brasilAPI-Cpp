@@ -85,9 +85,9 @@ void BrasilAPIClient::getFeriados(int ano, std::function<void(const FeriadosResp
   feriadosHandler.getFeriados(ano, callback);
 }
 
-void BrasilAPIClient::getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+void BrasilAPIClient::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
     std::function<void(const FipeMarcas &)> callback) {
-  fipeHandler.getFipe(tipoVeiculo, tabela_referencia, callback);
+  fipeHandler.listFipeMarcas(tipoVeiculo, tabela_referencia, callback);
 }
 
 /**
@@ -332,8 +332,8 @@ std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::getFipeAsync() {
-  return getFipeAsync(std::nullopt, std::nullopt);
+std::future<std::string> BrasilAPIClient::listFipeMarcasAsync() {
+  return listFipeMarcasAsync(std::nullopt, std::nullopt);
 }
 
 /**
@@ -345,8 +345,8 @@ std::future<std::string> BrasilAPIClient::getFipeAsync() {
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<std::string> tipoVeiculo) {
-  return getFipeAsync(tipoVeiculo, std::nullopt);
+std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<std::string> tipoVeiculo) {
+  return listFipeMarcasAsync(tipoVeiculo, std::nullopt);
 }
 
 /**
@@ -358,8 +358,8 @@ std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<std::string
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<int> tabela_referencia) {
-  return getFipeAsync(std::nullopt, tabela_referencia);
+std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<int> tabela_referencia) {
+  return listFipeMarcasAsync(std::nullopt, tabela_referencia);
 }
 
 /**
@@ -371,11 +371,11 @@ std::future<std::string> BrasilAPIClient::getFipeAsync(std::optional<int> tabela
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::getFipeAsync(
+std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(
     std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  fipeHandler.getFipe(tipoVeiculo, tabela_referencia,
+  fipeHandler.listFipeMarcas(tipoVeiculo, tabela_referencia,
       [this, promisePtr](const FipeMarcas &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
 }
