@@ -404,3 +404,4 @@ std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoF
   fipeHandler.listFipePreco(codigoFipe, tabela_referencia,
       [this, promisePtr](const FipePrecos &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
+}
