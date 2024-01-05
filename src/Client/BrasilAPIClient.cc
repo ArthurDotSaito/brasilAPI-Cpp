@@ -324,7 +324,7 @@ std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
 }
 
 /**
- * @brief Busca por tabela fipe
+ * @brief Lista as marcas de veículos referente ao tipo de veículo
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
  * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
  * todos os tipos de veículos
@@ -337,7 +337,7 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync() {
 }
 
 /**
- * @brief Busca por tabela fipe
+ * @brief Lista as marcas de veículos referente ao tipo de veículo
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
  * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
  * todos os tipos de veículos
@@ -350,7 +350,7 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<std:
 }
 
 /**
- * @brief Busca por tabela fipe
+ * @brief Lista as marcas de veículos referente ao tipo de veículo
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
  * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
  * todos os tipos de veículos
@@ -363,7 +363,7 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<int>
 }
 
 /**
- * @brief Busca por tabela fipe
+ * @brief Lista as marcas de veículos referente ao tipo de veículo
  * Retorna um objeto com informações referentes ao tipo de veículo e/ou tabela de referência solicitado.
  * @param tipoVeiculo tipo de veículo para efetuar a busca - opcional. Quando o tipo não é específicado são buscada as marcas de
  * todos os tipos de veículos
@@ -379,3 +379,28 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(
       [this, promisePtr](const FipeMarcas &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
 }
+
+/**
+ * @brief Consulta o preço do veículo segundo a tabela fipe.
+ * Retorna um array de objetos com informações referentes ao veículo segundo a tabela fipe.
+ * @param codigoFipe Código fipe do veículo/marca.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe atual.
+ */
+std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoFipe) {
+  return listFipePrecoAsync(codigoFipe, std::nullopt);
+}
+
+/**
+ * @brief Consulta o preço do veículo segundo a tabela fipe.
+ * Retorna um array de objetos com informações referentes ao veículo segundo a tabela fipe.
+ * @param codigoFipe Código fipe do veículo/marca.
+ * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
+ * Por padrão é utilizado o código da tabela fipe atual.
+ */
+std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  fipeHandler.listFipePreco(codigoFipe, tabela_referencia,
+      [this, promisePtr](const FipePrecos &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+  return future;
