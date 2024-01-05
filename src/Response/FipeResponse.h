@@ -7,7 +7,7 @@
 #include <string>
 
 class Marcas : public BaseResponse {
-  public:
+  private:
   std::string nome;
   std::string valor;
 

@@ -25,22 +25,22 @@ void FipeHandler::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, 
     ensureSuccess(response, fullUrl);
     std::string responseBody = std::string(response->getBody());
 
-    FipeMarcas fipeResponse;
-    fipeResponse.calledURL = fullUrl;
-    fipeResponse.jsonResponse = responseBody;
+    FipeMarcas marcasResponse;
+    marcasResponse.calledURL = fullUrl;
+    marcasResponse.jsonResponse = responseBody;
 
     Json::Value jsonResponse;
     Json::Reader reader;
     if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
       for (const auto &jsonItem : jsonResponse) {
         Marcas marcas;
-        marcas.nome = jsonItem["nome"].asString();
-        marcas.valor = jsonItem["valor"].asString();
-        fipeResponse.fipe.push_back(marcas);
+        marcas.setNome(jsonItem["nome"].asString());
+        marcas.setValor(jsonItem["valor"].asString());
+        marcasResponse.fipe.push_back(marcas);
       }
     }
 
-    callback(fipeResponse);
+    callback(marcasResponse);
   });
 }
 
