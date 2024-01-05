@@ -5,7 +5,7 @@
 #include <json/json.h>
 #include <string>
 
-class Fipe : public BaseResponse {
+class Marcas : public BaseResponse {
   public:
   std::string nome;
   std::string valor;
@@ -18,9 +18,9 @@ class Fipe : public BaseResponse {
   }
 };
 
-class FipeResponse : public BaseResponse {
+class FipeMarcas : public BaseResponse {
   public:
-  std::vector<Fipe> fipe;
+  std::vector<Marcas> fipe;
 
   Json::Value toJson() const {
     Json::Value jsonRoot(Json::arrayValue);

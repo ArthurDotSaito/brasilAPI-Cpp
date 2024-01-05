@@ -65,7 +65,7 @@ class BrasilAPIClient {
   void listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback);
   void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
   void getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-      std::function<void(const FipeResponse &)> callback);
+      std::function<void(const FipeMarcas &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();

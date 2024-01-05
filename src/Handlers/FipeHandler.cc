@@ -2,7 +2,7 @@
 #include <Utils/BrasilAPIException.h>
 
 void FipeHandler::getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipeResponse &)> callback) {
+    std::function<void(const FipeMarcas &)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -25,7 +25,7 @@ void FipeHandler::getFipe(const std::optional<std::string> &tipoVeiculo, const s
     ensureSuccess(response, fullUrl);
     std::string responseBody = std::string(response->getBody());
 
-    FipeResponse fipeResponse;
+    FipeMarcas fipeResponse;
     fipeResponse.calledURL = fullUrl;
     fipeResponse.jsonResponse = responseBody;
 
@@ -33,10 +33,10 @@ void FipeHandler::getFipe(const std::optional<std::string> &tipoVeiculo, const s
     Json::Reader reader;
     if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
       for (const auto &jsonItem : jsonResponse) {
-        Fipe fipe;
-        fipe.nome = jsonItem["nome"].asString();
-        fipe.valor = jsonItem["valor"].asString();
-        fipeResponse.fipe.push_back(fipe);
+        Marcas marcas;
+        marcas.nome = jsonItem["nome"].asString();
+        marcas.valor = jsonItem["valor"].asString();
+        fipeResponse.fipe.push_back(marcas);
       }
     }
 

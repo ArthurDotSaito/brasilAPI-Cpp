@@ -86,7 +86,7 @@ void BrasilAPIClient::getFeriados(int ano, std::function<void(const FeriadosResp
 }
 
 void BrasilAPIClient::getFipe(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipeResponse &)> callback) {
+    std::function<void(const FipeMarcas &)> callback) {
   fipeHandler.getFipe(tipoVeiculo, tabela_referencia, callback);
 }
 
@@ -376,6 +376,6 @@ std::future<std::string> BrasilAPIClient::getFipeAsync(
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
   fipeHandler.getFipe(tipoVeiculo, tabela_referencia,
-      [this, promisePtr](const FipeResponse &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+      [this, promisePtr](const FipeMarcas &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
 }
