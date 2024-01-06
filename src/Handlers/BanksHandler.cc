@@ -21,12 +21,12 @@ void BanksHandler::getAllBanks(std::function<void(const BankResponse &)> callbac
     if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
       for (const auto &jsonBank : jsonResponse) {
         Bank bank;
-        bank.ispb = jsonBank["ispb"].asString();
-        bank.name = jsonBank["name"].asString();
+        bank.setIspb(jsonBank["ispb"].asString());
+        bank.setName(jsonBank["name"].asString());
         if (!jsonBank["code"].isNull()) {
-          bank.code = jsonBank["code"].asInt();
+          bank.setCode(std::to_string(jsonBank["code"].asInt()));
         }
-        bank.fullName = jsonBank["fullName"].asString();
+        bank.setFullName(jsonBank["fullName"].asString());
         bankResponse.banks.push_back(bank);
       }
     }
@@ -49,12 +49,12 @@ void BanksHandler::getBanksByCode(int code, std::function<void(const Bank &)> ca
     Json::Reader reader;
     Bank bank;
     if (reader.parse(responseBody, jsonResponse)) {
-      bank.ispb = jsonResponse["ispb"].asString();
-      bank.name = jsonResponse["name"].asString();
+      bank.setIspb(jsonResponse["ispb"].asString());
+      bank.setName(jsonResponse["name"].asString());
       if (!jsonResponse["code"].isNull()) {
-        bank.code = jsonResponse["code"].asInt();
+        bank.setCode(std::to_string(jsonResponse["code"].asInt()));
       }
-      bank.fullName = jsonResponse["fullName"].asString();
+      bank.setFullName(jsonResponse["fullName"].asString());
       bank.calledURL = fullUrl;
       bank.jsonResponse = responseBody;
     } else {

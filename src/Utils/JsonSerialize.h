@@ -1,3 +1,6 @@
+#ifndef JSON_SERIALIZE_H
+#define JSON_SERIALIZE_H
+
 #include <json/json.h>
 #include <string>
 #include <vector>
@@ -14,3 +17,5 @@ class JsonSerialize {
     return Json::writeString(builder, this->toJson());
   }
 };
+
+#endif // JSON_SERIALIZE_H
