@@ -2,11 +2,12 @@
 #define CORRETORAS_RESPONSE_H
 
 #include "BaseResponse.h"
+#include "Utils/JsonSerialize.h"
 #include <json/json.h>
 #include <string>
 
-class Corretoras : public BaseResponse {
-  public:
+class Corretoras : public BaseResponse, public JsonSerialize {
+  private:
   std::string bairro;
   std::string cep;
   std::string cnpj;
@@ -27,7 +28,124 @@ class Corretoras : public BaseResponse {
   std::string uf;
   std::string valor_patrimonio_liquido;
 
-  std::string serialize() const {
+  public:
+  std::string getBairro() const {
+    return bairro;
+  }
+  std::string getCep() const {
+    return cep;
+  }
+  std::string getCnpj() const {
+    return cnpj;
+  }
+  std::string getCodigoCvm() const {
+    return codigo_cvm;
+  }
+  std::string getComplemento() const {
+    return complemento;
+  }
+  std::string getDataInicioSituacao() const {
+    return data_inicio_situacao;
+  }
+  std::string getDataPatrimonioLiquido() const {
+    return data_patrimonio_liquido;
+  }
+  std::string getDataRegistro() const {
+    return data_registro;
+  }
+  std::string getEmail() const {
+    return email;
+  }
+  std::string getLogradouro() const {
+    return logradouro;
+  }
+  std::string getMunicipio() const {
+    return municipio;
+  }
+  std::string getNomeSocial() const {
+    return nome_social;
+  }
+  std::string getNomeComercial() const {
+    return nome_comercial;
+  }
+  std::string getPais() const {
+    return pais;
+  }
+  std::string getStatus() const {
+    return status;
+  }
+  std::string getTelefone() const {
+    return telefone;
+  }
+  std::string getType() const {
+    return type;
+  }
+  std::string getUf() const {
+    return uf;
+  }
+  std::string getValorPatrimonioLiquido() const {
+    return valor_patrimonio_liquido;
+  }
+
+  void setBairro(const std::string &value) {
+    bairro = value;
+  }
+  void setCep(const std::string &value) {
+    cep = value;
+  }
+  void setCnpj(const std::string &value) {
+    cnpj = value;
+  }
+  void setCodigoCvm(const std::string &value) {
+    codigo_cvm = value;
+  }
+  void setComplemento(const std::string &value) {
+    complemento = value;
+  }
+  void setDataInicioSituacao(const std::string &value) {
+    data_inicio_situacao = value;
+  }
+  void setDataPatrimonioLiquido(const std::string &value) {
+    data_patrimonio_liquido = value;
+  }
+  void setDataRegistro(const std::string &value) {
+    data_registro = value;
+  }
+  void setEmail(const std::string &value) {
+    email = value;
+  }
+  void setLogradouro(const std::string &value) {
+    logradouro = value;
+  }
+  void setMunicipio(const std::string &value) {
+    municipio = value;
+  }
+  void setNomeSocial(const std::string &value) {
+    nome_social = value;
+  }
+  void setNomeComercial(const std::string &value) {
+    nome_comercial = value;
+  }
+  void setPais(const std::string &value) {
+    pais = value;
+  }
+  void setStatus(const std::string &value) {
+    status = value;
+  }
+  void setTelefone(const std::string &value) {
+    telefone = value;
+  }
+  void setType(const std::string &value) {
+    type = value;
+  }
+  void setUf(const std::string &value) {
+    uf = value;
+  }
+  void setValorPatrimonioLiquido(const std::string &value) {
+    valor_patrimonio_liquido = value;
+  }
+
+  Json::Value toJson() const {
     Json::Value jsonCorretoras;
     jsonCorretoras["bairro"] = bairro;
     jsonCorretoras["cep"] = cep;
@@ -48,49 +166,20 @@ class Corretoras : public BaseResponse {
     jsonCorretoras["type"] = type;
     jsonCorretoras["uf"] = uf;
     jsonCorretoras["valor_patrimonio_liquido"] = valor_patrimonio_liquido;
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonCorretoras);
+    return jsonCorretoras;
   }
 };
 
-class CorretorasResponse : public BaseResponse {
+class CorretorasResponse : public BaseResponse, public JsonSerialize {
   public:
   std::vector<Corretoras> corretoras;
 
-  std::string serialize() const {
-    Json::Value jsonRoot;
-
-    for (const auto &corretoras : corretoras) {
-      Json::Value jsonCorretoras;
-      jsonCorretoras["bairro"] = corretoras.bairro;
-      jsonCorretoras["cep"] = corretoras.cep;
-      jsonCorretoras["cnpj"] = corretoras.cnpj;
-      jsonCorretoras["codigo_cvm"] = corretoras.codigo_cvm;
-      jsonCorretoras["complemento"] = corretoras.complemento;
-      jsonCorretoras["data_inicio_situacao"] = corretoras.data_inicio_situacao;
-      jsonCorretoras["data_patrimonio_liquido"] = corretoras.data_patrimonio_liquido;
-      jsonCorretoras["data_registro"] = corretoras.data_registro;
-      jsonCorretoras["email"] = corretoras.email;
-      jsonCorretoras["logradouro"] = corretoras.logradouro;
-      jsonCorretoras["municipio"] = corretoras.municipio;
-      jsonCorretoras["nome_social"] = corretoras.nome_social;
-      jsonCorretoras["nome_comercial"] = corretoras.nome_comercial;
-      jsonCorretoras["pais"] = corretoras.pais;
-      jsonCorretoras["status"] = corretoras.status;
-      jsonCorretoras["telefone"] = corretoras.telefone;
-      jsonCorretoras["type"] = corretoras.type;
-      jsonCorretoras["uf"] = corretoras.uf;
-      jsonCorretoras["valor_patrimonio_liquido"] = corretoras.valor_patrimonio_liquido;
-      jsonRoot.append(jsonCorretoras);
+  Json::Value toJson() const override {
+    Json::Value jsonRoot(Json::arrayValue);
+    for (const auto &item : corretoras) {
+      jsonRoot.append(item.toJson());
     }
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonRoot);
+    return jsonRoot;
   }
 };
 
