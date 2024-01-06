@@ -66,8 +66,6 @@ void CorretorasHandler::getCorretorasByCnpj(std::string cnpj, std::function<void
       ensureSuccess(response, "/api/cvm/corretoras/v1/{cnpj}");
       std::string responseBody = std::string(response->getBody());
 
-      std::cout << "ResponseBody: " << responseBody << std::endl;
-
       Json::Value jsonResponse;
       Json::Reader reader;
       Corretoras corretoras;
