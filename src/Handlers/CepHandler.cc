@@ -16,12 +16,12 @@ void CepHandler::getCep(int cep, std::function<void(const CepResponse &)> callba
       Json::Reader reader;
       CepResponse cepResponse;
       if (reader.parse(responseBody, jsonResponse)) {
-        cepResponse.cep = jsonResponse["cep"].asString();
-        cepResponse.state = jsonResponse["state"].asString();
-        cepResponse.city = jsonResponse["city"].asString();
-        cepResponse.neighborhood = jsonResponse["neighborhood"].asString();
-        cepResponse.street = jsonResponse["street"].asString();
-        cepResponse.service = jsonResponse["service"].asString();
+        cepResponse.setCep(jsonResponse["cep"].asString());
+        cepResponse.setState(jsonResponse["state"].asString());
+        cepResponse.setCity(jsonResponse["city"].asString());
+        cepResponse.setNeighborhood(jsonResponse["neighborhood"].asString());
+        cepResponse.setStreet(jsonResponse["street"].asString());
+        cepResponse.setService(jsonResponse["service"].asString());
         cepResponse.calledURL = fullUrl;
       } else {
         std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
@@ -51,17 +51,19 @@ void CepHandler::getCepV2(int cep, std::function<void(const CepResponse &)> call
       Json::Reader reader;
       CepResponse cepResponse;
       if (reader.parse(responseBody, jsonResponse)) {
-        cepResponse.cep = jsonResponse["cep"].asString();
-        cepResponse.state = jsonResponse["state"].asString();
-        cepResponse.city = jsonResponse["city"].asString();
-        cepResponse.neighborhood = jsonResponse["neighborhood"].asString();
-        cepResponse.street = jsonResponse["street"].asString();
-        cepResponse.service = jsonResponse["service"].asString();
+        cepResponse.setCep(jsonResponse["cep"].asString());
+        cepResponse.setState(jsonResponse["state"].asString());
+        cepResponse.setCity(jsonResponse["city"].asString());
+        cepResponse.setNeighborhood(jsonResponse["neighborhood"].asString());
+        cepResponse.setStreet(jsonResponse["street"].asString());
+        cepResponse.setService(jsonResponse["service"].asString());
 
+        Location loc;
         Json::Value jsonLocation = jsonResponse["location"];
-        cepResponse.location.type = jsonResponse["type"].asString();
-        cepResponse.location.coordinates.longitude = jsonLocation["coordinates"]["longitude"].asString();
-        cepResponse.location.coordinates.latitude = jsonLocation["coordinates"]["latitude"].asString();
+        loc.type = jsonLocation["type"].asString();
+        loc.coordinates.longitude = jsonLocation["coordinates"]["longitude"].asString();
+        loc.coordinates.latitude = jsonLocation["coordinates"]["latitude"].asString();
+        cepResponse.setLocation(loc);
 
         cepResponse.calledURL = fullUrl;
       } else {
