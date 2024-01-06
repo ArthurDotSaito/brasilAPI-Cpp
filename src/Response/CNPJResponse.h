@@ -24,8 +24,8 @@ struct QSA {
   std::optional<int> codigo_qualificacao_representante_legal;
 };
 
-class CNPJResponse : public BaseResponse {
-  public:
+class CNPJResponse : public BaseResponse, public JsonSerialize {
+  private:
   std::string cnpj;
   int identificador_matriz_filial;
   std::string descricao_matriz_filial;
@@ -66,7 +66,251 @@ class CNPJResponse : public BaseResponse {
   std::vector<CNAE> cnaes_secundarios;
   std::vector<QSA> qsa;
 
-  std::string serialize() const {
+  public:
+  std::string getCnpj() const {
+    return cnpj;
+  }
+  int getIdentificadorMatrizFilial() const {
+    return identificador_matriz_filial;
+  }
+  std::string getDescricaoMatrizFilial() const {
+    return descricao_matriz_filial;
+  }
+  std::string getRazaoSocial() const {
+    return razao_social;
+  }
+  std::string getNomeFantasia() const {
+    return nome_fantasia;
+  }
+  int getSituacaoCadastral() const {
+    return situacao_cadastral;
+  }
+  std::string getDescricaoSituacaoCadastral() const {
+    return descricao_situacao_cadastral;
+  }
+  std::string getDataSituacaoCadastral() const {
+    return data_situacao_cadastral;
+  }
+  int getMotivoSituacaoCadastral() const {
+    return motivo_situacao_cadastral;
+  }
+  std::optional<std::string> getNomeCidadeExterior() const {
+    return nome_cidade_exterior;
+  }
+  int getCodigoNaturezaJuridica() const {
+    return codigo_natureza_juridica;
+  }
+  std::string getDataInicioAtividade() const {
+    return data_inicio_atividade;
+  }
+  int getCnaeFiscal() const {
+    return cnae_fiscal;
+  }
+  std::string getCnaeFiscalDescricao() const {
+    return cnae_fiscal_descricao;
+  }
+  std::string getDescricaoTipoLogradouro() const {
+    return descricao_tipo_logradouro;
+  }
+  std::string getLogradouro() const {
+    return logradouro;
+  }
+  std::string getNumero() const {
+    return numero;
+  }
+  std::string getComplemento() const {
+    return complemento;
+  }
+  std::string getBairro() const {
+    return bairro;
+  }
+  int getCep() const {
+    return cep;
+  }
+  std::string getUf() const {
+    return uf;
+  }
+  int getCodigoMunicipio() const {
+    return codigo_municipio;
+  }
+  std::string getMunicipio() const {
+    return municipio;
+  }
+  std::string getDddTelefone1() const {
+    return ddd_telefone_1;
+  }
+  std::optional<std::string> getDddTelefone2() const {
+    return ddd_telefone_2;
+  }
+  std::optional<std::string> getDddFax() const {
+    return ddd_fax;
+  }
+  int getQualificacaoDoResponsavel() const {
+    return qualificacao_do_responsavel;
+  }
+  double getCapitalSocial() const {
+    return capital_social;
+  }
+  int getCodigoPorte() const {
+    return codigo_porte;
+  }
+  std::string getPorte() const {
+    return porte;
+  }
+  std::string getDescricaoPorte() const {
+    return descricao_porte;
+  }
+  bool getOpcaoPeloSimples() const {
+    return opcao_pelo_simples;
+  }
+  std::optional<std::string> getDataOpcaoPeloSimples() const {
+    return data_opcao_pelo_simples;
+  }
+  std::optional<std::string> getDataExclusaoDoSimples() const {
+    return data_exclusao_do_simples;
+  }
+  bool getOpcaoPeloMei() const {
+    return opcao_pelo_mei;
+  }
+  std::optional<std::string> getSituacaoEspecial() const {
+    return situacao_especial;
+  }
+  std::optional<std::string> getDataSituacaoEspecial() const {
+    return data_situacao_especial;
+  }
+  std::vector<CNAE> getCnaesSecundarios() const {
+    return cnaes_secundarios;
+  }
+  std::vector<QSA> getQsa() const {
+    return qsa;
+  }
+
+  void setCnpj(const std::string &val) {
+    cnpj = val;
+  }
+  void setIdentificadorMatrizFilial(int val) {
+    identificador_matriz_filial = val;
+  }
+  void setDescricaoMatrizFilial(const std::string &val) {
+    descricao_matriz_filial = val;
+  }
+  void setRazaoSocial(const std::string &val) {
+    razao_social = val;
+  }
+  void setNomeFantasia(const std::string &val) {
+    nome_fantasia = val;
+  }
+  void setSituacaoCadastral(int val) {
+    situacao_cadastral = val;
+  }
+  void setDescricaoSituacaoCadastral(const std::string &val) {
+    descricao_situacao_cadastral = val;
+  }
+  void setDataSituacaoCadastral(const std::string &val) {
+    data_situacao_cadastral = val;
+  }
+  void setMotivoSituacaoCadastral(int val) {
+    motivo_situacao_cadastral = val;
+  }
+  void setNomeCidadeExterior(const std::optional<std::string> &val) {
+    nome_cidade_exterior = val;
+  }
+  void setCodigoNaturezaJuridica(int val) {
+    codigo_natureza_juridica = val;
+  }
+  void setDataInicioAtividade(const std::string &val) {
+    data_inicio_atividade = val;
+  }
+  void setCnaeFiscal(int val) {
+    cnae_fiscal = val;
+  }
+  void setCnaeFiscalDescricao(const std::string &val) {
+    cnae_fiscal_descricao = val;
+  }
+  void setDescricaoTipoLogradouro(const std::string &val) {
+    descricao_tipo_logradouro = val;
+  }
+  void setLogradouro(const std::string &val) {
+    logradouro = val;
+  }
+  void setNumero(const std::string &val) {
+    numero = val;
+  }
+  void setComplemento(const std::string &val) {
+    complemento = val;
+  }
+  void setBairro(const std::string &val) {
+    bairro = val;
+  }
+  void setCep(int val) {
+    cep = val;
+  }
+  void setUf(const std::string &val) {
+    uf = val;
+  }
+  void setCodigoMunicipio(int val) {
+    codigo_municipio = val;
+  }
+  void setMunicipio(const std::string &val) {
+    municipio = val;
+  }
+  void setDddTelefone1(const std::string &val) {
+    ddd_telefone_1 = val;
+  }
+  void setDddTelefone2(const std::optional<std::string> &val) {
+    ddd_telefone_2 = val;
+  }
+  void setDddFax(const std::optional<std::string> &val) {
+    ddd_fax = val;
+  }
+  void setQualificacaoDoResponsavel(int val) {
+    qualificacao_do_responsavel = val;
+  }
+  void setCapitalSocial(double val) {
+    capital_social = val;
+  }
+  void setCodigoPorte(int val) {
+    codigo_porte = val;
+  }
+  void setPorte(const std::string &val) {
+    porte = val;
+  }
+  void setDescricaoPorte(const std::string &val) {
+    descricao_porte = val;
+  }
+  void setOpcaoPeloSimples(bool val) {
+    opcao_pelo_simples = val;
+  }
+  void setDataOpcaoPeloSimples(const std::optional<std::string> &val) {
+    data_opcao_pelo_simples = val;
+  }
+  void setDataExclusaoDoSimples(const std::optional<std::string> &val) {
+    data_exclusao_do_simples = val;
+  }
+  void setOpcaoPeloMei(bool val) {
+    opcao_pelo_mei = val;
+  }
+  void setSituacaoEspecial(const std::optional<std::string> &val) {
+    situacao_especial = val;
+  }
+  void setDataSituacaoEspecial(const std::optional<std::string> &val) {
+    data_situacao_especial = val;
+  }
+  void setCnaesSecundarios(const std::vector<CNAE> &val) {
+    cnaes_secundarios = val;
+  }
+  void addCnaeSecundario(const CNAE &cnae) {
+    cnaes_secundarios.push_back(cnae);
+  }
+
+  void setQsa(const std::vector<QSA> &val) {
+    qsa = val;
+  }
+  void addQsaItem(const QSA &qsaItem) {
+    qsa.push_back(qsaItem);
+  }
+
+  Json::Value toJson() const override {
     Json::Value jsonCNPJ;
     jsonCNPJ["cnpj"] = cnpj;
     jsonCNPJ["identificador_matriz_filial"] = identificador_matriz_filial;
@@ -138,10 +382,7 @@ class CNPJResponse : public BaseResponse {
     }
     jsonCNPJ["qsa"] = jsonQSA;
 
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonCNPJ);
+    return jsonCNPJ;
   }
 };
 #endif // CNPJ_RESPONSE_H

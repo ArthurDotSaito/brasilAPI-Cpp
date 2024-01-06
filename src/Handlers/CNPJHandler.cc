@@ -16,50 +16,50 @@ void CNPJHandler::getCNPJ(std::string cnpj, std::function<void(const CNPJRespons
       Json::Reader reader;
       CNPJResponse cnpjResponse;
       if (reader.parse(responseBody, jsonResponse)) {
-        cnpjResponse.cnpj = jsonResponse["cnpj"].asString();
-        cnpjResponse.identificador_matriz_filial = stoi(jsonResponse["identificador_matriz_filial"].asString());
-        cnpjResponse.descricao_matriz_filial = jsonResponse["descricao_matriz_filial"].asString();
-        cnpjResponse.razao_social = jsonResponse["razao_social"].asString();
-        cnpjResponse.nome_fantasia = jsonResponse["nome_fantasia"].asString();
-        cnpjResponse.situacao_cadastral = stoi(jsonResponse["situacao_cadastral"].asString());
-        cnpjResponse.descricao_situacao_cadastral = jsonResponse["descricao_situacao_cadastral"].asString();
-        cnpjResponse.data_situacao_cadastral = jsonResponse["data_situacao_cadastral"].asString();
-        cnpjResponse.motivo_situacao_cadastral = stoi(jsonResponse["motivo_situacao_cadastral"].asString());
-        cnpjResponse.nome_cidade_exterior = jsonResponse["nome_cidade_exterior"].asString();
-        cnpjResponse.codigo_natureza_juridica = stoi(jsonResponse["codigo_natureza_juridica"].asString());
-        cnpjResponse.data_inicio_atividade = jsonResponse["data_inicio_atividade"].asString();
-        cnpjResponse.cnae_fiscal = stoi(jsonResponse["cnae_fiscal"].asString());
-        cnpjResponse.cnae_fiscal_descricao = jsonResponse["cnae_fiscal_descricao"].asString();
-        cnpjResponse.descricao_tipo_logradouro = jsonResponse["descricao_tipo_logradouro"].asString();
-        cnpjResponse.logradouro = jsonResponse["logradouro"].asString();
-        cnpjResponse.numero = jsonResponse["numero"].asString();
-        cnpjResponse.complemento = jsonResponse["complemento"].asString();
-        cnpjResponse.bairro = jsonResponse["bairro"].asString();
-        cnpjResponse.cep = stoi(jsonResponse["cep"].asString());
-        cnpjResponse.uf = jsonResponse["uf"].asString();
-        cnpjResponse.codigo_municipio = stoi(jsonResponse["codigo_municipio"].asString());
-        cnpjResponse.municipio = jsonResponse["municipio"].asString();
-        cnpjResponse.ddd_telefone_1 = jsonResponse["ddd_telefone_1"].asString();
-        cnpjResponse.ddd_telefone_2 = jsonResponse["ddd_telefone_2"].asString();
-        cnpjResponse.ddd_fax = jsonResponse["ddd_fax"].asString();
-        cnpjResponse.qualificacao_do_responsavel = stoi(jsonResponse["qualificacao_do_responsavel"].asString());
-        cnpjResponse.capital_social = jsonResponse["capital_social"].asDouble();
-        cnpjResponse.codigo_porte = stoi(jsonResponse["codigo_porte"].asString());
-        cnpjResponse.porte = jsonResponse["porte"].asString();
-        cnpjResponse.descricao_porte = jsonResponse["descricao_porte"].asString();
-        cnpjResponse.opcao_pelo_simples = jsonResponse["opcao_pelo_simples"].asBool();
-        cnpjResponse.data_opcao_pelo_simples = jsonResponse["data_opcao_pelo_simples"].asString();
-        cnpjResponse.data_exclusao_do_simples = jsonResponse["data_exclusao_do_simples"].asString();
-        cnpjResponse.opcao_pelo_mei = jsonResponse["opcao_pelo_mei"].asBool();
-        cnpjResponse.situacao_especial = jsonResponse["situacao_especial"].asString();
-        cnpjResponse.data_situacao_especial = jsonResponse["data_situacao_especial"].asString();
+        cnpjResponse.setCnpj(jsonResponse["cnpj"].asString());
+        cnpjResponse.setIdentificadorMatrizFilial(stoi(jsonResponse["identificador_matriz_filial"].asString()));
+        cnpjResponse.setDescricaoMatrizFilial(jsonResponse["descricao_matriz_filial"].asString());
+        cnpjResponse.setRazaoSocial(jsonResponse["razao_social"].asString());
+        cnpjResponse.setNomeFantasia(jsonResponse["nome_fantasia"].asString());
+        cnpjResponse.setSituacaoCadastral(stoi(jsonResponse["situacao_cadastral"].asString()));
+        cnpjResponse.setDescricaoSituacaoCadastral(jsonResponse["descricao_situacao_cadastral"].asString());
+        cnpjResponse.setDataSituacaoCadastral(jsonResponse["data_situacao_cadastral"].asString());
+        cnpjResponse.setMotivoSituacaoCadastral(stoi(jsonResponse["motivo_situacao_cadastral"].asString()));
+        cnpjResponse.setNomeCidadeExterior(jsonResponse["nome_cidade_exterior"].asString());
+        cnpjResponse.setCodigoNaturezaJuridica(stoi(jsonResponse["codigo_natureza_juridica"].asString()));
+        cnpjResponse.setDataInicioAtividade(jsonResponse["data_inicio_atividade"].asString());
+        cnpjResponse.setCnaeFiscal(stoi(jsonResponse["cnae_fiscal"].asString()));
+        cnpjResponse.setCnaeFiscalDescricao(jsonResponse["cnae_fiscal_descricao"].asString());
+        cnpjResponse.setDescricaoTipoLogradouro(jsonResponse["descricao_tipo_logradouro"].asString());
+        cnpjResponse.setLogradouro(jsonResponse["logradouro"].asString());
+        cnpjResponse.setNumero(jsonResponse["numero"].asString());
+        cnpjResponse.setComplemento(jsonResponse["complemento"].asString());
+        cnpjResponse.setBairro(jsonResponse["bairro"].asString());
+        cnpjResponse.setCep(stoi(jsonResponse["cep"].asString()));
+        cnpjResponse.setUf(jsonResponse["uf"].asString());
+        cnpjResponse.setCodigoMunicipio(stoi(jsonResponse["codigo_municipio"].asString()));
+        cnpjResponse.setMunicipio(jsonResponse["municipio"].asString());
+        cnpjResponse.setDddTelefone1(jsonResponse["ddd_telefone_1"].asString());
+        cnpjResponse.setDddTelefone2(jsonResponse["ddd_telefone_2"].asString());
+        cnpjResponse.setDddFax(jsonResponse["ddd_fax"].asString());
+        cnpjResponse.setQualificacaoDoResponsavel(stoi(jsonResponse["qualificacao_do_responsavel"].asString()));
+        cnpjResponse.setCapitalSocial(jsonResponse["capital_social"].asDouble());
+        cnpjResponse.setCodigoPorte(stoi(jsonResponse["codigo_porte"].asString()));
+        cnpjResponse.setPorte(jsonResponse["porte"].asString());
+        cnpjResponse.setDescricaoPorte(jsonResponse["descricao_porte"].asString());
+        cnpjResponse.setOpcaoPeloSimples(jsonResponse["opcao_pelo_simples"].asBool());
+        cnpjResponse.setDataOpcaoPeloSimples(jsonResponse["data_opcao_pelo_simples"].asString());
+        cnpjResponse.setDataExclusaoDoSimples(jsonResponse["data_exclusao_do_simples"].asString());
+        cnpjResponse.setOpcaoPeloMei(jsonResponse["opcao_pelo_mei"].asBool());
+        cnpjResponse.setSituacaoEspecial(jsonResponse["situacao_especial"].asString());
+        cnpjResponse.setDataSituacaoEspecial(jsonResponse["data_situacao_especial"].asString());
 
         if (jsonResponse.isMember("cnaes_secundarios") && jsonResponse["cnaes_secundarios"].isArray()) {
           for (const auto &cnae : jsonResponse["cnaes_secundarios"]) {
             CNAE cnaeItem;
             cnaeItem.codigo = stoi(cnae["codigo"].asString());
             cnaeItem.descricao = cnae["descricao"].asString();
-            cnpjResponse.cnaes_secundarios.push_back(cnaeItem);
+            cnpjResponse.addCnaeSecundario(cnaeItem);
           }
         }
 
@@ -78,8 +78,9 @@ void CNPJHandler::getCNPJ(std::string cnpj, std::function<void(const CNPJRespons
             if (qsaItem.isMember("nome_representante_legal"))
               qsaMember.nome_representante_legal = qsaItem["nome_representante_legal"].asString();
             if (qsaItem.isMember("codigo_qualificacao_representante_legal"))
-              qsaMember.codigo_qualificacao_representante_legal = stoi(qsaItem["codigo_qualificacao_representante_legal"].asString());
-            cnpjResponse.qsa.push_back(qsaMember);
+              qsaMember.codigo_qualificacao_representante_legal =
+                  stoi(qsaItem["codigo_qualificacao_representante_legal"].asString());
+            cnpjResponse.addQsaItem(qsaMember);
           }
         }
 
