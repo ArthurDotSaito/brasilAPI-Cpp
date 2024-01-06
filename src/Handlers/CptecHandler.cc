@@ -22,9 +22,9 @@ void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse &
       if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
         for (const auto &jsonCptec : jsonResponse) {
           CptecCidades cidade;
-          cidade.nome = jsonCptec["nome"].asString();
-          cidade.estado = jsonCptec["estado"].asString();
-          cidade.id = jsonCptec["id"].asInt();
+          cidade.setNome(jsonCptec["nome"].asString());
+          cidade.setEstado(jsonCptec["estado"].asString());
+          cidade.setId(jsonCptec["id"].asInt());
           cptecCidadesResponse.cptecCidades.push_back(cidade);
         }
       }
@@ -58,9 +58,9 @@ void CptecHandler::searchByTerms(std::string cityName, std::function<void(const 
       if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
         for (const auto &jsonCptec : jsonResponse) {
           CptecCidades cidade;
-          cidade.nome = jsonCptec["nome"].asString();
-          cidade.estado = jsonCptec["estado"].asString();
-          cidade.id = jsonCptec["id"].asInt();
+          cidade.setNome(jsonCptec["nome"].asString());
+          cidade.setEstado(jsonCptec["estado"].asString());
+          cidade.setId(jsonCptec["id"].asInt());
           cptecCidadesResponse.cptecCidades.push_back(cidade);
         }
       }
