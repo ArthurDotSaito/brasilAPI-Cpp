@@ -99,7 +99,7 @@ class Onda {
   void setData(const std::string &d) {
     data = d;
   }
-  void addClimaDiario(const DadosOnda &dadosOnda) {
+  void addDadosOnda(const DadosOnda &dadosOnda) {
     dados_ondas.push_back(dadosOnda);
   }
 

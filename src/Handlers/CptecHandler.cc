@@ -262,30 +262,30 @@ void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse)) {
         CptecPrevisaoOceanica previsaoOceanica;
-        previsaoOceanica.cidade = jsonResponse["cidade"].asString();
-        previsaoOceanica.estado = jsonResponse["estado"].asString();
-        previsaoOceanica.atualizado_em = jsonResponse["atualizado_em"].asString();
+        previsaoOceanica.setCidade(jsonResponse["cidade"].asString());
+        previsaoOceanica.setEstado(jsonResponse["estado"].asString());
+        previsaoOceanica.setAtualizadoEm(jsonResponse["atualizado_em"].asString());
 
         const Json::Value jsonOndasArray = jsonResponse["ondas"];
         for (const auto &jsonOnda : jsonOndasArray) {
           Onda onda;
-          onda.data = jsonOnda["data"].asString();
+          onda.setData(jsonOnda["data"].asString());
 
           const Json::Value jsonDadosOndasArray = jsonOnda["dados_ondas"];
           for (const auto &jsonDadosOnda : jsonDadosOndasArray) {
             DadosOnda dadosOnda;
-            dadosOnda.vento = jsonDadosOnda["vento"].asFloat();
-            dadosOnda.direcao_vento = jsonDadosOnda["direcao_vento"].asString();
-            dadosOnda.direcao_vento_desc = jsonDadosOnda["direcao_vento_desc"].asString();
-            dadosOnda.altura_onda = jsonDadosOnda["altura_onda"].asFloat();
-            dadosOnda.direcao_onda = jsonDadosOnda["direcao_onda"].asString();
-            dadosOnda.direcao_onda_desc = jsonDadosOnda["direcao_onda_desc"].asString();
-            dadosOnda.agitation = jsonDadosOnda["agitation"].asString();
-            dadosOnda.hora = jsonDadosOnda["hora"].asString();
-            onda.dados_ondas.push_back(dadosOnda);
+            dadosOnda.setVento(jsonDadosOnda["vento"].asFloat());
+            dadosOnda.setDirecaoVento(jsonDadosOnda["direcao_vento"].asString());
+            dadosOnda.setDirecaoVentoDesc(jsonDadosOnda["direcao_vento_desc"].asString());
+            dadosOnda.setAlturaOnda(jsonDadosOnda["altura_onda"].asFloat());
+            dadosOnda.setDirecaoOnda(jsonDadosOnda["direcao_onda"].asString());
+            dadosOnda.setDirecaoOndaDesc(jsonDadosOnda["direcao_onda_desc"].asString());
+            dadosOnda.setAgitation(jsonDadosOnda["agitation"].asString());
+            dadosOnda.setHora(jsonDadosOnda["hora"].asString());
+            onda.addDadosOnda(dadosOnda);
           }
 
-          previsaoOceanica.ondas.push_back(onda);
+          previsaoOceanica.addOnda(onda);
         }
 
         callback(previsaoOceanica);
@@ -317,30 +317,30 @@ void CptecHandler::previsaoOceanicaCidadeSeisDias(
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse)) {
         CptecPrevisaoOceanica previsaoOceanica;
-        previsaoOceanica.cidade = jsonResponse["cidade"].asString();
-        previsaoOceanica.estado = jsonResponse["estado"].asString();
-        previsaoOceanica.atualizado_em = jsonResponse["atualizado_em"].asString();
+        previsaoOceanica.setCidade(jsonResponse["cidade"].asString());
+        previsaoOceanica.setEstado(jsonResponse["estado"].asString());
+        previsaoOceanica.setAtualizadoEm(jsonResponse["atualizado_em"].asString());
 
         const Json::Value jsonOndasArray = jsonResponse["ondas"];
         for (const auto &jsonOnda : jsonOndasArray) {
           Onda onda;
-          onda.data = jsonOnda["data"].asString();
+          onda.setData(jsonOnda["data"].asString());
 
           const Json::Value jsonDadosOndasArray = jsonOnda["dados_ondas"];
           for (const auto &jsonDadosOnda : jsonDadosOndasArray) {
             DadosOnda dadosOnda;
-            dadosOnda.vento = jsonDadosOnda["vento"].asFloat();
-            dadosOnda.direcao_vento = jsonDadosOnda["direcao_vento"].asString();
-            dadosOnda.direcao_vento_desc = jsonDadosOnda["direcao_vento_desc"].asString();
-            dadosOnda.altura_onda = jsonDadosOnda["altura_onda"].asFloat();
-            dadosOnda.direcao_onda = jsonDadosOnda["direcao_onda"].asString();
-            dadosOnda.direcao_onda_desc = jsonDadosOnda["direcao_onda_desc"].asString();
-            dadosOnda.agitation = jsonDadosOnda["agitation"].asString();
-            dadosOnda.hora = jsonDadosOnda["hora"].asString();
-            onda.dados_ondas.push_back(dadosOnda);
+            dadosOnda.setVento(jsonDadosOnda["vento"].asFloat());
+            dadosOnda.setDirecaoVento(jsonDadosOnda["direcao_vento"].asString());
+            dadosOnda.setDirecaoVentoDesc(jsonDadosOnda["direcao_vento_desc"].asString());
+            dadosOnda.setAlturaOnda(jsonDadosOnda["altura_onda"].asFloat());
+            dadosOnda.setDirecaoOnda(jsonDadosOnda["direcao_onda"].asString());
+            dadosOnda.setDirecaoOndaDesc(jsonDadosOnda["direcao_onda_desc"].asString());
+            dadosOnda.setAgitation(jsonDadosOnda["agitation"].asString());
+            dadosOnda.setHora(jsonDadosOnda["hora"].asString());
+            onda.addDadosOnda(dadosOnda);
           }
 
-          previsaoOceanica.ondas.push_back(onda);
+          previsaoOceanica.addOnda(onda);
         }
 
         callback(previsaoOceanica);
