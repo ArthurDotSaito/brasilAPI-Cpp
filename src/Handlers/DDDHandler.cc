@@ -17,12 +17,12 @@ void DDDHandler::listStateAndCities(int ddd, std::function<void(const DDDRespons
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse)) {
         DDDResponse dddResponse;
-        dddResponse.state = jsonResponse["state"].asString();
+        dddResponse.setState(jsonResponse["state"].asString());
 
         const Json::Value jsonCitiesArray = jsonResponse["cities"];
         for (const auto &jsonCity : jsonCitiesArray) {
           std::string city = jsonCity.asString();
-          dddResponse.cities.push_back(city);
+          dddResponse.addCities(city);
         }
         callback(dddResponse);
       } else {
