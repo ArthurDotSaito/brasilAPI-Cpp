@@ -2,30 +2,42 @@
 #define DDD_RESPONSE_H
 
 #include "BaseResponse.h"
+#include "Utils/JsonSerialize.h"
 #include <json/json.h>
 #include <string>
 
-class DDDResponse : public BaseResponse {
-  public:
+class DDDResponse : public BaseResponse, JsonSerialize {
+  private:
   std::string state;
   std::vector<std::string> cities;
 
-  Json::Value toJson() const {
-    Json::Value jsonRoot;
-    jsonRoot["state"] = state;
-    Json::Value jsonCitiesArray(Json::arrayValue);
-    for (const auto &city : cities) {
-      jsonCitiesArray.append(city);
-    }
-    jsonRoot["cities"] = jsonCitiesArray;
-    return jsonRoot;
+  public:
+  const std::string &getState() const {
+    return state;
+  }
+  const std::vector<std::string> &getCities() const {
+    return cities;
   }
 
-  std::string serialize() const {
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, this->toJson());
+  void setState(const std::string &s) {
+    state = s;
+  }
+  void addCities(const std::string &c) {
+    cities.push_back(c);
+  }
+
+  Json::Value toJson() const override {
+    Json::Value jsonRoot;
+    Json::Value jsonCities(Json::arrayValue);
+
+    jsonRoot["state"] = state;
+
+    for (const auto &city : cities) {
+      jsonCities.append(city);
+    }
+
+    jsonRoot["cities"] = jsonCities;
+    return jsonRoot;
   }
 };
 
