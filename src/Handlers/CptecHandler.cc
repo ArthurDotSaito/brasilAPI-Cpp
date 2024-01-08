@@ -174,20 +174,20 @@ void CptecHandler::getCidadesClimaByCidade(int cityCode, std::function<void(cons
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse)) {
         CidadeClimaResponse cidadeClimaResponse;
-        cidadeClimaResponse.cidade = jsonResponse["cidade"].asString();
-        cidadeClimaResponse.estado = jsonResponse["estado"].asString();
-        cidadeClimaResponse.atualizado_em = jsonResponse["atualizado_em"].asString();
+        cidadeClimaResponse.setCidade(jsonResponse["cidade"].asString());
+        cidadeClimaResponse.setEstado(jsonResponse["estado"].asString());
+        cidadeClimaResponse.setAtualizadoEm(jsonResponse["atualizado_em"].asString());
 
         const Json::Value jsonClimaArray = jsonResponse["clima"];
         for (const auto &jsonClima : jsonClimaArray) {
           ClimaDiario climaDiario;
-          climaDiario.data = jsonClima["data"].asString();
-          climaDiario.condicao = jsonClima["condicao"].asString();
-          climaDiario.min = jsonClima["min"].asInt();
-          climaDiario.max = jsonClima["max"].asInt();
-          climaDiario.indice_uv = jsonClima["indice_uv"].asInt();
-          climaDiario.condicao_desc = jsonClima["condicao_desc"].asString();
-          cidadeClimaResponse.clima.push_back(climaDiario);
+          climaDiario.setData(jsonClima["data"].asString());
+          climaDiario.setCondicao(jsonClima["condicao"].asString());
+          climaDiario.setMin(jsonClima["min"].asInt());
+          climaDiario.setMax(jsonClima["max"].asInt());
+          climaDiario.setIndiceUv(jsonClima["indice_uv"].asInt());
+          climaDiario.setCondicaoDesc(jsonClima["condicao_desc"].asString());
+          cidadeClimaResponse.addClimaDiario(climaDiario);
         }
 
         callback(cidadeClimaResponse);
@@ -218,20 +218,20 @@ void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse)) {
         CidadeClimaResponse cidadeClimaResponse;
-        cidadeClimaResponse.cidade = jsonResponse["cidade"].asString();
-        cidadeClimaResponse.estado = jsonResponse["estado"].asString();
-        cidadeClimaResponse.atualizado_em = jsonResponse["atualizado_em"].asString();
+        cidadeClimaResponse.setCidade(jsonResponse["cidade"].asString());
+        cidadeClimaResponse.setEstado(jsonResponse["estado"].asString());
+        cidadeClimaResponse.setAtualizadoEm(jsonResponse["atualizado_em"].asString());
 
         const Json::Value jsonClimaArray = jsonResponse["clima"];
         for (const auto &jsonClima : jsonClimaArray) {
           ClimaDiario climaDiario;
-          climaDiario.data = jsonClima["data"].asString();
-          climaDiario.condicao = jsonClima["condicao"].asString();
-          climaDiario.min = jsonClima["min"].asInt();
-          climaDiario.max = jsonClima["max"].asInt();
-          climaDiario.indice_uv = jsonClima["indice_uv"].asInt();
-          climaDiario.condicao_desc = jsonClima["condicao_desc"].asString();
-          cidadeClimaResponse.clima.push_back(climaDiario);
+          climaDiario.setData(jsonClima["data"].asString());
+          climaDiario.setCondicao(jsonClima["condicao"].asString());
+          climaDiario.setMin(jsonClima["min"].asInt());
+          climaDiario.setMax(jsonClima["max"].asInt());
+          climaDiario.setIndiceUv(jsonClima["indice_uv"].asInt());
+          climaDiario.setCondicaoDesc(jsonClima["condicao_desc"].asString());
+          cidadeClimaResponse.addClimaDiario(climaDiario);
         }
 
         callback(cidadeClimaResponse);
