@@ -69,19 +69,19 @@ int main() {
   auto futureCptec6 = brasilAPI.previsaoCidadeSeisDiasAsync(999, 6);
   auto cptecData6 = futureCptec6.get();
   std::cout << "Cptec Data: " << cptecData6 << std::endl;
-  */
+
   auto futureCptec7 = brasilAPI.previsaoOceanicaCidadeAsync(241);
   auto cptecData7 = futureCptec7.get();
   std::cout << "Cptec Data: " << cptecData7 << std::endl;
-
+  */
   auto futureCptec8 = brasilAPI.previsaoOceanicaCidadeSeisDiasAsync(241, 6);
   auto cptecData8 = futureCptec8.get();
   std::cout << "Cptec Data: " << cptecData8 << std::endl;
-  /*
+
   auto ddd = brasilAPI.listStateAndCitiesAsync(21);
   auto dddData = ddd.get();
   std::cout << "DDD Data: " << dddData << std::endl;
-
+  /*
   auto feriados = brasilAPI.getFeriadosAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;

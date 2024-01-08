@@ -39,6 +39,10 @@ class DDDResponse : public BaseResponse, JsonSerialize {
     jsonRoot["cities"] = jsonCities;
     return jsonRoot;
   }
+
+  std::string serialize() const override {
+    return JsonSerialize::serialize();
+  }
 };
 
 #endif // DDD_RESPONSE_H

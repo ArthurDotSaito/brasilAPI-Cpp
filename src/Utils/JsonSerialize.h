@@ -10,7 +10,7 @@ class JsonSerialize {
   virtual ~JsonSerialize() = default;
   virtual Json::Value toJson() const = 0;
 
-  std::string serialize() const {
+  virtual std::string serialize() const {
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";
     builder["indentation"] = "  ";
