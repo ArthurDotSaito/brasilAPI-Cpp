@@ -133,17 +133,16 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
       Json::Reader reader;
       CptecAeroporto cptecAeroporto;
       if (reader.parse(responseBody, jsonResponse)) {
-        cptecAeroporto.codigo_icao = jsonResponse["codigo_icao"].asString();
-        cptecAeroporto.atualizado_em = jsonResponse["atualizado_em"].asString();
-        cptecAeroporto.pressao_atmosferica = jsonResponse["pressao_atmosferica"].asString();
-        cptecAeroporto.visibilidade = jsonResponse["visibilidade"].asString();
-        cptecAeroporto.vento = jsonResponse["vento"].asInt();
-        cptecAeroporto.direcao_vento = jsonResponse["direcao_vento"].asInt();
-        cptecAeroporto.umidade = jsonResponse["umidade"].asInt();
-        cptecAeroporto.condicao = jsonResponse["condicao"].asString();
-        cptecAeroporto.condicao_Desc = jsonResponse["condicao_Desc"].asString();
-        cptecAeroporto.temp = jsonResponse["temp"].asInt();
-
+        cptecAeroporto.setCodigoIcao(jsonResponse["codigo_icao"].asString());
+        cptecAeroporto.setAtualizadoEm(jsonResponse["atualizado_em"].asString());
+        cptecAeroporto.setPressaoAtmosferica(jsonResponse["pressao_atmosferica"].asString());
+        cptecAeroporto.setVisibilidade(jsonResponse["visibilidade"].asString());
+        cptecAeroporto.setVento(jsonResponse["vento"].asInt());
+        cptecAeroporto.setDirecaoVento(jsonResponse["direcao_vento"].asInt());
+        cptecAeroporto.setUmidade(jsonResponse["umidade"].asInt());
+        cptecAeroporto.setCondicao(jsonResponse["condicao"].asString());
+        cptecAeroporto.setCondicaoDesc(jsonResponse["condicao_Desc"].asString());
+        cptecAeroporto.setTemp(jsonResponse["temp"].asInt());
         cptecAeroporto.calledURL = fullUrl;
         cptecAeroporto.jsonResponse = responseBody;
       } else {
