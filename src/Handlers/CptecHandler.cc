@@ -94,16 +94,16 @@ void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse &)
         for (const auto &jsonCptec : jsonResponse) {
           CptecCapitais capitais;
 
-          capitais.codigo_icao = jsonCptec["codigo_icao"].asString();
-          capitais.atualizado_em = jsonCptec["atualizado_em"].asString();
-          capitais.pressao_atmosferica = jsonCptec["pressao_atmosferica"].asString();
-          capitais.visibilidade = jsonCptec["visibilidade"].asString();
-          capitais.vento = jsonCptec["vento"].asInt();
-          capitais.direcao_vento = jsonCptec["direcao_vento"].asInt();
-          capitais.umidade = jsonCptec["umidade"].asInt();
-          capitais.condicao = jsonCptec["condicao"].asString();
-          capitais.condicao_Desc = jsonCptec["condicao_Desc"].asString();
-          capitais.temp = jsonCptec["temp"].asInt();
+          capitais.setCodigoIcao(jsonCptec["codigo_icao"].asString());
+          capitais.setAtualizadoEm(jsonCptec["atualizado_em"].asString());
+          capitais.setPressaoAtmosferica(jsonCptec["pressao_atmosferica"].asString());
+          capitais.setVisibilidade(jsonCptec["visibilidade"].asString());
+          capitais.setVento(jsonCptec["vento"].asInt());
+          capitais.setDirecaoVento(jsonCptec["direcao_vento"].asInt());
+          capitais.setUmidade(jsonCptec["umidade"].asInt());
+          capitais.setCondicao(jsonCptec["condicao"].asString());
+          capitais.setCondicaoDesc(jsonCptec["condicao_Desc"].asString());
+          capitais.setTemp(jsonCptec["temp"].asInt());
 
           cptecCapitaisResponse.cptecCapitais.push_back(capitais);
         }

@@ -2,11 +2,12 @@
 #define CPTECCAPITAIS_RESPONSE_H
 
 #include "BaseResponse.h"
+#include "Utils/JsonSerialize.h"
 #include <json/json.h>
 #include <string>
 
-class CptecCapitais : public BaseResponse {
-  public:
+class CptecCapitais : public BaseResponse, public JsonSerialize {
+  private:
   std::string codigo_icao;
   std::string atualizado_em;
   std::string pressao_atmosferica;
@@ -18,7 +19,70 @@ class CptecCapitais : public BaseResponse {
   std::string condicao_Desc;
   int temp;
 
-  std::string serialize() const {
+  public:
+  std::string getCodigoIcao() const {
+    return codigo_icao;
+  }
+  std::string getAtualizadoEm() const {
+    return atualizado_em;
+  }
+  std::string getPressaoAtmosferica() const {
+    return pressao_atmosferica;
+  }
+  std::string getVisibilidade() const {
+    return visibilidade;
+  }
+  int getVento() const {
+    return vento;
+  }
+  int getDirecaoVento() const {
+    return direcao_vento;
+  }
+  int getUmidade() const {
+    return umidade;
+  }
+  std::string getCondicao() const {
+    return condicao;
+  }
+  std::string getCondicaoDesc() const {
+    return condicao_Desc;
+  }
+  int getTemp() const {
+    return temp;
+  }
+
+  void setCodigoIcao(const std::string &c) {
+    codigo_icao = c;
+  }
+  void setAtualizadoEm(const std::string &a) {
+    atualizado_em = a;
+  }
+  void setPressaoAtmosferica(const std::string &p) {
+    pressao_atmosferica = p;
+  }
+  void setVisibilidade(const std::string &v) {
+    visibilidade = v;
+  }
+  void setVento(const int &v) {
+    vento = v;
+  }
+  void setDirecaoVento(const int &d) {
+    direcao_vento = d;
+  }
+  void setUmidade(const int &u) {
+    umidade = u;
+  }
+  void setCondicao(const std::string &c) {
+    condicao = c;
+  }
+  void setCondicaoDesc(const std::string &c) {
+    condicao_Desc = c;
+  }
+  void setTemp(const int &t) {
+    temp = t;
+  }
+
+  Json::Value toJson() const override {
     Json::Value jsonCptecCapitais;
     jsonCptecCapitais["codigo_icao"] = codigo_icao;
     jsonCptecCapitais["atualizado_em"] = atualizado_em;
@@ -30,40 +94,20 @@ class CptecCapitais : public BaseResponse {
     jsonCptecCapitais["condicao"] = condicao;
     jsonCptecCapitais["condicao_Desc"] = condicao_Desc;
     jsonCptecCapitais["temp"] = temp;
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonCptecCapitais);
+    return jsonCptecCapitais;
   }
 };
 
-class CptecCapitaisResponse : public BaseResponse {
+class CptecCapitaisResponse : public BaseResponse, public JsonSerialize {
   public:
   std::vector<CptecCapitais> cptecCapitais;
 
-  std::string serialize() const {
-    Json::Value jsonRoot;
-    for (const auto &cptecCapitais : cptecCapitais) {
-      Json::Value jsonCptecCapitais;
-      jsonCptecCapitais["codigo_icao"] = cptecCapitais.codigo_icao;
-      jsonCptecCapitais["atualizado_em"] = cptecCapitais.atualizado_em;
-      jsonCptecCapitais["pressao_atmosferica"] = cptecCapitais.pressao_atmosferica;
-      jsonCptecCapitais["visibilidade"] = cptecCapitais.visibilidade;
-      jsonCptecCapitais["vento"] = cptecCapitais.vento;
-      jsonCptecCapitais["direcao_vento"] = cptecCapitais.direcao_vento;
-      jsonCptecCapitais["umidade"] = cptecCapitais.umidade;
-      jsonCptecCapitais["condicao"] = cptecCapitais.condicao;
-      jsonCptecCapitais["condicao_Desc"] = cptecCapitais.condicao_Desc;
-      jsonCptecCapitais["temp"] = cptecCapitais.temp;
-
-      jsonRoot.append(jsonCptecCapitais);
+  Json::Value toJson() const override {
+    Json::Value jsonRoot(Json::arrayValue);
+    for (const auto &item : cptecCapitais) {
+      jsonRoot.append(item.toJson());
     }
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonRoot);
+    return jsonRoot;
   }
 };
 
