@@ -14,6 +14,7 @@ class JsonSerialize {
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";
     builder["indentation"] = "  ";
+    builder["emitUTF8"] = true;
     return Json::writeString(builder, this->toJson());
   }
 };

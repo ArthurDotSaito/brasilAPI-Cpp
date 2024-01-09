@@ -81,12 +81,11 @@ int main() {
   auto ddd = brasilAPI.listStateAndCitiesAsync(21);
   auto dddData = ddd.get();
   std::cout << "DDD Data: " << dddData << std::endl;
-  /*
+
   auto feriados = brasilAPI.getFeriadosAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;
   return 0;
-    */
 
   /*
     auto fipe = brasilAPI.listFipeMarcasAsync();
