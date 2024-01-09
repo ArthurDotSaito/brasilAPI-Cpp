@@ -6,7 +6,7 @@
 #include <json/json.h>
 #include <string>
 
-class Marcas : public BaseResponse {
+class Marcas : public BaseResponse, public JsonSerialize {
   private:
   std::string nome;
   std::string valor;
@@ -27,7 +27,7 @@ class Marcas : public BaseResponse {
     valor = v;
   }
 
-  Json::Value toJson() const {
+  Json::Value toJson() const override {
     Json::Value jsonValue;
     jsonValue["nome"] = nome;
     jsonValue["valor"] = valor;
@@ -35,7 +35,7 @@ class Marcas : public BaseResponse {
   }
 };
 
-class Precos : public BaseResponse {
+class Precos : public BaseResponse, public JsonSerialize {
   private:
   std::string valor;
   std::string marca;
@@ -111,7 +111,7 @@ class Precos : public BaseResponse {
     dataConsulta = dc;
   }
 
-  Json::Value toJson() const {
+  Json::Value toJson() const override {
     Json::Value jsonValue;
     jsonValue["valor"] = valor;
     jsonValue["marca"] = marca;
@@ -123,6 +123,35 @@ class Precos : public BaseResponse {
     jsonValue["tipoVeiculo"] = tipoVeiculo;
     jsonValue["siglaCombustivel"] = siglaCombustivel;
     jsonValue["dataConsulta"] = dataConsulta;
+    return jsonValue;
+  }
+};
+
+class TabelasReferencia : public BaseResponse, public JsonSerialize {
+  private:
+  std::string mes;
+  int codigo;
+
+  public:
+  const std::string &getMes() const {
+    return mes;
+  }
+  const int &getCodigo() const {
+    return codigo;
+  }
+
+  void setMes(const std::string &n) {
+    mes = n;
+  }
+
+  void setCodigo(const int &c) {
+    codigo = c;
+  }
+
+  Json::Value toJson() const override {
+    Json::Value jsonValue;
+    jsonValue["mes"] = mes;
+    jsonValue["codigo"] = codigo;
     return jsonValue;
   }
 };
@@ -147,6 +176,19 @@ class FipePrecos : public BaseResponse, public JsonSerialize {
   Json::Value toJson() const override {
     Json::Value jsonRoot(Json::arrayValue);
     for (const auto &item : precos) {
+      jsonRoot.append(item.toJson());
+    }
+    return jsonRoot;
+  }
+};
+
+class FipeTabelasReferencia : public BaseResponse, public JsonSerialize {
+  public:
+  std::vector<TabelasReferencia> tabelasReferencia;
+
+  Json::Value toJson() const override {
+    Json::Value jsonRoot(Json::arrayValue);
+    for (const auto &item : tabelasReferencia) {
       jsonRoot.append(item.toJson());
     }
     return jsonRoot;
