@@ -90,3 +90,37 @@ void FipeHandler::listFipePreco(const std::string &codigoFipe, const std::option
     callback(precosResponse);
   });
 }
+
+void FipeHandler::listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  std::stringstream pathStream;
+  std::stringstream queryStream;
+  pathStream << "/api/fipe/tabelas/v1";
+
+  req->setPath(pathStream.str());
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    ensureSuccess(response, fullUrl);
+    std::string responseBody = std::string(response->getBody());
+
+    FipeTabelasReferencia fipeTabelas;
+    fipeTabelas.calledURL = fullUrl;
+    fipeTabelas.jsonResponse = responseBody;
+
+    Json::Value jsonResponse;
+    Json::Reader reader;
+    if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+      for (const auto &jsonItem : jsonResponse) {
+        TabelasReferencia tabelasReferencia;
+        tabelasReferencia.setMes(jsonItem["mes"].asString());
+        tabelasReferencia.setCodigo(jsonItem["codigo"].asInt());
+        fipeTabelas.tabelasReferencia.push_back(tabelasReferencia);
+      }
+    }
+
+    callback(fipeTabelas);
+  });
+}

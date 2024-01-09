@@ -85,24 +85,23 @@ int main() {
   auto feriados = brasilAPI.getFeriadosAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;
-  return 0;
+
+  auto fipe = brasilAPI.listFipeMarcasAsync();
+  auto fipeData = fipe.get();
+  std::cout << "Fipe Data: " << fipeData << std::endl;
+
+  auto fipe1 = brasilAPI.listFipeMarcasAsync("carros");
+  auto fipeData1 = fipe1.get();
+  std::cout << "Fipe Data: " << fipeData1 << std::endl;
+
+  auto fipe2 = brasilAPI.listFipeMarcasAsync(102);
+  auto fipeData2 = fipe2.get();
+  std::cout << "Fipe Data: " << fipeData2 << std::endl;
+
+  auto fipe3 = brasilAPI.listFipePrecoAsync("001004-9");
+  auto fipeData3 = fipe3.get();
+  std::cout << "Fipe Data: " << fipeData3 << std::endl;
   */
-  /*
-    auto fipe = brasilAPI.listFipeMarcasAsync();
-    auto fipeData = fipe.get();
-    std::cout << "Fipe Data: " << fipeData << std::endl;
 
-    auto fipe1 = brasilAPI.listFipeMarcasAsync("carros");
-    auto fipeData1 = fipe1.get();
-    std::cout << "Fipe Data: " << fipeData1 << std::endl;
-
-    auto fipe2 = brasilAPI.listFipeMarcasAsync(102);
-    auto fipeData2 = fipe2.get();
-    std::cout << "Fipe Data: " << fipeData2 << std::endl;
-
-    auto fipe3 = brasilAPI.listFipePrecoAsync("001004-9");
-    auto fipeData3 = fipe3.get();
-    std::cout << "Fipe Data: " << fipeData3 << std::endl;
-      */
   return 0;
 }
