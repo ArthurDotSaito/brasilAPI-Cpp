@@ -21,9 +21,10 @@ void FeriadosHandler::getFeriados(int ano, std::function<void(const FeriadosResp
     if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
       for (const auto &jsonFeriado : jsonResponse) {
         Feriados feriados;
-        feriados.date = jsonFeriado["date"].asString();
-        feriados.name = jsonFeriado["name"].asString();
-        feriados.type = jsonFeriado["type"].asString();
+        feriados.setDate(jsonFeriado["date"].asString());
+        feriados.setName(jsonFeriado["name"].asString());
+        feriados.setType(jsonFeriado["type"].asString());
+
         feriadosResponse.feriados.push_back(feriados);
       }
     }
