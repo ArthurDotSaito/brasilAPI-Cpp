@@ -2,17 +2,43 @@
 #define FERIADOS_RESPONSE_H
 
 #include "BaseResponse.h"
+#include "Utils/JsonSerialize.h"
 #include <json/json.h>
 #include <string>
 #include <vector>
 
-class Feriados : public BaseResponse {
-  public:
+class Feriados : public BaseResponse, public JsonSerialize {
+  private:
   std::string date;
   std::string name;
   std::string type;
 
-  Json::Value toJson() const {
+  public:
+  const std::string &getDate() const {
+    return date;
+  }
+
+  const std::string &getName() const {
+    return name;
+  }
+
+  const std::string &getType() const {
+    return type;
+  }
+
+  void setDate(const std::string &d) {
+    date = d;
+  }
+
+  void setName(const std::string &n) {
+    name = n;
+  }
+
+  void setType(const std::string &t) {
+    type = t;
+  }
+
+  Json::Value toJson() const override {
     Json::Value jsonFeriado;
     jsonFeriado["date"] = date;
     jsonFeriado["name"] = name;
@@ -21,20 +47,16 @@ class Feriados : public BaseResponse {
   }
 };
 
-class FeriadosResponse : public BaseResponse {
+class FeriadosResponse : public BaseResponse, public JsonSerialize {
   public:
   std::vector<Feriados> feriados;
 
-  std::string serialize() const {
+  Json::Value toJson() const override {
     Json::Value jsonRoot(Json::arrayValue);
-    for (const auto &feriado : feriados) {
-      jsonRoot.append(feriado.toJson());
+    for (const auto &item : feriados) {
+      jsonRoot.append(item.toJson());
     }
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "  ";
-    return Json::writeString(builder, jsonRoot);
+    return jsonRoot;
   }
 };
 

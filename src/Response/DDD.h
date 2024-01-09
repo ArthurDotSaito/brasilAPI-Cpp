@@ -15,6 +15,7 @@ class DDDResponse : public BaseResponse, JsonSerialize {
   const std::string &getState() const {
     return state;
   }
+
   const std::vector<std::string> &getCities() const {
     return cities;
   }
