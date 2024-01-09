@@ -90,6 +90,15 @@ void BrasilAPIClient::listFipeMarcas(const std::optional<std::string> &tipoVeicu
   fipeHandler.listFipeMarcas(tipoVeiculo, tabela_referencia, callback);
 }
 
+void BrasilAPIClient::listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
+    std::function<void(const FipePrecos &)> callback) {
+  fipeHandler.listFipePreco(codigoFipe, tabela_referencia, callback);
+}
+
+void BrasilAPIClient::listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback) {
+  fipeHandler.listFipeTabelas(callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -403,5 +412,17 @@ std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoF
   auto future = promisePtr->get_future();
   fipeHandler.listFipePreco(codigoFipe, tabela_referencia,
       [this, promisePtr](const FipePrecos &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Lista as tabelas fipe de referência existentes.
+ * Retorna um array de objetos com informações referentes as tabelas de referência da tabela fipe.
+ */
+std::future<std::string> BrasilAPIClient::listFipeTabelasAsync() {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  fipeHandler.listFipeTabelas(
+      [this, promisePtr](const FipeTabelasReferencia &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
   return future;
 }

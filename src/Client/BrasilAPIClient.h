@@ -69,6 +69,7 @@ class BrasilAPIClient {
       std::function<void(const FipeMarcas &)> callback);
   void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
       std::function<void(const FipePrecos &)> callback);
+  void listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -94,6 +95,7 @@ class BrasilAPIClient {
   std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe);
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
+  std::future<std::string> listFipeTabelasAsync();
 
   // ...
 };
