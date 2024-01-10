@@ -99,6 +99,11 @@ void BrasilAPIClient::listFipeTabelas(std::function<void(const FipeTabelasRefere
   fipeHandler.listFipeTabelas(callback);
 }
 
+void BrasilAPIClient::listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
+    std::function<void(const IBGEMunicipiosResponse &)> callback) {
+  ibgeHandler.listMunicipios(siglaUf, providers, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -424,5 +429,29 @@ std::future<std::string> BrasilAPIClient::listFipeTabelasAsync() {
   auto future = promisePtr->get_future();
   fipeHandler.listFipeTabelas(
       [this, promisePtr](const FipeTabelasReferencia &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Retorna os municípios da unidade federativa
+ * Retorna um array de objetos com nome e codigo IBGE da unidade correspondente
+ * @param siglaUf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
+ * @param providers Lista de provedores separados por vírgula. Provedores Disponíveis: dados-abertos-br, gov, wikipedia
+ */
+std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf) {
+  return listMunicipiosAsync(siglaUf, std::nullopt);
+}
+
+/**
+ * @brief Retorna os municípios da unidade federativa
+ * Retorna um array de objetos com nome e codigo IBGE da unidade correspondente
+ * @param siglaUf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
+ * @param providers Lista de provedores separados por vírgula. Provedores Disponíveis: dados-abertos-br, gov, wikipedia
+ */
+std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  ibgeHandler.listMunicipios(siglaUf, providers,
+      [this, promisePtr](const IBGEMunicipiosResponse &ibgeResponse) { promisePtr->set_value(ibgeResponse.serialize()); });
   return future;
 }

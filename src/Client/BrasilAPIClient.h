@@ -1,3 +1,4 @@
+// Handler
 #include "Handlers/BanksHandler.h"
 #include "Handlers/CNPJHandler.h"
 #include "Handlers/CepHandler.h"
@@ -6,6 +7,9 @@
 #include "Handlers/DDDHandler.h"
 #include "Handlers/FeriadosHandler.h"
 #include "Handlers/FipeHandler.h"
+#include "Handlers/IBGEHandler.h"
+
+// Response
 #include "Response/BankResponse.h"
 #include "Response/CNPJResponse.h"
 #include "Response/CepResponse.h"
@@ -14,6 +18,7 @@
 #include "Response/CptecCidadesResponse.h"
 #include "Response/DDD.h"
 #include "Response/FipeResponse.h"
+#include "Response/IBGEResponse.h"
 #include "Response/PrevisaoOceanica.h"
 
 #include <drogon/drogon.h>
@@ -28,6 +33,7 @@ class BrasilAPIClient {
   DDDHandler dddHandler;
   FeriadosHandler feriadosHandler;
   FipeHandler fipeHandler;
+  IBGEHandler ibgeHandler;
 
   std::string userAgent;
   std::thread eventLoopThread;
@@ -70,6 +76,8 @@ class BrasilAPIClient {
   void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
       std::function<void(const FipePrecos &)> callback);
   void listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback);
+  void listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
+      std::function<void(const IBGEMunicipiosResponse &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -96,6 +104,8 @@ class BrasilAPIClient {
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe);
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
   std::future<std::string> listFipeTabelasAsync();
+  std::future<std::string> listMunicipiosAsync(std::string siglaUf);
+  std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
 
   // ...
 };
