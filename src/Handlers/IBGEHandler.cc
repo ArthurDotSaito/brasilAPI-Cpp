@@ -22,24 +22,31 @@ void IBGEHandler::listMunicipios(const std::string &siglaUf, const std::optional
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
-    ensureSuccess(response, fullUrl);
-    std::string responseBody = std::string(response->getBody());
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
 
-    IBGEMunicipiosResponse ibgeMunicipiosResponse;
-    ibgeMunicipiosResponse.calledURL = fullUrl;
-    ibgeMunicipiosResponse.jsonResponse = responseBody;
+      IBGEMunicipiosResponse ibgeMunicipiosResponse;
+      ibgeMunicipiosResponse.calledURL = fullUrl;
+      ibgeMunicipiosResponse.jsonResponse = responseBody;
 
-    Json::Value jsonResponse;
-    Json::Reader reader;
-    if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
-      for (const auto &jsonItem : jsonResponse) {
-        IBGEMunicipios ibgeMunicipios;
-        ibgeMunicipios.setNome(jsonItem["nome"].asString());
-        ibgeMunicipios.setCodigoIbge(jsonItem["codigo_ibge"].asString());
-        ibgeMunicipiosResponse.ibgeMunicipios.push_back(ibgeMunicipios);
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonItem : jsonResponse) {
+          IBGEMunicipios ibgeMunicipios;
+          ibgeMunicipios.setNome(jsonItem["nome"].asString());
+          ibgeMunicipios.setCodigoIbge(jsonItem["codigo_ibge"].asString());
+          ibgeMunicipiosResponse.ibgeMunicipios.push_back(ibgeMunicipios);
+        }
+        callback(ibgeMunicipiosResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
     }
-
-    callback(ibgeMunicipiosResponse);
   });
 }

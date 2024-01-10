@@ -22,25 +22,32 @@ void FipeHandler::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, 
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
-    ensureSuccess(response, fullUrl);
-    std::string responseBody = std::string(response->getBody());
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
 
-    FipeMarcas marcasResponse;
-    marcasResponse.calledURL = fullUrl;
-    marcasResponse.jsonResponse = responseBody;
+      FipeMarcas marcasResponse;
+      marcasResponse.calledURL = fullUrl;
+      marcasResponse.jsonResponse = responseBody;
 
-    Json::Value jsonResponse;
-    Json::Reader reader;
-    if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
-      for (const auto &jsonItem : jsonResponse) {
-        Marcas marcas;
-        marcas.setNome(jsonItem["nome"].asString());
-        marcas.setValor(jsonItem["valor"].asString());
-        marcasResponse.fipe.push_back(marcas);
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonItem : jsonResponse) {
+          Marcas marcas;
+          marcas.setNome(jsonItem["nome"].asString());
+          marcas.setValor(jsonItem["valor"].asString());
+          marcasResponse.fipe.push_back(marcas);
+        }
+        callback(marcasResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
     }
-
-    callback(marcasResponse);
   });
 }
 
@@ -61,33 +68,40 @@ void FipeHandler::listFipePreco(const std::string &codigoFipe, const std::option
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
-    ensureSuccess(response, fullUrl);
-    std::string responseBody = std::string(response->getBody());
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
 
-    FipePrecos precosResponse;
-    precosResponse.calledURL = fullUrl;
-    precosResponse.jsonResponse = responseBody;
+      FipePrecos precosResponse;
+      precosResponse.calledURL = fullUrl;
+      precosResponse.jsonResponse = responseBody;
 
-    Json::Value jsonResponse;
-    Json::Reader reader;
-    if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
-      for (const auto &jsonItem : jsonResponse) {
-        Precos precos;
-        precos.setValor(jsonItem["valor"].asString());
-        precos.setMarca(jsonItem["marca"].asString());
-        precos.setModelo(jsonItem["modelo"].asString());
-        precos.setAnoModelo(jsonItem["ano_modelo"].asInt());
-        precos.setCombustivel(jsonItem["combustivel"].asString());
-        precos.setCodigoFipe(jsonItem["codigo_fipe"].asString());
-        precos.setMesReferencia(jsonItem["mes_referencia"].asString());
-        precos.setTipoVeiculo(jsonItem["tipo_veiculo"].asInt());
-        precos.setSiglaCombustivel(jsonItem["sigla_combustivel"].asString());
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonItem : jsonResponse) {
+          Precos precos;
+          precos.setValor(jsonItem["valor"].asString());
+          precos.setMarca(jsonItem["marca"].asString());
+          precos.setModelo(jsonItem["modelo"].asString());
+          precos.setAnoModelo(jsonItem["ano_modelo"].asInt());
+          precos.setCombustivel(jsonItem["combustivel"].asString());
+          precos.setCodigoFipe(jsonItem["codigo_fipe"].asString());
+          precos.setMesReferencia(jsonItem["mes_referencia"].asString());
+          precos.setTipoVeiculo(jsonItem["tipo_veiculo"].asInt());
+          precos.setSiglaCombustivel(jsonItem["sigla_combustivel"].asString());
 
-        precosResponse.precos.push_back(precos);
+          precosResponse.precos.push_back(precos);
+        }
+        callback(precosResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
     }
-
-    callback(precosResponse);
   });
 }
 
@@ -103,24 +117,32 @@ void FipeHandler::listFipeTabelas(std::function<void(const FipeTabelasReferencia
   std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
-    ensureSuccess(response, fullUrl);
-    std::string responseBody = std::string(response->getBody());
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
 
-    FipeTabelasReferencia fipeTabelas;
-    fipeTabelas.calledURL = fullUrl;
-    fipeTabelas.jsonResponse = responseBody;
+      FipeTabelasReferencia fipeTabelas;
+      fipeTabelas.calledURL = fullUrl;
+      fipeTabelas.jsonResponse = responseBody;
 
-    Json::Value jsonResponse;
-    Json::Reader reader;
-    if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
-      for (const auto &jsonItem : jsonResponse) {
-        TabelasReferencia tabelasReferencia;
-        tabelasReferencia.setMes(jsonItem["mes"].asString());
-        tabelasReferencia.setCodigo(jsonItem["codigo"].asInt());
-        fipeTabelas.tabelasReferencia.push_back(tabelasReferencia);
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonItem : jsonResponse) {
+          TabelasReferencia tabelasReferencia;
+          tabelasReferencia.setMes(jsonItem["mes"].asString());
+          tabelasReferencia.setCodigo(jsonItem["codigo"].asInt());
+          fipeTabelas.tabelasReferencia.push_back(tabelasReferencia);
+        }
+        callback(fipeTabelas);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
-    }
 
-    callback(fipeTabelas);
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
   });
 }
