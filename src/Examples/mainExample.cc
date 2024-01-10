@@ -103,5 +103,9 @@ int main() {
   std::cout << "Fipe Data: " << fipeData3 << std::endl;
   */
 
+  auto fipe4 = brasilAPI.listFipeTabelasAsync();
+  auto fipeData4 = fipe4.get();
+  std::cout << "Fipe Data: " << fipeData4 << std::endl;
+
   return 0;
 }
