@@ -84,7 +84,7 @@ class IBGEMunicipiosResponse : public BaseResponse, public JsonSerialize {
   }
 };
 
-class IBGERegiaoResponse : public BaseResponse, public JsonSerialize {
+class IBGERegioesResponse : public BaseResponse, public JsonSerialize {
   public:
   std::vector<Regiao> regioes;
 

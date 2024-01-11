@@ -50,3 +50,44 @@ void IBGEHandler::listMunicipios(const std::string &siglaUf, const std::optional
     }
   });
 }
+
+void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  std::stringstream pathStream;
+  pathStream << "/api/ibge/uf/v1/";
+
+  req->setPath(pathStream.str());
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
+
+      IBGERegioesResponse ibgeRegioesResponse;
+      ibgeRegioesResponse.calledURL = fullUrl;
+      ibgeRegioesResponse.jsonResponse = responseBody;
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+        for (const auto &jsonItem : jsonResponse) {
+          Regiao regiao;
+          regiao.setId(jsonItem["id"].asString());
+          regiao.setNome(jsonItem["nome"].asString());
+          regiao.setSigla(jsonItem["sigla"].asString());
+          ibgeRegioesResponse.regioes.push_back(regiao);
+        }
+        callback(ibgeRegioesResponse);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
+      }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
+}
