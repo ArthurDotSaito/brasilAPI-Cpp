@@ -7,4 +7,5 @@ class IBGEHandler : public BrasilAPIHandlerBase {
       std::function<void(const IBGEMunicipiosResponse &)> callback);
 
   void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
+  void getEstado(const std::string &uf, std::function<void(const Estado &)> callback);
 };

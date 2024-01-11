@@ -108,6 +108,10 @@ void BrasilAPIClient::listRegioes(std::function<void(const IBGERegioesResponse &
   ibgeHandler.listRegioes(callback);
 }
 
+void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(const Estado &)> callback) {
+  ibgeHandler.getEstado(uf, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -473,5 +477,17 @@ std::future<std::string> BrasilAPIClient::listRegioesAsync() {
   auto future = promisePtr->get_future();
   ibgeHandler.listRegioes(
       [this, promisePtr](const IBGERegioesResponse &ibgeResponse) { promisePtr->set_value(ibgeResponse.serialize()); });
+  return future;
+}
+
+/**
+ * @brief Busca as informações de um estado a partir da sigla ou código.
+ * Retorna um objeto com nome, sigla e id do estado do Brasil, bem como informações acerca da região.
+ * @param uf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
+ */
+std::future<std::string> BrasilAPIClient::getEstadoAsync(std::string uf) {
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+  ibgeHandler.getEstado(uf, [this, promisePtr](const Estado &estado) { promisePtr->set_value(estado.serialize()); });
   return future;
 }

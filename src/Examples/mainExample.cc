@@ -119,5 +119,9 @@ int main() {
   auto ibgeData2 = ibge2.get();
   std::cout << "IBGE Data: " << ibgeData2 << std::endl;
 
+  auto ibge3 = brasilAPI.getEstadoAsync("SC");
+  auto ibgeData3 = ibge3.get();
+  std::cout << "IBGE Data: " << ibgeData3 << std::endl;
+
   return 0;
 }

@@ -79,6 +79,7 @@ class BrasilAPIClient {
   void listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
       std::function<void(const IBGEMunicipiosResponse &)> callback);
   void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
+  void getEstado(const std::string &uf, std::function<void(const Estado &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -108,6 +109,7 @@ class BrasilAPIClient {
   std::future<std::string> listMunicipiosAsync(std::string siglaUf);
   std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
   std::future<std::string> listRegioesAsync();
+  std::future<std::string> getEstadoAsync(std::string uf);
 
   // ...
 };

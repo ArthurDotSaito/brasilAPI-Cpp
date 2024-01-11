@@ -96,3 +96,45 @@ void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> c
     }
   });
 }
+
+void IBGEHandler::getEstado(const std::string &uf, std::function<void(const Estado &)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  std::stringstream pathStream;
+  pathStream << "/api/ibge/uf/v1/" + uf;
+
+  req->setPath(pathStream.str());
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
+
+      Estado estado;
+      estado.calledURL = fullUrl;
+      estado.jsonResponse = responseBody;
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse)) {
+        estado.setId(jsonResponse["id"].asString());
+        estado.setNome(jsonResponse["nome"].asString());
+        estado.setSigla(jsonResponse["sigla"].asString());
+        Regiao regiao;
+        regiao.setId(jsonResponse["regiao"]["id"].asString());
+        regiao.setNome(jsonResponse["regiao"]["nome"].asString());
+        regiao.setSigla(jsonResponse["regiao"]["sigla"].asString());
+        estado.setRegiao(regiao);
+        callback(estado);
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
+      }
+    } catch (const BrasilAPIException &e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      return;
+    }
+  });
+}
