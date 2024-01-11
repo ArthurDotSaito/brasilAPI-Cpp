@@ -436,7 +436,9 @@ std::future<std::string> BrasilAPIClient::listFipeTabelasAsync() {
  * @brief Retorna os municípios da unidade federativa
  * Retorna um array de objetos com nome e codigo IBGE da unidade correspondente
  * @param siglaUf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
- * @param providers Lista de provedores separados por vírgula. Provedores Disponíveis: dados-abertos-br, gov, wikipedia
+ * @param providers Lista de provedores separados por vírgula. Este parâmetro é opcional.
+ * Quando não fornecido, o sistema utilizará os provedores padrão.
+ * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
 std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf) {
   return listMunicipiosAsync(siglaUf, std::nullopt);
@@ -446,7 +448,9 @@ std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaU
  * @brief Retorna os municípios da unidade federativa
  * Retorna um array de objetos com nome e codigo IBGE da unidade correspondente
  * @param siglaUf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
- * @param providers Lista de provedores separados por vírgula. Provedores Disponíveis: dados-abertos-br, gov, wikipedia
+ * @param providers Lista de provedores separados por vírgula. Este parâmetro é opcional.
+ * Quando não fornecido, o sistema utilizará os provedores padrão.
+ * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
 std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
