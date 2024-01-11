@@ -71,6 +71,50 @@ class Regiao : public BaseResponse, public JsonSerialize {
   }
 };
 
+class Estado : public BaseResponse, public JsonSerialize {
+  private:
+  std::string id;
+  std::string sigla;
+  std::string nome;
+  Regiao regiao;
+
+  public:
+  const std::string &getId() const {
+    return id;
+  }
+  const std::string &getSigla() const {
+    return sigla;
+  }
+  const std::string &getNome() const {
+    return nome;
+  }
+  const Regiao &getRegiao() const {
+    return regiao;
+  }
+
+  void setId(const std::string &i) {
+    id = i;
+  }
+  void setSigla(const std::string &s) {
+    sigla = s;
+  }
+  void setNome(const std::string &n) {
+    nome = n;
+  }
+  void setRegiao(const Regiao &r) {
+    regiao = r;
+  }
+
+  Json::Value toJson() const override {
+    Json::Value jsonValue;
+    jsonValue["id"] = id;
+    jsonValue["nome"] = nome;
+    jsonValue["sigla"] = sigla;
+    jsonValue["regiao"] = regiao.toJson();
+    return jsonValue;
+  }
+};
+
 class IBGEMunicipiosResponse : public BaseResponse, public JsonSerialize {
   public:
   std::vector<IBGEMunicipios> ibgeMunicipios;
@@ -86,11 +130,11 @@ class IBGEMunicipiosResponse : public BaseResponse, public JsonSerialize {
 
 class IBGERegioesResponse : public BaseResponse, public JsonSerialize {
   public:
-  std::vector<Regiao> regioes;
+  std::vector<Estado> estados;
 
   Json::Value toJson() const override {
     Json::Value jsonRoot(Json::arrayValue);
-    for (const auto &item : regioes) {
+    for (const auto &item : estados) {
       jsonRoot.append(item.toJson());
     }
     return jsonRoot;

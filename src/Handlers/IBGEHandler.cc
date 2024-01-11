@@ -74,11 +74,16 @@ void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> c
       Json::Reader reader;
       if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
         for (const auto &jsonItem : jsonResponse) {
+          Estado estado;
+          estado.setId(jsonItem["id"].asString());
+          estado.setNome(jsonItem["nome"].asString());
+          estado.setSigla(jsonItem["sigla"].asString());
           Regiao regiao;
-          regiao.setId(jsonItem["id"].asString());
-          regiao.setNome(jsonItem["nome"].asString());
-          regiao.setSigla(jsonItem["sigla"].asString());
-          ibgeRegioesResponse.regioes.push_back(regiao);
+          regiao.setId(jsonItem["regiao"]["id"].asString());
+          regiao.setNome(jsonItem["regiao"]["nome"].asString());
+          regiao.setSigla(jsonItem["regiao"]["sigla"].asString());
+          estado.setRegiao(regiao);
+          ibgeRegioesResponse.estados.push_back(estado);
         }
         callback(ibgeRegioesResponse);
       } else {
