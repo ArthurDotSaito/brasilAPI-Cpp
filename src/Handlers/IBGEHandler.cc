@@ -55,7 +55,7 @@ void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> c
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
-  pathStream << "/api/ibge/uf/v1/";
+  pathStream << "/api/ibge/uf/v1";
 
   req->setPath(pathStream.str());
   std::string fullUrl = baseUrl + req->getPath();

@@ -100,12 +100,10 @@ int main() {
 
   auto fipe3 = brasilAPI.listFipePrecoAsync("001004-9");
   auto fipeData3 = fipe3.get();
-  std::cout << "Fipe Data: " << fipeData3 << std::endl;
-
+  std::cout << "Fipe Data: " << fipeData3 << std::end
   auto fipe4 = brasilAPI.listFipeTabelasAsync();
   auto fipeData4 = fipe4.get();
   std::cout << "Fipe Data: " << fipeData4 << std::endl;
-  */
 
   auto ibge = brasilAPI.listMunicipiosAsync("SC");
   auto ibgeData = ibge.get();
@@ -114,6 +112,12 @@ int main() {
   auto ibge1 = brasilAPI.listMunicipiosAsync("SC", "gov");
   auto ibgeData1 = ibge1.get();
   std::cout << "IBGE Data: " << ibgeData1 << std::endl;
+  l;
+  */
+
+  auto ibge2 = brasilAPI.listRegioesAsync();
+  auto ibgeData2 = ibge2.get();
+  std::cout << "IBGE Data: " << ibgeData2 << std::endl;
 
   return 0;
 }
