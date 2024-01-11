@@ -78,6 +78,7 @@ class BrasilAPIClient {
   void listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback);
   void listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
       std::function<void(const IBGEMunicipiosResponse &)> callback);
+  void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -106,6 +107,7 @@ class BrasilAPIClient {
   std::future<std::string> listFipeTabelasAsync();
   std::future<std::string> listMunicipiosAsync(std::string siglaUf);
   std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
+  std::future<std::string> listRegioesAsync();
 
   // ...
 };
