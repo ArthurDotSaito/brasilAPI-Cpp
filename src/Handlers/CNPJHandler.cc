@@ -1,7 +1,7 @@
 #include "CNPJHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void CNPJHandler::getCNPJ(std::string cnpj, std::function<void(const CNPJResponse &)> callback) {
+void CNPJHandler::getCNPJ(std::string cnpj, std::function<void(std::variant<CNPJResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cnpj/v1/" + cnpj);
@@ -92,8 +92,11 @@ void CNPJHandler::getCNPJ(std::string cnpj, std::function<void(const CNPJRespons
       callback(cnpjResponse);
 
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }

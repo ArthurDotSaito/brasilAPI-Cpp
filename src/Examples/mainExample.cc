@@ -17,7 +17,7 @@ int main() {
   auto futureBank2 = brasilAPI.getAllBanksAsync();
   auto bankData2 = futureBank2.get();
   std::cout << "Bank Data: " << bankData2 << std::endl;
-  */
+
 
   auto futureCep = brasilAPI.getCepAsync(890125);
   auto cepData = futureCep.get();
@@ -26,12 +26,13 @@ int main() {
   auto futureCepV2 = brasilAPI.getCepV2Async(89010025);
   auto cepDataV2 = futureCepV2.get();
   std::cout << "Cep Data V2: " << cepDataV2 << std::endl;
+  */
 
-  /*
   auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
   auto cnpjData = futureCNPJ.get();
   std::cout << "CNPJ Data: " << cnpjData << std::endl;
 
+  /*
   auto futureCorretoras = brasilAPI.getAllCorretorasAsync();
   auto corretorasData = futureCorretoras.get();
   std::cout << "Corretoras Data: " << corretorasData << std::endl;

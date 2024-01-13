@@ -32,7 +32,7 @@ void BrasilAPIClient::getCepV2(int cep, std::function<void(std::variant<CepRespo
   cepHandler.getCepV2(cep, callback);
 }
 
-void BrasilAPIClient::getCNPJ(std::string cnpj, std::function<void(const CNPJResponse &)> callback) {
+void BrasilAPIClient::getCNPJ(std::string cnpj, std::function<void(std::variant<CNPJResponse, ErrorResponse>)> callback) {
   cnpjHandler.getCNPJ(cnpj, callback);
 }
 
@@ -153,7 +153,7 @@ std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
         promisePtr->set_value(bank.serialize());
       } else {
         ErrorResponse error = std::get<ErrorResponse>(result);
-        promisePtr->set_value("Error: " + error.errorMessage);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
       }
     } catch (const std::exception &e) {
       promisePtr->set_value("Exception: " + std::string(e.what()));
@@ -180,7 +180,7 @@ std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
         promisePtr->set_value(cepResponse.serialize());
       } else {
         ErrorResponse error = std::get<ErrorResponse>(result);
-        promisePtr->set_value("Error: " + error.errorMessage);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
       }
     } catch (const std::exception &e) {
       promisePtr->set_value("Exception: " + std::string(e.what()));
@@ -205,7 +205,7 @@ std::future<std::string> BrasilAPIClient::getCepV2Async(int cep) {
         promisePtr->set_value(cepResponse.serialize());
       } else {
         ErrorResponse error = std::get<ErrorResponse>(result);
-        promisePtr->set_value("Error: " + error.errorMessage);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
       }
     } catch (const std::exception &e) {
       promisePtr->set_value("Exception: " + std::string(e.what()));
@@ -222,10 +222,22 @@ std::future<std::string> BrasilAPIClient::getCepV2Async(int cep) {
 std::future<std::string> BrasilAPIClient::getCNPJAsync(std::string cnpj) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cnpjHandler.getCNPJ(
-      cnpj, [this, promisePtr, cnpj](const CNPJResponse &cnpjResponse) { promisePtr->set_value(cnpjResponse.serialize()); });
+
+  cnpjHandler.getCNPJ(cnpj, [promisePtr](std::variant<CNPJResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CNPJResponse>(result)) {
+        CNPJResponse cnpjResponse = std::get<CNPJResponse>(result);
+        promisePtr->set_value(cnpjResponse.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief retorna todas as corretoras nos arquivos da CVM.
