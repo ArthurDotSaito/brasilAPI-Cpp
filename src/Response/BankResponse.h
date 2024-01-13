@@ -40,7 +40,7 @@ class Bank : public BaseResponse, public JsonSerialize {
   }
 
   void setCode(const std::string &c) {
-    name = c;
+    code = c.empty() ? std::nullopt : std::optional<int>(std::stoi(c));
   }
 
   void setFullName(const std::string &fn) {

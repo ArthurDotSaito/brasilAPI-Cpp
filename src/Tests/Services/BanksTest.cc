@@ -14,9 +14,13 @@ void runTestGetAllBanks() {
   BankResponse response;
   std::promise<void> promise;
 
-  brasilAPI.getAllBanks([&response, &promise](const BankResponse &bankResponse) {
-    response = bankResponse;
-    promise.set_value();
+  brasilAPI.getAllBanks([&response, &promise](std::variant<BankResponse, ErrorResponse> result) {
+    if (std::holds_alternative<BankResponse>(result)) {
+      response = std::get<BankResponse>(result);
+      promise.set_value();
+    } else {
+      ErrorResponse error = std::get<ErrorResponse>(result);
+    }
   });
 
   std::future<void> future = promise.get_future();
@@ -41,9 +45,13 @@ void runTestGetBankByCode() {
   Bank response;
   std::promise<void> promise;
 
-  brasilAPI.getBanksByCode(1, [&response, &promise](const Bank &bank) {
-    response = bank;
-    promise.set_value();
+  brasilAPI.getBanksByCode(1, [&response, &promise](std::variant<Bank, ErrorResponse> result) {
+    if (std::holds_alternative<Bank>(result)) {
+      response = std::get<Bank>(result);
+      promise.set_value();
+    } else {
+      ErrorResponse error = std::get<ErrorResponse>(result);
+    }
   });
 
   std::future<void> future = promise.get_future();

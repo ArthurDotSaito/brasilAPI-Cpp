@@ -12,16 +12,15 @@ int main() {
 
   std::cout << "Starting banks API request..." << std::endl;
 
-  /*
-  auto futureBanks = brasilAPI.getAllBanksAsync();
-  auto banksData = futureBanks.get();
-  std::cout << "Banks Data: " << banksData << std::endl;
-
-  auto futureBank = brasilAPI.getBanksByCodeAsync(1);
+  auto futureBank = brasilAPI.getBanksByCodeAsync(0);
   auto bankData = futureBank.get();
   std::cout << "Bank Data: " << bankData << std::endl;
 
+  auto futureBank2 = brasilAPI.getAllBanksAsync();
+  auto bankData2 = futureBank2.get();
+  std::cout << "Bank Data: " << bankData2 << std::endl;
 
+  /*
   auto futureCep = brasilAPI.getCepAsync(89010025);
   auto cepData = futureCep.get();
   std::cout << "Cep Data: " << cepData << std::endl;
@@ -112,8 +111,6 @@ int main() {
   auto ibge1 = brasilAPI.listMunicipiosAsync("SC", "gov");
   auto ibgeData1 = ibge1.get();
   std::cout << "IBGE Data: " << ibgeData1 << std::endl;
-  l;
-  */
 
   auto ibge2 = brasilAPI.listRegioesAsync();
   auto ibgeData2 = ibge2.get();
@@ -122,6 +119,6 @@ int main() {
   auto ibge3 = brasilAPI.getEstadoAsync("SC");
   auto ibgeData3 = ibge3.get();
   std::cout << "IBGE Data: " << ibgeData3 << std::endl;
-
+  */
   return 0;
 }

@@ -54,8 +54,8 @@ class BrasilAPIClient {
 
   // TODO: Revisar nome das funções (list vs get, etc)
   // Funções que usam callbacks
-  void getAllBanks(std::function<void(const BankResponse &)> callback);
-  void getBanksByCode(int code, std::function<void(const Bank &)> callback);
+  void getAllBanks(std::function<void(std::variant<BankResponse, ErrorResponse>)> callback);
+  void getBanksByCode(int code, std::function<void(std::variant<Bank, ErrorResponse>)> callback);
   void getCep(int cep, std::function<void(const CepResponse &)> callback);
   void getCepV2(int cep, std::function<void(const CepResponse &)> callback);
   void getCNPJ(std::string cnpj, std::function<void(const CNPJResponse &)> callback);

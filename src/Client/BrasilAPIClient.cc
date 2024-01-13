@@ -16,11 +16,11 @@ void BrasilAPIClient::setUserAgent(const std::string &ua) {
   userAgent = ua;
 }
 
-void BrasilAPIClient::getAllBanks(std::function<void(const BankResponse &)> callback) {
+void BrasilAPIClient::getAllBanks(std::function<void(std::variant<BankResponse, ErrorResponse>)> callback) {
   banksHandler.getAllBanks(callback);
 }
 
-void BrasilAPIClient::getBanksByCode(int code, std::function<void(const Bank &)> callback) {
+void BrasilAPIClient::getBanksByCode(int code, std::function<void(std::variant<Bank, ErrorResponse>)> callback) {
   banksHandler.getBanksByCode(code, callback);
 }
 
@@ -119,7 +119,21 @@ void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(const 
 std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  banksHandler.getAllBanks([this, promisePtr](const BankResponse &response) { promisePtr->set_value(response.serialize()); });
+
+  banksHandler.getAllBanks([promisePtr](std::variant<BankResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<BankResponse>(result)) {
+        BankResponse bankResponse = std::get<BankResponse>(result);
+        promisePtr->set_value(bankResponse.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
+
   return future;
 }
 
@@ -131,7 +145,21 @@ std::future<std::string> BrasilAPIClient::getAllBanksAsync() {
 std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  banksHandler.getBanksByCode(code, [this, promisePtr, code](const Bank &bank) { promisePtr->set_value(bank.serialize()); });
+
+  banksHandler.getBanksByCode(code, [promisePtr](std::variant<Bank, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<Bank>(result)) {
+        Bank bank = std::get<Bank>(result);
+        promisePtr->set_value(bank.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
+
   return future;
 }
 
@@ -202,10 +230,10 @@ std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string c
 
 /**
  * @brief Buscar localidades
- * Retorna listagem com todas as cidades junto a seus respectivos códigos presentes nos serviços da CPTEC. O Código destas cidades
- * será utilizado para os serviços de meteorologia e a ondas (previsão oceânica) fornecido pelo centro. Leve em consideração que o
- * WebService do CPTEC as vezes é instável, então se não encontrar uma determinada cidade na listagem completa, tente buscando por
- * parte de seu nome no endpoint de busca.
+ * Retorna listagem com todas as cidades junto a seus respectivos códigos presentes nos serviços da CPTEC. O Código destas
+ * cidades será utilizado para os serviços de meteorologia e a ondas (previsão oceânica) fornecido pelo centro. Leve em
+ * consideração que o WebService do CPTEC as vezes é instável, então se não encontrar uma determinada cidade na listagem
+ * completa, tente buscando por parte de seu nome no endpoint de busca.
  */
 std::future<std::string> BrasilAPIClient::listAllCitiesAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
