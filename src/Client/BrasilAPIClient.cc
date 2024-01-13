@@ -24,11 +24,11 @@ void BrasilAPIClient::getBanksByCode(int code, std::function<void(std::variant<B
   banksHandler.getBanksByCode(code, callback);
 }
 
-void BrasilAPIClient::getCep(int cep, std::function<void(const CepResponse &)> callback) {
+void BrasilAPIClient::getCep(int cep, std::function<void(std::variant<CepResponse, ErrorResponse>)> callback) {
   cepHandler.getCep(cep, callback);
 }
 
-void BrasilAPIClient::getCepV2(int cep, std::function<void(const CepResponse &)> callback) {
+void BrasilAPIClient::getCepV2(int cep, std::function<void(std::variant<CepResponse, ErrorResponse>)> callback) {
   cepHandler.getCepV2(cep, callback);
 }
 
@@ -168,13 +168,26 @@ std::future<std::string> BrasilAPIClient::getBanksByCodeAsync(int code) {
  * Retorna um objeto com informações referentes ao cep de busca.
  * @param cnpj código cep para efetuar a busca.
  */
+
 std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cepHandler.getCep(
-      cep, [this, promisePtr, cep](const CepResponse &cepRespose) { promisePtr->set_value(cepRespose.serialize()); });
+
+  cepHandler.getCep(cep, [promisePtr](std::variant<CepResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CepResponse>(result)) {
+        CepResponse cepResponse = std::get<CepResponse>(result);
+        promisePtr->set_value(cepResponse.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief versão 2 do serviço de busca por CEP com múltiplos providers de fallback.
@@ -184,10 +197,22 @@ std::future<std::string> BrasilAPIClient::getCepAsync(int cep) {
 std::future<std::string> BrasilAPIClient::getCepV2Async(int cep) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cepHandler.getCepV2(
-      cep, [this, promisePtr, cep](const CepResponse &cepRespose) { promisePtr->set_value(cepRespose.serialize()); });
+
+  cepHandler.getCepV2(cep, [promisePtr](std::variant<CepResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CepResponse>(result)) {
+        CepResponse cepResponse = std::get<CepResponse>(result);
+        promisePtr->set_value(cepResponse.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Busca por CNPJ na API Minha Receita.

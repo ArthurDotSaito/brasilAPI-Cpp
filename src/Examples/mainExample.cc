@@ -9,9 +9,7 @@
 int main() {
   BrasilAPIClient brasilAPI;
   brasilAPI.setUserAgent("MeuApp/1.0");
-
-  std::cout << "Starting banks API request..." << std::endl;
-
+  /*
   auto futureBank = brasilAPI.getBanksByCodeAsync(0);
   auto bankData = futureBank.get();
   std::cout << "Bank Data: " << bankData << std::endl;
@@ -19,9 +17,9 @@ int main() {
   auto futureBank2 = brasilAPI.getAllBanksAsync();
   auto bankData2 = futureBank2.get();
   std::cout << "Bank Data: " << bankData2 << std::endl;
+  */
 
-  /*
-  auto futureCep = brasilAPI.getCepAsync(89010025);
+  auto futureCep = brasilAPI.getCepAsync(890125);
   auto cepData = futureCep.get();
   std::cout << "Cep Data: " << cepData << std::endl;
 
@@ -29,11 +27,10 @@ int main() {
   auto cepDataV2 = futureCepV2.get();
   std::cout << "Cep Data V2: " << cepDataV2 << std::endl;
 
-
+  /*
   auto futureCNPJ = brasilAPI.getCNPJAsync("19131243000197");
   auto cnpjData = futureCNPJ.get();
   std::cout << "CNPJ Data: " << cnpjData << std::endl;
-
 
   auto futureCorretoras = brasilAPI.getAllCorretorasAsync();
   auto corretorasData = futureCorretoras.get();
@@ -47,11 +44,9 @@ int main() {
   auto cptecData = futureCptec.get();
   std::cout << "Cptec Data: " << cptecData << std::endl;
 
-
   auto futureCptec2 = brasilAPI.searchByTermsAsync("Blumenau");
   auto cptecData2 = futureCptec2.get();
   std::cout << "Cptec Data: " << cptecData2 << std::endl;
-
 
   auto futureCptec3 = brasilAPI.getCapitaisAsync();
   auto cptecData3 = futureCptec3.get();
@@ -99,8 +94,7 @@ int main() {
 
   auto fipe3 = brasilAPI.listFipePrecoAsync("001004-9");
   auto fipeData3 = fipe3.get();
-  std::cout << "Fipe Data: " << fipeData3 << std::end
-  auto fipe4 = brasilAPI.listFipeTabelasAsync();
+  std::cout << "Fipe Data: " << fipeData3 << std::end auto fipe4 = brasilAPI.listFipeTabelasAsync();
   auto fipeData4 = fipe4.get();
   std::cout << "Fipe Data: " << fipeData4 << std::endl;
 

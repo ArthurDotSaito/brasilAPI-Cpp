@@ -1,7 +1,7 @@
 #include "CepHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void CepHandler::getCep(int cep, std::function<void(const CepResponse &)> callback) {
+void CepHandler::getCep(int cep, std::function<void(std::variant<CepResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cep/v1/" + std::to_string(cep));
@@ -9,7 +9,7 @@ void CepHandler::getCep(int cep, std::function<void(const CepResponse &)> callba
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
     try {
-      ensureSuccess(response, "api/cep/v1/{cep}");
+      ensureSuccess(response, fullUrl);
       std::string responseBody = std::string(response->getBody());
 
       Json::Value jsonResponse;
@@ -30,13 +30,16 @@ void CepHandler::getCep(int cep, std::function<void(const CepResponse &)> callba
 
       callback(cepResponse);
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
 
-void CepHandler::getCepV2(int cep, std::function<void(const CepResponse &)> callback) {
+void CepHandler::getCepV2(int cep, std::function<void(std::variant<CepResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cep/v2/" + std::to_string(cep));
@@ -44,7 +47,7 @@ void CepHandler::getCepV2(int cep, std::function<void(const CepResponse &)> call
 
   httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
     try {
-      ensureSuccess(response, "api/cep/v2/{cep}");
+      ensureSuccess(response, fullUrl);
       std::string responseBody = std::string(response->getBody());
 
       Json::Value jsonResponse;
@@ -73,8 +76,11 @@ void CepHandler::getCepV2(int cep, std::function<void(const CepResponse &)> call
 
       callback(cepResponse);
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
