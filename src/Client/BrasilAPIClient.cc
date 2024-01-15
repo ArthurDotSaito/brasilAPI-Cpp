@@ -45,20 +45,23 @@ void BrasilAPIClient::getCorretorasByCnpj(
   corretorasHandler.getCorretorasByCnpj(cnpj, callback);
 }
 
-void BrasilAPIClient::listAllCities(std::function<void(const CptecCidadesResponse &)> callback) {
+void BrasilAPIClient::listAllCities(std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback) {
   cptecHandler.listAllCities(callback);
 }
 
-void BrasilAPIClient::searchByTerms(std::string cityName, std::function<void(const CptecCidadesResponse &)> callback) {
+void BrasilAPIClient::searchByTerms(
+    std::string cityName, std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback) {
   cptecHandler.searchByTerms(cityName, callback);
 }
 
-void BrasilAPIClient::getCapitais(std::function<void(const CptecCapitaisResponse &)> callback) {
-  cptecHandler.getCapitais(callback);
+void BrasilAPIClient::listCondicoesMetereologicasCapitais(
+    std::function<void(std::variant<CptecCapitaisResponse, ErrorResponse>)> callback) {
+  cptecHandler.listCondicoesMetereologicasCapitais(callback);
 }
 
-void BrasilAPIClient::getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback) {
-  cptecHandler.getCondicoesAeroporto(icao, callback);
+void BrasilAPIClient::getCondicoesMetereologicasAeroporto(
+    std::string icao, std::function<void(std::variant<CptecAeroporto, ErrorResponse>)> callback) {
+  cptecHandler.getCondicoesMetereologicasAeroporto(icao, callback);
 }
 
 void BrasilAPIClient::getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback) {
@@ -299,10 +302,22 @@ std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string c
 std::future<std::string> BrasilAPIClient::listAllCitiesAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.listAllCities(
-      [this, promisePtr](const CptecCidadesResponse &cidades) { promisePtr->set_value(cidades.serialize()); });
+
+  cptecHandler.listAllCities([promisePtr](std::variant<CptecCidadesResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CptecCidadesResponse>(result)) {
+        CptecCidadesResponse cidades = std::get<CptecCidadesResponse>(result);
+        promisePtr->set_value(cidades.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Buscar localidades
@@ -314,22 +329,46 @@ std::future<std::string> BrasilAPIClient::listAllCitiesAsync() {
 std::future<std::string> BrasilAPIClient::searchByTermsAsync(std::string cityName) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.searchByTerms(cityName,
-      [this, promisePtr, cityName](const CptecCidadesResponse &cidades) { promisePtr->set_value(cidades.serialize()); });
+
+  cptecHandler.searchByTerms(cityName, [promisePtr](std::variant<CptecCidadesResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CptecCidadesResponse>(result)) {
+        CptecCidadesResponse cidades = std::get<CptecCidadesResponse>(result);
+        promisePtr->set_value(cidades.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Condições atuais nas capitais
  * Retorna condições meteorológicas atuais nas capitais do país, com base nas estações de solo de seu aeroporto.
  */
-std::future<std::string> BrasilAPIClient::getCapitaisAsync() {
+std::future<std::string> BrasilAPIClient::listCondicoesMetereologicasCapitaisAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.getCapitais(
-      [this, promisePtr](const CptecCapitaisResponse &capitais) { promisePtr->set_value(capitais.serialize()); });
+
+  cptecHandler.listCondicoesMetereologicasCapitais([promisePtr](std::variant<CptecCapitaisResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CptecCapitaisResponse>(result)) {
+        CptecCapitaisResponse capitais = std::get<CptecCapitaisResponse>(result);
+        promisePtr->set_value(capitais.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Condições atuais em um aeroporto
@@ -337,13 +376,25 @@ std::future<std::string> BrasilAPIClient::getCapitaisAsync() {
  * Este endpoint utiliza o código ICAO (4 dígitos) do aeroporto.
  * @param icao Código ICAO (4 dígitos) do aeroporto desejado.
  */
-std::future<std::string> BrasilAPIClient::getCondicoesAeroportoAsync(std::string icao) {
+std::future<std::string> BrasilAPIClient::getCondicoesMetereologicasAeroportoAsync(std::string icao) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.getCondicoesAeroporto(
-      icao, [this, promisePtr, icao](const CptecAeroporto &aeroporto) { promisePtr->set_value(aeroporto.serialize()); });
+
+  cptecHandler.getCondicoesMetereologicasAeroporto(icao, [promisePtr](std::variant<CptecAeroporto, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CptecAeroporto>(result)) {
+        CptecAeroporto aeroporto = std::get<CptecAeroporto>(result);
+        promisePtr->set_value(aeroporto.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Previsão meteorológica de um dia de uma cidade

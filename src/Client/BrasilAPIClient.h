@@ -61,10 +61,11 @@ class BrasilAPIClient {
   void getCNPJ(std::string cnpj, std::function<void(std::variant<CNPJResponse, ErrorResponse>)> callback);
   void getAllCorretoras(std::function<void(std::variant<CorretorasResponse, ErrorResponse>)> callback);
   void getCorretorasByCnpj(std::string cnpj, std::function<void(std::variant<Corretoras, ErrorResponse>)> callback);
-  void listAllCities(std::function<void(const CptecCidadesResponse &)> callback);
-  void searchByTerms(std::string cityName, std::function<void(const CptecCidadesResponse &)> callback);
-  void getCapitais(std::function<void(const CptecCapitaisResponse &)> callback);
-  void getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback);
+  void listAllCities(std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback);
+  void searchByTerms(std::string cityName, std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback);
+  void listCondicoesMetereologicasCapitais(std::function<void(std::variant<CptecCapitaisResponse, ErrorResponse>)> callback);
+  void getCondicoesMetereologicasAeroporto(
+      std::string icao, std::function<void(std::variant<CptecAeroporto, ErrorResponse>)> callback);
   void getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback);
   void previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback);
   void previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback);
@@ -91,8 +92,8 @@ class BrasilAPIClient {
   std::future<std::string> getCorretorasByCnpjAsync(std::string cnpj);
   std::future<std::string> listAllCitiesAsync();
   std::future<std::string> searchByTermsAsync(std::string cityName);
-  std::future<std::string> getCapitaisAsync();
-  std::future<std::string> getCondicoesAeroportoAsync(std::string icao);
+  std::future<std::string> listCondicoesMetereologicasCapitaisAsync();
+  std::future<std::string> getCondicoesMetereologicasAeroportoAsync(std::string icao);
   std::future<std::string> getCidadesClimaByCidadeAsync(int cityCode);
   std::future<std::string> previsaoCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> previsaoOceanicaCidadeAsync(int cityCode);

@@ -1,7 +1,7 @@
 #include "CptecHandler.h"
 #include "Utils/BrasilAPIException.h"
 
-void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse &)> callback) {
+void CptecHandler::listAllCities(std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/cidade");
@@ -31,13 +31,17 @@ void CptecHandler::listAllCities(std::function<void(const CptecCidadesResponse &
       callback(cptecCidadesResponse);
 
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
 
-void CptecHandler::searchByTerms(std::string cityName, std::function<void(const CptecCidadesResponse &)> callback) {
+void CptecHandler::searchByTerms(
+    std::string cityName, std::function<void(std::variant<CptecCidadesResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/cidade/" + cityName);
@@ -66,13 +70,17 @@ void CptecHandler::searchByTerms(std::string cityName, std::function<void(const 
       }
       callback(cptecCidadesResponse);
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
 
-void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse &)> callback) {
+void CptecHandler::listCondicoesMetereologicasCapitais(
+    std::function<void(std::variant<CptecCapitaisResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/clima/capital");
@@ -111,13 +119,17 @@ void CptecHandler::getCapitais(std::function<void(const CptecCapitaisResponse &)
       callback(cptecCapitaisResponse);
 
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
 
-void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(const CptecAeroporto &)> callback) {
+void CptecHandler::getCondicoesMetereologicasAeroporto(
+    std::string icao, std::function<void(std::variant<CptecAeroporto, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/clima/aeroporto/" + icao);
@@ -152,8 +164,11 @@ void CptecHandler::getCondicoesAeroporto(std::string icao, std::function<void(co
       callback(cptecAeroporto);
 
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
@@ -196,8 +211,11 @@ void CptecHandler::getCidadesClimaByCidade(int cityCode, std::function<void(cons
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
@@ -239,9 +257,13 @@ void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<
         std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
         return;
       }
-    } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+    }
+    ccatch(const BrasilAPIException &e) {
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
@@ -294,8 +316,11 @@ void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
@@ -349,8 +374,11 @@ void CptecHandler::previsaoOceanicaCidadeSeisDias(
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
