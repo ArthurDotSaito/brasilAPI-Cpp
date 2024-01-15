@@ -66,7 +66,7 @@ class BrasilAPIClient {
   void listCondicoesMetereologicasCapitais(std::function<void(std::variant<CptecCapitaisResponse, ErrorResponse>)> callback);
   void getCondicoesMetereologicasAeroporto(
       std::string icao, std::function<void(std::variant<CptecAeroporto, ErrorResponse>)> callback);
-  void getCidadesClimaByCidade(int cityCode, std::function<void(const CidadeClimaResponse &)> callback);
+  void getClimaEmCidade(int cityCode, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback);
   void previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback);
   void previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback);
   void previsaoOceanicaCidadeSeisDias(int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback);
@@ -94,7 +94,7 @@ class BrasilAPIClient {
   std::future<std::string> searchByTermsAsync(std::string cityName);
   std::future<std::string> listCondicoesMetereologicasCapitaisAsync();
   std::future<std::string> getCondicoesMetereologicasAeroportoAsync(std::string icao);
-  std::future<std::string> getCidadesClimaByCidadeAsync(int cityCode);
+  std::future<std::string> getCLimaEmCidadeAsync(int cityCode);
   std::future<std::string> previsaoCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> previsaoOceanicaCidadeAsync(int cityCode);
   std::future<std::string> previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
