@@ -1,7 +1,7 @@
 #include "CorretorasHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResponse &)> callback) {
+void CorretorasHandler::getAllCorretoras(std::function<void(std::variant<CorretorasResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cvm/corretoras/v1");
@@ -47,8 +47,11 @@ void CorretorasHandler::getAllCorretoras(std::function<void(const CorretorasResp
       }
       callback(corretorasResponse);
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }

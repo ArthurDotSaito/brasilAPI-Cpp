@@ -36,7 +36,7 @@ void BrasilAPIClient::getCNPJ(std::string cnpj, std::function<void(std::variant<
   cnpjHandler.getCNPJ(cnpj, callback);
 }
 
-void BrasilAPIClient::getAllCorretoras(std::function<void(const CorretorasResponse &)> callback) {
+void BrasilAPIClient::getAllCorretoras(std::function<void(std::variant<CorretorasResponse, ErrorResponse>)> callback) {
   corretorasHandler.getAllCorretoras(callback);
 }
 
@@ -246,11 +246,22 @@ std::future<std::string> BrasilAPIClient::getCNPJAsync(std::string cnpj) {
 std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  corretorasHandler.getAllCorretoras([this, promisePtr](const CorretorasResponse &corretorasResponse) {
-    promisePtr->set_value(corretorasResponse.serialize());
+
+  corretorasHandler.getAllCorretoras([promisePtr](std::variant<CorretorasResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CorretorasResponse>(result)) {
+        CorretorasResponse corretoras = std::get<CorretorasResponse>(result);
+        promisePtr->set_value(corretoras.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
   });
   return future;
-}
+};
 
 /**
  * @brief Busca por corretoras nos arquivos da CVM.
