@@ -74,13 +74,14 @@ void BrasilAPIClient::getPrevisaoCidadeSeisDias(
   cptecHandler.getPrevisaoCidadeSeisDias(cityCode, days, callback);
 }
 
-void BrasilAPIClient::previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback) {
-  cptecHandler.previsaoOceanicaCidade(cityCode, callback);
+void BrasilAPIClient::getPrevisaoOceanicaCidade(
+    int cityCode, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback) {
+  cptecHandler.getPrevisaoOceanicaCidade(cityCode, callback);
 }
 
-void BrasilAPIClient::previsaoOceanicaCidadeSeisDias(
-    int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback) {
-  cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days, callback);
+void BrasilAPIClient::getPrevisaoOceanicaCidadeSeisDias(
+    int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback) {
+  cptecHandler.getPrevisaoOceanicaCidadeSeisDias(cityCode, days, callback);
 }
 
 void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback) {
@@ -433,7 +434,7 @@ std::future<std::string> BrasilAPIClient::getCLimaEmCidadeAsync(int cityCode) {
  * @param cityCode Código da cidade fornecido. Veja CptecCidade.
  * @param days Quantidade de dias desejado para a previsão. Máximo de 6 dias.
  */
-std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCode, int days) {
+std::future<std::string> BrasilAPIClient::getPrevisaoCidadeSeisDiasAsync(int cityCode, int days) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
 
@@ -459,13 +460,25 @@ std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCo
  *
  * @param cityCode Código da cidade fornecido. Veja CptecCidade.
  */
-std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeAsync(int cityCode) {
+std::future<std::string> BrasilAPIClient::getPrevisaoOceanicaCidadeAsync(int cityCode) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.previsaoOceanicaCidade(
-      cityCode, [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
+
+  cptecHandler.getPrevisaoOceanicaCidade(cityCode, [promisePtr](std::variant<CptecPrevisaoOceanica, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CptecPrevisaoOceanica>(result)) {
+        CptecPrevisaoOceanica previsaoOceanicaCidade = std::get<CptecPrevisaoOceanica>(result);
+        promisePtr->set_value(previsaoOceanicaCidade.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Previsão oceânica para uma cidade, para até 6 dias
@@ -476,13 +489,26 @@ std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeAsync(int cityCo
  * @param cityCode Código da cidade fornecido. Veja CptecCidade.
  * @param days Quantidade de dias desejado para a previsão. Máximo de 6 dias.
  */
-std::future<std::string> BrasilAPIClient::previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days) {
+std::future<std::string> BrasilAPIClient::getPrevisaoOceanicaCidadeSeisDiasAsync(int cityCode, int days) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.previsaoOceanicaCidadeSeisDias(cityCode, days,
-      [this, promisePtr, cityCode](const CptecPrevisaoOceanica &cidade) { promisePtr->set_value(cidade.serialize()); });
+
+  cptecHandler.getPrevisaoOceanicaCidadeSeisDias(
+      cityCode, days, [promisePtr](std::variant<CptecPrevisaoOceanica, ErrorResponse> result) {
+        try {
+          if (std::holds_alternative<CptecPrevisaoOceanica>(result)) {
+            CptecPrevisaoOceanica previsaoOceanicaCidade = std::get<CptecPrevisaoOceanica>(result);
+            promisePtr->set_value(previsaoOceanicaCidade.serialize());
+          } else {
+            ErrorResponse error = std::get<ErrorResponse>(result);
+            promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+          }
+        } catch (const std::exception &e) {
+          promisePtr->set_value("Exception: " + std::string(e.what()));
+        }
+      });
   return future;
-}
+};
 
 /**
  * @brief Busca por DDD

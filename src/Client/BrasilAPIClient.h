@@ -69,8 +69,9 @@ class BrasilAPIClient {
   void getClimaEmCidade(int cityCode, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback);
   void getPrevisaoCidadeSeisDias(
       int cityCode, int days, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback);
-  void previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback);
-  void previsaoOceanicaCidadeSeisDias(int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback);
+  void getPrevisaoOceanicaCidade(int cityCode, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
+  void getPrevisaoOceanicaCidadeSeisDias(
+      int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
   void listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback);
   void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
   void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
@@ -96,9 +97,9 @@ class BrasilAPIClient {
   std::future<std::string> listCondicoesMetereologicasCapitaisAsync();
   std::future<std::string> getCondicoesMetereologicasAeroportoAsync(std::string icao);
   std::future<std::string> getCLimaEmCidadeAsync(int cityCode);
-  std::future<std::string> previsaoCidadeSeisDiasAsync(int cityCode, int days);
-  std::future<std::string> previsaoOceanicaCidadeAsync(int cityCode);
-  std::future<std::string> previsaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
+  std::future<std::string> getPrevisaoCidadeSeisDiasAsync(int cityCode, int days);
+  std::future<std::string> getPrevisaoOceanicaCidadeAsync(int cityCode);
+  std::future<std::string> getPrevisaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> listStateAndCitiesAsync(int ddd);
   std::future<std::string> getFeriadosAsync(int ano);
   std::future<std::string> listFipeMarcasAsync();

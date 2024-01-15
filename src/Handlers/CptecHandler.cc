@@ -269,7 +269,8 @@ void CptecHandler::getPrevisaoCidadeSeisDias(
   });
 }
 
-void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback) {
+void CptecHandler::getPrevisaoOceanicaCidade(
+    int cityCode, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/ondas/" + std::to_string(cityCode));
@@ -326,8 +327,8 @@ void CptecHandler::previsaoOceanicaCidade(int cityCode, std::function<void(const
   });
 }
 
-void CptecHandler::previsaoOceanicaCidadeSeisDias(
-    int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback) {
+void CptecHandler::getPrevisaoOceanicaCidadeSeisDias(
+    int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/ondas/" + std::to_string(cityCode) + "/" + std::to_string(days));
