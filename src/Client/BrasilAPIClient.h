@@ -60,7 +60,7 @@ class BrasilAPIClient {
   void getCepV2(int cep, std::function<void(std::variant<CepResponse, ErrorResponse>)> callback);
   void getCNPJ(std::string cnpj, std::function<void(std::variant<CNPJResponse, ErrorResponse>)> callback);
   void getAllCorretoras(std::function<void(std::variant<CorretorasResponse, ErrorResponse>)> callback);
-  void getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras &)> callback);
+  void getCorretorasByCnpj(std::string cnpj, std::function<void(std::variant<Corretoras, ErrorResponse>)> callback);
   void listAllCities(std::function<void(const CptecCidadesResponse &)> callback);
   void searchByTerms(std::string cityName, std::function<void(const CptecCidadesResponse &)> callback);
   void getCapitais(std::function<void(const CptecCapitaisResponse &)> callback);

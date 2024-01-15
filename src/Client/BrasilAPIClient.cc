@@ -40,7 +40,8 @@ void BrasilAPIClient::getAllCorretoras(std::function<void(std::variant<Corretora
   corretorasHandler.getAllCorretoras(callback);
 }
 
-void BrasilAPIClient::getCorretorasByCnpj(std::string cnpj, std::function<void(const Corretoras &)> callback) {
+void BrasilAPIClient::getCorretorasByCnpj(
+    std::string cnpj, std::function<void(std::variant<Corretoras, ErrorResponse>)> callback) {
   corretorasHandler.getCorretorasByCnpj(cnpj, callback);
 }
 
@@ -271,10 +272,22 @@ std::future<std::string> BrasilAPIClient::getAllCorretorasAsync() {
 std::future<std::string> BrasilAPIClient::getCorretorasByCnpjAsync(std::string cnpj) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  corretorasHandler.getCorretorasByCnpj(
-      cnpj, [this, promisePtr, cnpj](const Corretoras &corretora) { promisePtr->set_value(corretora.serialize()); });
+
+  corretorasHandler.getCorretorasByCnpj(cnpj, [promisePtr](std::variant<Corretoras, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<Corretoras>(result)) {
+        Corretoras corretoras = std::get<Corretoras>(result);
+        promisePtr->set_value(corretoras.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Buscar localidades

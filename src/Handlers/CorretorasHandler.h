@@ -6,5 +6,5 @@
 class CorretorasHandler : public BrasilAPIHandlerBase {
   public:
   void getAllCorretoras(std::function<void(std::variant<CorretorasResponse, ErrorResponse>)> callback);
-  void getCorretorasByCnpj(std::string, std::function<void(const Corretoras &)> callback);
+  void getCorretorasByCnpj(std::string cnpj, std::function<void(std::variant<Corretoras, ErrorResponse>)> callback);
 };
