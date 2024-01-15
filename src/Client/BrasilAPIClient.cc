@@ -69,8 +69,9 @@ void BrasilAPIClient::getClimaEmCidade(
   cptecHandler.getClimaEmCidade(cityCode, callback);
 }
 
-void BrasilAPIClient::previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback) {
-  cptecHandler.previsaoCidadeSeisDias(cityCode, days, callback);
+void BrasilAPIClient::getPrevisaoCidadeSeisDias(
+    int cityCode, int days, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback) {
+  cptecHandler.getPrevisaoCidadeSeisDias(cityCode, days, callback);
 }
 
 void BrasilAPIClient::previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback) {
@@ -435,10 +436,22 @@ std::future<std::string> BrasilAPIClient::getCLimaEmCidadeAsync(int cityCode) {
 std::future<std::string> BrasilAPIClient::previsaoCidadeSeisDiasAsync(int cityCode, int days) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  cptecHandler.previsaoCidadeSeisDias(cityCode, days,
-      [this, promisePtr, cityCode](const CidadeClimaResponse &cidade) { promisePtr->set_value(cidade.serialize()); });
+
+  cptecHandler.getPrevisaoCidadeSeisDias(cityCode, days, [promisePtr](std::variant<CidadeClimaResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<CidadeClimaResponse>(result)) {
+        CidadeClimaResponse cidadeClima = std::get<CidadeClimaResponse>(result);
+        promisePtr->set_value(cidadeClima.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Previsão oceânica para uma cidade

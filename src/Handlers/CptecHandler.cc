@@ -221,7 +221,8 @@ void CptecHandler::getClimaEmCidade(
   });
 }
 
-void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback) {
+void CptecHandler::getPrevisaoCidadeSeisDias(
+    int cityCode, int days, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/cptec/v1/clima/previsao/" + std::to_string(cityCode) + "/" + std::to_string(days));
@@ -258,8 +259,7 @@ void CptecHandler::previsaoCidadeSeisDias(int cityCode, int days, std::function<
         std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
         return;
       }
-    }
-    ccatch(const BrasilAPIException &e) {
+    } catch (const BrasilAPIException &e) {
       ErrorResponse errorResponse;
       errorResponse.errorCode = e.getStatusCode();
       errorResponse.errorMessage = e.what();

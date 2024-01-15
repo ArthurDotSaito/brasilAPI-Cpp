@@ -15,7 +15,8 @@ class CptecHandler : public BrasilAPIHandlerBase {
   void getCondicoesMetereologicasAeroporto(
       std::string icao, std::function<void(std::variant<CptecAeroporto, ErrorResponse>)> callback);
   void getClimaEmCidade(int cityCode, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback);
-  void previsaoCidadeSeisDias(int cityCode, int days, std::function<void(const CidadeClimaResponse &)> callback);
+  void getPrevisaoCidadeSeisDias(
+      int cityCode, int days, std::function<void(std::variant<CidadeClimaResponse, ErrorResponse>)> callback);
   void previsaoOceanicaCidade(int cityCode, std::function<void(const CptecPrevisaoOceanica &)> callback);
   void previsaoOceanicaCidadeSeisDias(int cityCode, int days, std::function<void(const CptecPrevisaoOceanica &)> callback);
 };
