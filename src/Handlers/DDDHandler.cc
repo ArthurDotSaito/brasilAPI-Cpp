@@ -1,7 +1,7 @@
 #include "DDDHandler.h"
 #include "Utils/BrasilAPIException.h"
 
-void DDDHandler::listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback) {
+void DDDHandler::listStateAndCities(int ddd, std::function<void(std::variant<DDDResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/ddd/v1/" + std::to_string(ddd));
@@ -30,8 +30,11 @@ void DDDHandler::listStateAndCities(int ddd, std::function<void(const DDDRespons
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
