@@ -2,7 +2,7 @@
 #include <Utils/BrasilAPIException.h>
 
 void FipeHandler::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipeMarcas &)> callback) {
+    std::function<void(std::variant<FipeMarcas, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -45,8 +45,11 @@ void FipeHandler::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, 
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
