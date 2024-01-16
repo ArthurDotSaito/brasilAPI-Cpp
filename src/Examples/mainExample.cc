@@ -77,11 +77,11 @@ int main() {
   auto dddData = ddd.get();
   std::cout << "DDD Data: " << dddData << std::endl;
 
-  /*
-  auto feriados = brasilAPI.getFeriadosAsync(2024);
+  auto feriados = brasilAPI.listHolidaysAtYearAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;
 
+  /*
   auto fipe = brasilAPI.listFipeMarcasAsync();
   auto fipeData = fipe.get();
   std::cout << "Fipe Data: " << fipeData << std::endl;

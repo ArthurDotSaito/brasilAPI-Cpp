@@ -5,5 +5,5 @@
 
 class FeriadosHandler : public BrasilAPIHandlerBase {
   public:
-  void getFeriados(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback);
+  void listHolidaysAtYear(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback);
 };

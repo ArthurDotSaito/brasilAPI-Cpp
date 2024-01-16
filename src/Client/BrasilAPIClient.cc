@@ -88,8 +88,8 @@ void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(std::varian
   dddHandler.listStateAndCities(ddd, callback);
 }
 
-void BrasilAPIClient::getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback) {
-  feriadosHandler.getFeriados(ano, callback);
+void BrasilAPIClient::listHolidaysAtYear(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback) {
+  feriadosHandler.listHolidaysAtYear(ano, callback);
 }
 
 void BrasilAPIClient::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
@@ -540,13 +540,25 @@ std::future<std::string> BrasilAPIClient::listStateAndCitiesAsync(int ddd) {
  * Retorna um objeto com informações referentes ao ano solicitado.
  * @param ano ano para efetuar a busca.
  */
-std::future<std::string> BrasilAPIClient::getFeriadosAsync(int ano) {
+std::future<std::string> BrasilAPIClient::listHolidaysAtYearAsync(int ano) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  feriadosHandler.getFeriados(ano,
-      [this, promisePtr, ano](const FeriadosResponse &feriadosResponse) { promisePtr->set_value(feriadosResponse.serialize()); });
+
+  feriadosHandler.listHolidaysAtYear(ano, [promisePtr](std::variant<FeriadosResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<FeriadosResponse>(result)) {
+        FeriadosResponse feriados = std::get<FeriadosResponse>(result);
+        promisePtr->set_value(feriados.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Lista as marcas de veículos referente ao tipo de veículo

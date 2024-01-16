@@ -73,7 +73,7 @@ class BrasilAPIClient {
   void getPrevisaoOceanicaCidadeSeisDias(
       int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
   void listStateAndCities(int ddd, std::function<void(std::variant<DDDResponse, ErrorResponse>)> callback);
-  void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
+  void listHolidaysAtYear(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback);
   void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
       std::function<void(const FipeMarcas &)> callback);
   void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
@@ -101,7 +101,7 @@ class BrasilAPIClient {
   std::future<std::string> getPrevisaoOceanicaCidadeAsync(int cityCode);
   std::future<std::string> getPrevisaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> listStateAndCitiesAsync(int ddd);
-  std::future<std::string> getFeriadosAsync(int ano);
+  std::future<std::string> listHolidaysAtYearAsync(int ano);
   std::future<std::string> listFipeMarcasAsync();
   std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo);
   std::future<std::string> listFipeMarcasAsync(std::optional<int> tabela_referencia);
