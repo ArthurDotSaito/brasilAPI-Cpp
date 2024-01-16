@@ -1,7 +1,7 @@
 #include "FeriadosHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void FeriadosHandler::getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback) {
+void FeriadosHandler::getFeriados(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/feriados/v1/" + std::to_string(ano));
@@ -34,8 +34,11 @@ void FeriadosHandler::getFeriados(int ano, std::function<void(const FeriadosResp
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
