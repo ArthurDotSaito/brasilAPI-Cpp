@@ -72,7 +72,7 @@ class BrasilAPIClient {
   void getPrevisaoOceanicaCidade(int cityCode, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
   void getPrevisaoOceanicaCidadeSeisDias(
       int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
-  void listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback);
+  void listStateAndCities(int ddd, std::function<void(std::variant<DDDResponse, ErrorResponse>)> callback);
   void getFeriados(int ano, std::function<void(const FeriadosResponse &)> callback);
   void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
       std::function<void(const FipeMarcas &)> callback);

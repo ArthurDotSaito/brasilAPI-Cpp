@@ -84,7 +84,7 @@ void BrasilAPIClient::getPrevisaoOceanicaCidadeSeisDias(
   cptecHandler.getPrevisaoOceanicaCidadeSeisDias(cityCode, days, callback);
 }
 
-void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(const DDDResponse &)> callback) {
+void BrasilAPIClient::listStateAndCities(int ddd, std::function<void(std::variant<DDDResponse, ErrorResponse>)> callback) {
   dddHandler.listStateAndCities(ddd, callback);
 }
 
@@ -515,14 +515,25 @@ std::future<std::string> BrasilAPIClient::getPrevisaoOceanicaCidadeSeisDiasAsync
  * Retorna um objeto com informações referentes ao DDD solicitado.
  * @param ddd ddd para efetuar a busca.
  */
-
 std::future<std::string> BrasilAPIClient::listStateAndCitiesAsync(int ddd) {
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  dddHandler.listStateAndCities(
-      ddd, [this, promisePtr, ddd](const DDDResponse &dddResponse) { promisePtr->set_value(dddResponse.serialize()); });
+
+  dddHandler.listStateAndCities(ddd, [promisePtr](std::variant<DDDResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<DDDResponse>(result)) {
+        DDDResponse dddResponse = std::get<DDDResponse>(result);
+        promisePtr->set_value(dddResponse.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Busca por feriados
