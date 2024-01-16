@@ -92,9 +92,9 @@ void BrasilAPIClient::listHolidaysAtYear(int ano, std::function<void(std::varian
   feriadosHandler.listHolidaysAtYear(ano, callback);
 }
 
-void BrasilAPIClient::listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipeMarcas &)> callback) {
-  fipeHandler.listFipeMarcas(tipoVeiculo, tabela_referencia, callback);
+void BrasilAPIClient::listarFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+    std::function<void(std::variant<FipeMarcas, ErrorResponse>)> callback) {
+  fipeHandler.listarFipeMarcas(tipoVeiculo, tabela_referencia, callback);
 }
 
 void BrasilAPIClient::listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
@@ -569,8 +569,8 @@ std::future<std::string> BrasilAPIClient::listHolidaysAtYearAsync(int ano) {
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::listFipeMarcasAsync() {
-  return listFipeMarcasAsync(std::nullopt, std::nullopt);
+std::future<std::string> BrasilAPIClient::listarFipeMarcasAsync() {
+  return listarFipeMarcasAsync(std::nullopt, std::nullopt);
 }
 
 /**
@@ -582,8 +582,8 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync() {
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<std::string> tipoVeiculo) {
-  return listFipeMarcasAsync(tipoVeiculo, std::nullopt);
+std::future<std::string> BrasilAPIClient::listarFipeMarcasAsync(std::optional<std::string> tipoVeiculo) {
+  return listarFipeMarcasAsync(tipoVeiculo, std::nullopt);
 }
 
 /**
@@ -595,8 +595,8 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<std:
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<int> tabela_referencia) {
-  return listFipeMarcasAsync(std::nullopt, tabela_referencia);
+std::future<std::string> BrasilAPIClient::listarFipeMarcasAsync(std::optional<int> tabela_referencia) {
+  return listarFipeMarcasAsync(std::nullopt, tabela_referencia);
 }
 
 /**
@@ -608,14 +608,28 @@ std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(std::optional<int>
  * Por padrão é utilizado o código da tabela fipe
  * atual.
  */
-std::future<std::string> BrasilAPIClient::listFipeMarcasAsync(
+
+std::future<std::string> BrasilAPIClient::listarFipeMarcasAsync(
     std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia) {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  fipeHandler.listFipeMarcas(tipoVeiculo, tabela_referencia,
-      [this, promisePtr](const FipeMarcas &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+
+  fipeHandler.listarFipeMarcas(tipoVeiculo, tabela_referencia, [promisePtr](std::variant<FipeMarcas, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<FipeMarcas>(result)) {
+        FipeMarcas marcas = std::get<FipeMarcas>(result);
+        promisePtr->set_value(marcas.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Consulta o preço do veículo segundo a tabela fipe.

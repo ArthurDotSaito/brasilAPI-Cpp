@@ -74,8 +74,8 @@ class BrasilAPIClient {
       int cityCode, int days, std::function<void(std::variant<CptecPrevisaoOceanica, ErrorResponse>)> callback);
   void listStateAndCities(int ddd, std::function<void(std::variant<DDDResponse, ErrorResponse>)> callback);
   void listHolidaysAtYear(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback);
-  void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
-      std::function<void(const FipeMarcas &)> callback);
+  void listarFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+      std::function<void(std::variant<FipeMarcas, ErrorResponse>)> callback);
   void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
       std::function<void(const FipePrecos &)> callback);
   void listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback);
@@ -102,10 +102,10 @@ class BrasilAPIClient {
   std::future<std::string> getPrevisaoOceanicaCidadeSeisDiasAsync(int cityCode, int days);
   std::future<std::string> listStateAndCitiesAsync(int ddd);
   std::future<std::string> listHolidaysAtYearAsync(int ano);
-  std::future<std::string> listFipeMarcasAsync();
-  std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo);
-  std::future<std::string> listFipeMarcasAsync(std::optional<int> tabela_referencia);
-  std::future<std::string> listFipeMarcasAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
+  std::future<std::string> listarFipeMarcasAsync();
+  std::future<std::string> listarFipeMarcasAsync(std::optional<std::string> tipoVeiculo);
+  std::future<std::string> listarFipeMarcasAsync(std::optional<int> tabela_referencia);
+  std::future<std::string> listarFipeMarcasAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe);
   std::future<std::string> listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
   std::future<std::string> listFipeTabelasAsync();

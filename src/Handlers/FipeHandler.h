@@ -5,7 +5,7 @@
 
 class FipeHandler : public BrasilAPIHandlerBase {
   public:
-  void listFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
+  void listarFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
       std::function<void(std::variant<FipeMarcas, ErrorResponse>)> callback);
 
   void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
