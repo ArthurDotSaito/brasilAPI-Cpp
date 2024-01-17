@@ -79,8 +79,8 @@ class BrasilAPIClient {
   void listarFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
       std::function<void(std::variant<FipePrecos, ErrorResponse>)> callback);
   void listarFipeTabelas(std::function<void(std::variant<FipeTabelasReferencia, ErrorResponse>)> callback);
-  void listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
-      std::function<void(const IBGEMunicipiosResponse &)> callback);
+  void listarMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
+      std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback);
   void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
   void getEstado(const std::string &uf, std::function<void(const Estado &)> callback);
 
@@ -109,7 +109,7 @@ class BrasilAPIClient {
   std::future<std::string> listarFipePrecoAsync(std::string codigoFipe);
   std::future<std::string> listarFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
   std::future<std::string> listarFipeTabelasAsync();
-  std::future<std::string> listMunicipiosAsync(std::string siglaUf);
+  std::future<std::string> listarMunicipiosAsync(std::string siglaUf);
   std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
   std::future<std::string> listRegioesAsync();
   std::future<std::string> getEstadoAsync(std::string uf);

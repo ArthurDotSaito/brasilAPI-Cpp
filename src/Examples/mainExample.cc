@@ -71,7 +71,6 @@ int main() {
   auto futureCptec8 = brasilAPI.getPrevisaoOceanicaCidadeSeisDiasAsync(241, 6);
   auto cptecData8 = futureCptec8.get();
   std::cout << "Cptec Data: " << cptecData8 << std::endl;
-  */
 
   auto ddd = brasilAPI.listStateAndCitiesAsync(21);
   auto dddData = ddd.get();
@@ -80,31 +79,33 @@ int main() {
   auto feriados = brasilAPI.listHolidaysAtYearAsync(2024);
   auto feriadosData = feriados.get();
   std::cout << "Feriados Data: " << feriadosData << std::endl;
-
+  */
   /*
-  auto fipe = brasilAPI.listFipeMarcasAsync();
+  auto fipe = brasilAPI.listarFipeMarcasAsync();
   auto fipeData = fipe.get();
   std::cout << "Fipe Data: " << fipeData << std::endl;
 
-  auto fipe1 = brasilAPI.listFipeMarcasAsync("carros");
+  auto fipe1 = brasilAPI.listarFipeMarcasAsync("carros");
   auto fipeData1 = fipe1.get();
   std::cout << "Fipe Data: " << fipeData1 << std::endl;
 
-  auto fipe2 = brasilAPI.listFipeMarcasAsync(102);
+  auto fipe2 = brasilAPI.listarFipeMarcasAsync(102);
   auto fipeData2 = fipe2.get();
   std::cout << "Fipe Data: " << fipeData2 << std::endl;
 
-  auto fipe3 = brasilAPI.listFipePrecoAsync("001004-9");
+  auto fipe3 = brasilAPI.listarFipePrecoAsync("001004-9");
   auto fipeData3 = fipe3.get();
-  std::cout << "Fipe Data: " << fipeData3 << std::end auto fipe4 = brasilAPI.listFipeTabelasAsync();
+  std::cout << "Fipe Data: " << fipeData3 << std::endl;
+
+  auto fipe4 = brasilAPI.listarFipeTabelasAsync();
   auto fipeData4 = fipe4.get();
   std::cout << "Fipe Data: " << fipeData4 << std::endl;
-
-  auto ibge = brasilAPI.listMunicipiosAsync("SC");
+  */
+  auto ibge = brasilAPI.listarMunicipiosAsync("SC");
   auto ibgeData = ibge.get();
   std::cout << "IBGE Data: " << ibgeData << std::endl;
 
-  auto ibge1 = brasilAPI.listMunicipiosAsync("SC", "gov");
+  auto ibge1 = brasilAPI.listarMunicipiosAsync("SC", "gov");
   auto ibgeData1 = ibge1.get();
   std::cout << "IBGE Data: " << ibgeData1 << std::endl;
 
@@ -115,6 +116,6 @@ int main() {
   auto ibge3 = brasilAPI.getEstadoAsync("SC");
   auto ibgeData3 = ibge3.get();
   std::cout << "IBGE Data: " << ibgeData3 << std::endl;
-  */
+
   return 0;
 }

@@ -2,8 +2,8 @@
 #include <Utils/BrasilAPIException.h>
 #include <Utils/ValidateProviders.h>
 
-void IBGEHandler::listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
-    std::function<void(const IBGEMunicipiosResponse &)> callback) {
+void IBGEHandler::listarMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
+    std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -45,8 +45,11 @@ void IBGEHandler::listMunicipios(const std::string &siglaUf, const std::optional
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }

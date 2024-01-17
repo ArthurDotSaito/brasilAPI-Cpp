@@ -1,7 +1,9 @@
 #ifndef BRASIL_API_HANDLER_BASE_H
 #define BRASIL_API_HANDLER_BASE_H
 
+#include "Response/ErrorResponse.h"
 #include <drogon/HttpClient.h>
+#include <variant>
 
 class BrasilAPIHandlerBase {
   protected:

@@ -106,9 +106,9 @@ void BrasilAPIClient::listarFipeTabelas(std::function<void(std::variant<FipeTabe
   fipeHandler.listarFipeTabelas(callback);
 }
 
-void BrasilAPIClient::listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
-    std::function<void(const IBGEMunicipiosResponse &)> callback) {
-  ibgeHandler.listMunicipios(siglaUf, providers, callback);
+void BrasilAPIClient::listarMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
+    std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback) {
+  ibgeHandler.listarMunicipios(siglaUf, providers, callback);
 }
 
 void BrasilAPIClient::listRegioes(std::function<void(const IBGERegioesResponse &)> callback) {
@@ -703,7 +703,7 @@ std::future<std::string> BrasilAPIClient::listarFipeTabelasAsync() {
  * Quando não fornecido, o sistema utilizará os provedores padrão.
  * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
-std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf) {
+std::future<std::string> BrasilAPIClient::listarMunicipiosAsync(std::string siglaUf) {
   return listMunicipiosAsync(siglaUf, std::nullopt);
 }
 
@@ -716,12 +716,25 @@ std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaU
  * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
 std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers) {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  ibgeHandler.listMunicipios(siglaUf, providers,
-      [this, promisePtr](const IBGEMunicipiosResponse &ibgeResponse) { promisePtr->set_value(ibgeResponse.serialize()); });
+
+  ibgeHandler.listarMunicipios(siglaUf, providers, [promisePtr](std::variant<IBGEMunicipiosResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<IBGEMunicipiosResponse>(result)) {
+        IBGEMunicipiosResponse municipios = std::get<IBGEMunicipiosResponse>(result);
+        promisePtr->set_value(municipios.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Retorna informações de todos estados do Brasil
