@@ -97,13 +97,13 @@ void BrasilAPIClient::listarFipeMarcas(const std::optional<std::string> &tipoVei
   fipeHandler.listarFipeMarcas(tipoVeiculo, tabela_referencia, callback);
 }
 
-void BrasilAPIClient::listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipePrecos &)> callback) {
-  fipeHandler.listFipePreco(codigoFipe, tabela_referencia, callback);
+void BrasilAPIClient::listarFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
+    std::function<void(std::variant<FipePrecos, ErrorResponse>)> callback) {
+  fipeHandler.listarFipePreco(codigoFipe, tabela_referencia, callback);
 }
 
-void BrasilAPIClient::listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback) {
-  fipeHandler.listFipeTabelas(callback);
+void BrasilAPIClient::listarFipeTabelas(std::function<void(std::variant<FipeTabelasReferencia, ErrorResponse>)> callback) {
+  fipeHandler.listarFipeTabelas(callback);
 }
 
 void BrasilAPIClient::listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
@@ -638,8 +638,8 @@ std::future<std::string> BrasilAPIClient::listarFipeMarcasAsync(
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
  * Por padrão é utilizado o código da tabela fipe atual.
  */
-std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoFipe) {
-  return listFipePrecoAsync(codigoFipe, std::nullopt);
+std::future<std::string> BrasilAPIClient::listarFipePrecoAsync(std::string codigoFipe) {
+  return listarFipePrecoAsync(codigoFipe, std::nullopt);
 }
 
 /**
@@ -649,25 +649,51 @@ std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoF
  * @param tabela_referencia tabela de referência para efetuar a busca - opcional.
  * Por padrão é utilizado o código da tabela fipe atual.
  */
-std::future<std::string> BrasilAPIClient::listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia) {
+std::future<std::string> BrasilAPIClient::listarFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia) {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  fipeHandler.listFipePreco(codigoFipe, tabela_referencia,
-      [this, promisePtr](const FipePrecos &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+
+  fipeHandler.listarFipePreco(codigoFipe, tabela_referencia, [promisePtr](std::variant<FipePrecos, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<FipePrecos>(result)) {
+        FipePrecos precos = std::get<FipePrecos>(result);
+        promisePtr->set_value(precos.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Lista as tabelas fipe de referência existentes.
  * Retorna um array de objetos com informações referentes as tabelas de referência da tabela fipe.
  */
-std::future<std::string> BrasilAPIClient::listFipeTabelasAsync() {
+std::future<std::string> BrasilAPIClient::listarFipeTabelasAsync() {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  fipeHandler.listFipeTabelas(
-      [this, promisePtr](const FipeTabelasReferencia &fipeResponse) { promisePtr->set_value(fipeResponse.serialize()); });
+
+  fipeHandler.listarFipeTabelas([promisePtr](std::variant<FipeTabelasReferencia, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<FipeTabelasReferencia>(result)) {
+        FipeTabelasReferencia tabelasReferencia = std::get<FipeTabelasReferencia>(result);
+        promisePtr->set_value(tabelasReferencia.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Retorna os municípios da unidade federativa

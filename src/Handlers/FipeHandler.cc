@@ -54,8 +54,8 @@ void FipeHandler::listarFipeMarcas(const std::optional<std::string> &tipoVeiculo
   });
 }
 
-void FipeHandler::listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
-    std::function<void(const FipePrecos &)> callback) {
+void FipeHandler::listarFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
+    std::function<void(std::variant<FipePrecos, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -102,13 +102,16 @@ void FipeHandler::listFipePreco(const std::string &codigoFipe, const std::option
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
 
-void FipeHandler::listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback) {
+void FipeHandler::listarFipeTabelas(std::function<void(std::variant<FipeTabelasReferencia, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -144,8 +147,11 @@ void FipeHandler::listFipeTabelas(std::function<void(const FipeTabelasReferencia
       }
 
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }

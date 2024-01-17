@@ -76,9 +76,9 @@ class BrasilAPIClient {
   void listHolidaysAtYear(int ano, std::function<void(std::variant<FeriadosResponse, ErrorResponse>)> callback);
   void listarFipeMarcas(const std::optional<std::string> &tipoVeiculo, const std::optional<int> &tabela_referencia,
       std::function<void(std::variant<FipeMarcas, ErrorResponse>)> callback);
-  void listFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
-      std::function<void(const FipePrecos &)> callback);
-  void listFipeTabelas(std::function<void(const FipeTabelasReferencia &)> callback);
+  void listarFipePreco(const std::string &codigoFipe, const std::optional<int> &tabela_referencia,
+      std::function<void(std::variant<FipePrecos, ErrorResponse>)> callback);
+  void listarFipeTabelas(std::function<void(std::variant<FipeTabelasReferencia, ErrorResponse>)> callback);
   void listMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
       std::function<void(const IBGEMunicipiosResponse &)> callback);
   void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
@@ -106,9 +106,9 @@ class BrasilAPIClient {
   std::future<std::string> listarFipeMarcasAsync(std::optional<std::string> tipoVeiculo);
   std::future<std::string> listarFipeMarcasAsync(std::optional<int> tabela_referencia);
   std::future<std::string> listarFipeMarcasAsync(std::optional<std::string> tipoVeiculo, std::optional<int> tabela_referencia);
-  std::future<std::string> listFipePrecoAsync(std::string codigoFipe);
-  std::future<std::string> listFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
-  std::future<std::string> listFipeTabelasAsync();
+  std::future<std::string> listarFipePrecoAsync(std::string codigoFipe);
+  std::future<std::string> listarFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
+  std::future<std::string> listarFipeTabelasAsync();
   std::future<std::string> listMunicipiosAsync(std::string siglaUf);
   std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
   std::future<std::string> listRegioesAsync();
