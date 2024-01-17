@@ -115,7 +115,7 @@ void BrasilAPIClient::listarRegioes(std::function<void(std::variant<IBGERegioesR
   ibgeHandler.listarRegioes(callback);
 }
 
-void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(const Estado &)> callback) {
+void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(std::variant<Estado, ErrorResponse>)> callback) {
   ibgeHandler.getEstado(uf, callback);
 }
 
@@ -767,8 +767,22 @@ std::future<std::string> BrasilAPIClient::listarRegioesAsync() {
  * @param uf Sigla da unidade federativa, por exemplo SP, RJ, SC, etc.
  */
 std::future<std::string> BrasilAPIClient::getEstadoAsync(std::string uf) {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  ibgeHandler.getEstado(uf, [this, promisePtr](const Estado &estado) { promisePtr->set_value(estado.serialize()); });
+
+  ibgeHandler.getEstado(uf, [promisePtr](std::variant<Estado, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<Estado>(result)) {
+        Estado estaado = std::get<Estado>(result);
+        promisePtr->set_value(estaado.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};

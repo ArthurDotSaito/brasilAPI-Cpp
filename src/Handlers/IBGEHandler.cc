@@ -103,7 +103,7 @@ void IBGEHandler::listarRegioes(std::function<void(std::variant<IBGERegioesRespo
   });
 }
 
-void IBGEHandler::getEstado(const std::string &uf, std::function<void(const Estado &)> callback) {
+void IBGEHandler::getEstado(const std::string &uf, std::function<void(std::variant<Estado, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -139,8 +139,11 @@ void IBGEHandler::getEstado(const std::string &uf, std::function<void(const Esta
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }
