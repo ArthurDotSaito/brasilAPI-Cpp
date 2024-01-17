@@ -110,7 +110,7 @@ class BrasilAPIClient {
   std::future<std::string> listarFipePrecoAsync(std::string codigoFipe, std::optional<int> tabela_referencia);
   std::future<std::string> listarFipeTabelasAsync();
   std::future<std::string> listarMunicipiosAsync(std::string siglaUf);
-  std::future<std::string> listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
+  std::future<std::string> listarMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
   std::future<std::string> listRegioesAsync();
   std::future<std::string> getEstadoAsync(std::string uf);
 
