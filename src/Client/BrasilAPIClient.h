@@ -81,7 +81,7 @@ class BrasilAPIClient {
   void listarFipeTabelas(std::function<void(std::variant<FipeTabelasReferencia, ErrorResponse>)> callback);
   void listarMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
       std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback);
-  void listRegioes(std::function<void(const IBGERegioesResponse &)> callback);
+  void listarRegioes(std::function<void(std::variant<IBGERegioesResponse, ErrorResponse>)> callback);
   void getEstado(const std::string &uf, std::function<void(const Estado &)> callback);
 
   // Funções que retornam std::future<std::string>
@@ -111,7 +111,7 @@ class BrasilAPIClient {
   std::future<std::string> listarFipeTabelasAsync();
   std::future<std::string> listarMunicipiosAsync(std::string siglaUf);
   std::future<std::string> listarMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
-  std::future<std::string> listRegioesAsync();
+  std::future<std::string> listarRegioesAsync();
   std::future<std::string> getEstadoAsync(std::string uf);
 
   // ...

@@ -54,7 +54,7 @@ void IBGEHandler::listarMunicipios(const std::string &siglaUf, const std::option
   });
 }
 
-void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> callback) {
+void IBGEHandler::listarRegioes(std::function<void(std::variant<IBGERegioesResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
@@ -94,8 +94,11 @@ void IBGEHandler::listRegioes(std::function<void(const IBGERegioesResponse &)> c
         return;
       }
     } catch (const BrasilAPIException &e) {
-      std::cerr << "Error: " << e.what() << std::endl;
-      return;
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
     }
   });
 }

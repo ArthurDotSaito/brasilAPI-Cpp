@@ -111,8 +111,8 @@ void BrasilAPIClient::listarMunicipios(const std::string &siglaUf, const std::op
   ibgeHandler.listarMunicipios(siglaUf, providers, callback);
 }
 
-void BrasilAPIClient::listRegioes(std::function<void(const IBGERegioesResponse &)> callback) {
-  ibgeHandler.listRegioes(callback);
+void BrasilAPIClient::listarRegioes(std::function<void(std::variant<IBGERegioesResponse, ErrorResponse>)> callback) {
+  ibgeHandler.listarRegioes(callback);
 }
 
 void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(const Estado &)> callback) {
@@ -704,7 +704,7 @@ std::future<std::string> BrasilAPIClient::listarFipeTabelasAsync() {
  * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
 std::future<std::string> BrasilAPIClient::listarMunicipiosAsync(std::string siglaUf) {
-  return listMunicipiosAsync(siglaUf, std::nullopt);
+  return listarMunicipiosAsync(siglaUf, std::nullopt);
 }
 
 /**
@@ -715,7 +715,7 @@ std::future<std::string> BrasilAPIClient::listarMunicipiosAsync(std::string sigl
  * Quando não fornecido, o sistema utilizará os provedores padrão.
  * Provedores Disponíveis: dados-abertos-br, gov, wikipedia
  */
-std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers) {
+std::future<std::string> BrasilAPIClient::listarMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers) {
 
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
@@ -740,13 +740,26 @@ std::future<std::string> BrasilAPIClient::listMunicipiosAsync(std::string siglaU
  * @brief Retorna informações de todos estados do Brasil
  * Retorna um array de objetos com nome, sigla e id de cada estado do Brasil.
  */
-std::future<std::string> BrasilAPIClient::listRegioesAsync() {
+std::future<std::string> BrasilAPIClient::listarRegioesAsync() {
+
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
-  ibgeHandler.listRegioes(
-      [this, promisePtr](const IBGERegioesResponse &ibgeResponse) { promisePtr->set_value(ibgeResponse.serialize()); });
+
+  ibgeHandler.listarRegioes([promisePtr](std::variant<IBGERegioesResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<IBGERegioesResponse>(result)) {
+        IBGERegioesResponse regioes = std::get<IBGERegioesResponse>(result);
+        promisePtr->set_value(regioes.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + std::to_string(error.errorCode) + " - " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
   return future;
-}
+};
 
 /**
  * @brief Busca as informações de um estado a partir da sigla ou código.
