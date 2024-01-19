@@ -1,7 +1,11 @@
+#include <drogon/drogon.h>
 #include <gtest/gtest.h>
+#include <thread>
 
 int main(int argc, char **argv) {
-    ::testing::GTEST_FLAG(throw_on_failure) = true;
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+  ::testing::InitGoogleTest(&argc, argv);
+
+  int result = RUN_ALL_TESTS();
+
+  return result;
 }

@@ -9,7 +9,7 @@
 int main() {
   BrasilAPIClient brasilAPI;
   brasilAPI.setUserAgent("MeuApp/1.0");
-  /*
+
   auto futureBank = brasilAPI.getBanksByCodeAsync(0);
   auto bankData = futureBank.get();
   std::cout << "Bank Data: " << bankData << std::endl;
@@ -17,8 +17,7 @@ int main() {
   auto futureBank2 = brasilAPI.getAllBanksAsync();
   auto bankData2 = futureBank2.get();
   std::cout << "Bank Data: " << bankData2 << std::endl;
-
-
+  /*
   auto futureCep = brasilAPI.getCepAsync(890125);
   auto cepData = futureCep.get();
   std::cout << "Cep Data: " << cepData << std::endl;
@@ -100,7 +99,7 @@ int main() {
   auto fipe4 = brasilAPI.listarFipeTabelasAsync();
   auto fipeData4 = fipe4.get();
   std::cout << "Fipe Data: " << fipeData4 << std::endl;
-  */
+
   auto ibge = brasilAPI.listarMunicipiosAsync("SC");
   auto ibgeData = ibge.get();
   std::cout << "IBGE Data: " << ibgeData << std::endl;
@@ -109,13 +108,13 @@ int main() {
   auto ibgeData1 = ibge1.get();
   std::cout << "IBGE Data: " << ibgeData1 << std::endl;
 
-  auto ibge2 = brasilAPI.listRegioesAsync();
+  auto ibge2 = brasilAPI.listarRegioesAsync();
   auto ibgeData2 = ibge2.get();
   std::cout << "IBGE Data: " << ibgeData2 << std::endl;
 
   auto ibge3 = brasilAPI.getEstadoAsync("SC");
   auto ibgeData3 = ibge3.get();
   std::cout << "IBGE Data: " << ibgeData3 << std::endl;
-
+  */
   return 0;
 }
