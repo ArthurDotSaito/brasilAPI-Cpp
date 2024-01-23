@@ -5,13 +5,15 @@
 #include <chrono>
 #include <future>
 #include <gtest/gtest.h>
+#include <memory>
 
 class TestBase : public ::testing::Test {
   protected:
-  BrasilAPIClient brasilAPI;
+  std::unique_ptr<BrasilAPIClient> brasilAPI;
 
   void SetUp() override {
-    brasilAPI.setUserAgent("MeuApp/1.0");
+    brasilAPI = std::make_unique<BrasilAPIClient>();
+    brasilAPI->setUserAgent("MeuApp/1.0");
   }
 
   void TearDown() override {
