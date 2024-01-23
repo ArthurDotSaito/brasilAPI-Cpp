@@ -14,6 +14,8 @@ class Dimension {
   std::string unit;
 };
 
+enum class Provider { CBL, MercadoEditorial, OpenLibrary, GoogleBooks };
+
 class BookInfo : public BaseResponse, public JsonSerialize {
   private:
   std::string isbn;
