@@ -8,7 +8,7 @@ void ISBNHandler::getLivrosBrasil(const std::string &isbn, const std::optional<s
   req->setMethod(drogon::HttpMethod::Get);
   std::stringstream pathStream;
   std::stringstream queryStream;
-  pathStream << "/api/isbn/v1" + isbn;
+  pathStream << "/api/isbn/v1/" + isbn;
 
   if (providers.has_value() && !providers->empty()) {
     queryStream << "?providers=";
@@ -35,7 +35,7 @@ void ISBNHandler::getLivrosBrasil(const std::string &isbn, const std::optional<s
 
       Json::Value jsonResponse;
       Json::Reader reader;
-      if (reader.parse(responseBody, jsonResponse) && jsonResponse.isArray()) {
+      if (reader.parse(responseBody, jsonResponse)) {
         bookInfo.setIsbn(jsonResponse["isbn"].asString());
         bookInfo.setTitle(jsonResponse["title"].asString());
         bookInfo.setSubtitle(jsonResponse["subtitle"].asString());

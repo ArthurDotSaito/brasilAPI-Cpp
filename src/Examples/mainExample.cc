@@ -9,7 +9,7 @@
 int main() {
   BrasilAPIClient brasilAPI;
   brasilAPI.setUserAgent("MeuApp/1.0");
-
+  /*
   auto futureBank = brasilAPI.getBanksByCodeAsync(0);
   auto bankData = futureBank.get();
   std::cout << "Bank Data: " << bankData << std::endl;
@@ -17,7 +17,7 @@ int main() {
   auto futureBank2 = brasilAPI.getAllBanksAsync();
   auto bankData2 = futureBank2.get();
   std::cout << "Bank Data: " << bankData2 << std::endl;
-  /*
+
   auto futureCep = brasilAPI.getCepAsync(890125);
   auto cepData = futureCep.get();
   std::cout << "Cep Data: " << cepData << std::endl;
@@ -116,5 +116,10 @@ int main() {
   auto ibgeData3 = ibge3.get();
   std::cout << "IBGE Data: " << ibgeData3 << std::endl;
   */
+
+  auto isbn = brasilAPI.getLivrosBrasilAsync("9788545702870");
+  auto isbnData = isbn.get();
+  std::cout << "ISBN Data: " << isbnData << std::endl;
+
   return 0;
 }
