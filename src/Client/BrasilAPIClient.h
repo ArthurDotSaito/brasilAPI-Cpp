@@ -8,6 +8,7 @@
 #include "Handlers/FeriadosHandler.h"
 #include "Handlers/FipeHandler.h"
 #include "Handlers/IBGEHandler.h"
+#include "Handlers/ISBNHandler.h"
 
 // Response
 #include "Response/BankResponse.h"
@@ -19,6 +20,7 @@
 #include "Response/DDD.h"
 #include "Response/FipeResponse.h"
 #include "Response/IBGEResponse.h"
+#include "Response/ISBNResponse.h"
 #include "Response/PrevisaoOceanica.h"
 
 #include <drogon/drogon.h>
@@ -34,6 +36,7 @@ class BrasilAPIClient {
   FeriadosHandler feriadosHandler;
   FipeHandler fipeHandler;
   IBGEHandler ibgeHandler;
+  ISBNHandler isbnHandler;
 
   std::string userAgent;
   std::thread eventLoopThread;
@@ -83,6 +86,8 @@ class BrasilAPIClient {
       std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback);
   void listarRegioes(std::function<void(std::variant<IBGERegioesResponse, ErrorResponse>)> callback);
   void getEstado(const std::string &uf, std::function<void(std::variant<Estado, ErrorResponse>)> callback);
+  void getLivrosBrasil(const std::string &isbn, const std::optional<std::vector<Provider>> &providers,
+      std::function<void(std::variant<BookInfo, ErrorResponse>)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -113,6 +118,8 @@ class BrasilAPIClient {
   std::future<std::string> listarMunicipiosAsync(std::string siglaUf, std::optional<std::string> providers);
   std::future<std::string> listarRegioesAsync();
   std::future<std::string> getEstadoAsync(std::string uf);
+  std::future<std::string> getLivrosBrasilAsync(std::string isbn);
+  std::future<std::string> getLivrosBrasilAsync(std::string isbn, std::optional<std::vector<Provider>> providers);
 
   // ...
 };

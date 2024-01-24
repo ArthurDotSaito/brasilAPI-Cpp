@@ -14,23 +14,6 @@ class Dimension {
   std::string unit;
 };
 
-enum class Provider { CBL, MercadoEditorial, OpenLibrary, GoogleBooks };
-
-std::string providerToString(Provider provider) {
-  switch (provider) {
-  case Provider::CBL:
-    return "cbl";
-  case Provider::MercadoEditorial:
-    return "mercado-editorial";
-  case Provider::OpenLibrary:
-    return "open-library";
-  case Provider::GoogleBooks:
-    return "google-books";
-  default:
-    return "";
-  }
-}
-
 class BookInfo : public BaseResponse, public JsonSerialize {
   private:
   std::string isbn;

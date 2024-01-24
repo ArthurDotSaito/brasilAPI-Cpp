@@ -119,6 +119,11 @@ void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(std::v
   ibgeHandler.getEstado(uf, callback);
 }
 
+void BrasilAPIClient::getLivrosBrasil(const std::string &isbn, const std::optional<std::vector<Provider>> &providers,
+    std::function<void(std::variant<BookInfo, ErrorResponse>)> callback) {
+  isbnHandler.getLivrosBrasil(isbn, providers, callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -786,3 +791,48 @@ std::future<std::string> BrasilAPIClient::getEstadoAsync(std::string uf) {
   });
   return future;
 };
+
+/**
+ * @brief Informações sobre o livro a partir do ISBN
+ * Retorna um objeto JSON com informações sobre o livro.
+ * @param isbn Códigoinformado pode conter traços (-) e ambos os formatos são aceitos, sendo eles o obsoleto de 10 dígitos e o
+ * atual de 13 dígitos.
+ * @param providers cbl" "mercado-editorial" "open-library" "google-books".
+ * Lista de provedores separados por vírgula. Se não especificado,
+ * será realizado uma busca em todos os provedores e o que retornar
+ * as informações mais rapidamente será o escolhido.
+ */
+std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn) {
+  return getLivrosBrasilAsync(isbn, std::nullopt);
+}
+
+/**
+ * @brief Informações sobre o livro a partir do ISBN
+ * Retorna um objeto JSON com informações sobre o livro.
+ * @param isbn Códigoinformado pode conter traços (-) e ambos os formatos são aceitos, sendo eles o obsoleto de 10 dígitos e o
+ * atual de 13 dígitos.
+ * @param providers cbl" "mercado-editorial" "open-library" "google-books".
+ * Lista de provedores separados por vírgula. Se não especificado,
+ * será realizado uma busca em todos os provedores e o que retornar
+ * as informações mais rapidamente será o escolhido.
+ */
+std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn, std::optional<std::vector<Provider>> providers) {
+
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+
+  isbnHandler.getLivrosBrasil(isbn, providers, [promisePtr](std::variant<BookInfo, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<BookInfo>(result)) {
+        BookInfo bookInfo = std::get<BookInfo>(result);
+        promisePtr->set_value(bookInfo.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
+  return future;
+}
