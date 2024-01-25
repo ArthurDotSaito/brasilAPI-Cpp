@@ -1,8 +1,8 @@
 #include "ISBNHandler.h"
 #include <Utils/BrasilAPIException.h>
-#include <Utils/ProviderToString.h>
+#include <Utils/ValidateProviders.h>
 
-void ISBNHandler::getLivrosBrasil(const std::string &isbn, const std::optional<std::vector<Provider>> &providers,
+void ISBNHandler::getLivrosBrasil(const std::string &isbn, std::initializer_list<std::string> providers,
     std::function<void(std::variant<BookInfo, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
@@ -10,13 +10,16 @@ void ISBNHandler::getLivrosBrasil(const std::string &isbn, const std::optional<s
   std::stringstream queryStream;
   pathStream << "/api/isbn/v1/" + isbn;
 
-  if (providers.has_value() && !providers->empty()) {
+  if (!providers.size() == 0) {
+    if (!validateISBNProviders(providers)) {
+      throw BrasilAPIException("Provedor inválido fornecido", 404, pathStream.str());
+    }
     queryStream << "?providers=";
-    for (size_t i = 0; i < providers->size(); ++i) {
-      if (i > 0) {
+    for (const auto &provider : providers) {
+      if (&provider != &*providers.begin()) {
         queryStream << ",";
       }
-      queryStream << providerToString((*providers)[i]);
+      queryStream << provider;
     }
   }
 

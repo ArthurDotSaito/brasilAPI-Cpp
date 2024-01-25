@@ -86,7 +86,7 @@ class BrasilAPIClient {
       std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback);
   void listarRegioes(std::function<void(std::variant<IBGERegioesResponse, ErrorResponse>)> callback);
   void getEstado(const std::string &uf, std::function<void(std::variant<Estado, ErrorResponse>)> callback);
-  void getLivrosBrasil(const std::string &isbn, const std::optional<std::vector<Provider>> &providers,
+  void getLivrosBrasil(const std::string &isbn, std::initializer_list<std::string> providers,
       std::function<void(std::variant<BookInfo, ErrorResponse>)> callback);
 
   // Funções que retornam std::future<std::string>
@@ -119,7 +119,7 @@ class BrasilAPIClient {
   std::future<std::string> listarRegioesAsync();
   std::future<std::string> getEstadoAsync(std::string uf);
   std::future<std::string> getLivrosBrasilAsync(std::string isbn);
-  std::future<std::string> getLivrosBrasilAsync(std::string isbn, std::optional<std::vector<Provider>> providers);
+  std::future<std::string> getLivrosBrasilAsync(std::string isbn, std::initializer_list<std::string> providers);
 
   // ...
 };

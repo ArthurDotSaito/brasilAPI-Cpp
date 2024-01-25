@@ -121,5 +121,9 @@ int main() {
   auto isbnData = isbn.get();
   std::cout << "ISBN Data: " << isbnData << std::endl;
 
+  auto isbn1 = brasilAPI.getLivrosBrasilAsync("9788545702870", {"cbl"});
+  auto isbnData1 = isbn1.get();
+  std::cout << "ISBN Data: " << isbnData1 << std::endl;
+
   return 0;
 }

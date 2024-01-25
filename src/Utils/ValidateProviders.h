@@ -11,6 +11,11 @@ bool isValidProvider(const std::string &provider) {
   return validProviders.find(provider) != validProviders.end();
 }
 
+bool isValidISBNProvider(const std::string &provider) {
+  static const std::set<std::string> validProviders = {"cbl", "mercado-editorial", "open-library", "google-books"};
+  return validProviders.find(provider) != validProviders.end();
+}
+
 bool validateProviders(const std::optional<std::string> &providers) {
   if (!providers)
     return true;
@@ -23,6 +28,20 @@ bool validateProviders(const std::optional<std::string> &providers) {
     }
   }
   return true;
+}
+
+bool validateISBNProviders(const std::optional<std::vector<std::string>> &providers) {
+  if (!providers) {
+    return true;
+
+    for (const auto &provider : *providers) {
+      if (!isValidISBNProvider(provider)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
 
 #endif // PROVIDER_VALIDATION_H

@@ -119,7 +119,7 @@ void BrasilAPIClient::getEstado(const std::string &uf, std::function<void(std::v
   ibgeHandler.getEstado(uf, callback);
 }
 
-void BrasilAPIClient::getLivrosBrasil(const std::string &isbn, const std::optional<std::vector<Provider>> &providers,
+void BrasilAPIClient::getLivrosBrasil(const std::string &isbn, std::initializer_list<std::string> providers,
     std::function<void(std::variant<BookInfo, ErrorResponse>)> callback) {
   isbnHandler.getLivrosBrasil(isbn, providers, callback);
 }
@@ -803,7 +803,7 @@ std::future<std::string> BrasilAPIClient::getEstadoAsync(std::string uf) {
  * as informações mais rapidamente será o escolhido.
  */
 std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn) {
-  return getLivrosBrasilAsync(isbn, std::nullopt);
+  return getLivrosBrasilAsync(isbn, {});
 }
 
 /**
@@ -816,7 +816,7 @@ std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn)
  * será realizado uma busca em todos os provedores e o que retornar
  * as informações mais rapidamente será o escolhido.
  */
-std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn, std::optional<std::vector<Provider>> providers) {
+std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn, std::initializer_list<std::string> providers) {
 
   auto promisePtr = std::make_shared<std::promise<std::string>>();
   auto future = promisePtr->get_future();
