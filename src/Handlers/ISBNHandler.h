@@ -1,5 +1,4 @@
 #include "BrasilAPIHandlerBase.h"
-#include "Response/ISBNProviders.h"
 #include "Response/ISBNResponse.h"
 #include <string>
 

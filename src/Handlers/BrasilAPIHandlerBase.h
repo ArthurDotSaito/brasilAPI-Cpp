@@ -2,6 +2,7 @@
 #define BRASIL_API_HANDLER_BASE_H
 
 #include "Response/ErrorResponse.h"
+#include <Utils/ValidateProviders.h>
 #include <drogon/HttpClient.h>
 #include <variant>
 

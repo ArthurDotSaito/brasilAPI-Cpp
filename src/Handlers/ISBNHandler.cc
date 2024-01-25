@@ -1,6 +1,5 @@
 #include "ISBNHandler.h"
 #include <Utils/BrasilAPIException.h>
-#include <Utils/ValidateProviders.h>
 
 void ISBNHandler::getLivrosBrasil(const std::string &isbn, std::initializer_list<std::string> providers,
     std::function<void(std::variant<BookInfo, ErrorResponse>)> callback) {

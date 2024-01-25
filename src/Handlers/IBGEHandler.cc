@@ -1,6 +1,5 @@
 #include "IBGEHandler.h"
 #include <Utils/BrasilAPIException.h>
-#include <Utils/ValidateProviders.h>
 
 void IBGEHandler::listarMunicipios(const std::string &siglaUf, const std::optional<std::string> &providers,
     std::function<void(std::variant<IBGEMunicipiosResponse, ErrorResponse>)> callback) {
