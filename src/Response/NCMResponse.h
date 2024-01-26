@@ -7,13 +7,6 @@
 #include <string>
 #include <vector>
 
-class Dimension {
-  public:
-  double width;
-  double height;
-  std::string unit;
-};
-
 class NCM : public BaseResponse, public JsonSerialize {
   private:
   std::string codigo;
