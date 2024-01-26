@@ -115,7 +115,6 @@ int main() {
   auto ibge3 = brasilAPI.getEstadoAsync("SC");
   auto ibgeData3 = ibge3.get();
   std::cout << "IBGE Data: " << ibgeData3 << std::endl;
-  */
 
   auto isbn = brasilAPI.getLivrosBrasilAsync("9788545702870");
   auto isbnData = isbn.get();
@@ -124,6 +123,6 @@ int main() {
   auto isbn1 = brasilAPI.getLivrosBrasilAsync("9788545702870", {"cbl"});
   auto isbnData1 = isbn1.get();
   std::cout << "ISBN Data: " << isbnData1 << std::endl;
-
+  */
   return 0;
 }
