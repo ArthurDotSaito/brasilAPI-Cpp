@@ -9,6 +9,7 @@
 #include "Handlers/FipeHandler.h"
 #include "Handlers/IBGEHandler.h"
 #include "Handlers/ISBNHandler.h"
+#include "Handlers/NCMHandler.h"
 
 // Response
 #include "Response/BankResponse.h"
@@ -21,6 +22,7 @@
 #include "Response/FipeResponse.h"
 #include "Response/IBGEResponse.h"
 #include "Response/ISBNResponse.h"
+#include "Response/NCMResponse.h"
 #include "Response/PrevisaoOceanica.h"
 
 #include <drogon/drogon.h>
@@ -37,6 +39,7 @@ class BrasilAPIClient {
   FipeHandler fipeHandler;
   IBGEHandler ibgeHandler;
   ISBNHandler isbnHandler;
+  NCMHandler ncmHandler;
 
   std::string userAgent;
   std::thread eventLoopThread;
@@ -88,6 +91,7 @@ class BrasilAPIClient {
   void getEstado(const std::string &uf, std::function<void(std::variant<Estado, ErrorResponse>)> callback);
   void getLivrosBrasil(const std::string &isbn, std::initializer_list<std::string> providers,
       std::function<void(std::variant<BookInfo, ErrorResponse>)> callback);
+  void listarTodosNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback);
 
   // Funções que retornam std::future<std::string>
   std::future<std::string> getAllBanksAsync();
@@ -120,6 +124,7 @@ class BrasilAPIClient {
   std::future<std::string> getEstadoAsync(std::string uf);
   std::future<std::string> getLivrosBrasilAsync(std::string isbn);
   std::future<std::string> getLivrosBrasilAsync(std::string isbn, std::initializer_list<std::string> providers);
+  std::future<std::string> listarTodosNCMAsync();
 
   // ...
 };

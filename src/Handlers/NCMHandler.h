@@ -4,5 +4,5 @@
 
 class NCMHandler : public BrasilAPIHandlerBase {
   public:
-  void listAllNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback);
+  void listarTodosNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback);
 };

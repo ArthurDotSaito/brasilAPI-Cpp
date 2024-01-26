@@ -1,7 +1,7 @@
 #include "NCMHandler.h"
 #include <Utils/BrasilAPIException.h>
 
-void NCMHandler::listAllNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback) {
+void NCMHandler::listarTodosNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback) {
   auto req = drogon::HttpRequest::newHttpRequest();
   req->setMethod(drogon::HttpMethod::Get);
   req->setPath("/api/ncm/v1");

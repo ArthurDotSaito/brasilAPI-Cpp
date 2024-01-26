@@ -124,6 +124,10 @@ void BrasilAPIClient::getLivrosBrasil(const std::string &isbn, std::initializer_
   isbnHandler.getLivrosBrasil(isbn, providers, callback);
 }
 
+void BrasilAPIClient::listarTodosNCM(std::function<void(std::variant<NCMResponse, ErrorResponse>)> callback) {
+  ncmHandler.listarTodosNCM(callback);
+}
+
 /**
  * @brief Retorna informações de todos os bancos do Brasil.
  * Retorna um array de objetos com informações de todos os bancos do Brasil.
@@ -826,6 +830,32 @@ std::future<std::string> BrasilAPIClient::getLivrosBrasilAsync(std::string isbn,
       if (std::holds_alternative<BookInfo>(result)) {
         BookInfo bookInfo = std::get<BookInfo>(result);
         promisePtr->set_value(bookInfo.serialize());
+      } else {
+        ErrorResponse error = std::get<ErrorResponse>(result);
+        promisePtr->set_value("Error: " + error.errorMessage);
+      }
+    } catch (const std::exception &e) {
+      promisePtr->set_value("Exception: " + std::string(e.what()));
+    }
+  });
+  return future;
+}
+
+/**
+ * @brief Retorna informações de todos os NCMs
+ * Retorna um array de objetos JSON com informações gerais NCM.
+ */
+
+std::future<std::string> BrasilAPIClient::listarTodosNCMAsync() {
+
+  auto promisePtr = std::make_shared<std::promise<std::string>>();
+  auto future = promisePtr->get_future();
+
+  ncmHandler.listarTodosNCM([promisePtr](std::variant<NCMResponse, ErrorResponse> result) {
+    try {
+      if (std::holds_alternative<NCMResponse>(result)) {
+        NCMResponse ncm = std::get<NCMResponse>(result);
+        promisePtr->set_value(ncm.serialize());
       } else {
         ErrorResponse error = std::get<ErrorResponse>(result);
         promisePtr->set_value("Error: " + error.errorMessage);

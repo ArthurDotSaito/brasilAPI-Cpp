@@ -124,5 +124,10 @@ int main() {
   auto isbnData1 = isbn1.get();
   std::cout << "ISBN Data: " << isbnData1 << std::endl;
   */
+
+  auto ncm = brasilAPI.listarTodosNCMAsync();
+  auto ncmData = ncm.get();
+  std::cout << "NCM Data: " << ncmData << std::endl;
+
   return 0;
 }
