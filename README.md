@@ -8,5 +8,6 @@
 
 # Brasil API Cpp
 
-Este é um client, escrito em C++ fazendo uso do framework Drogon para lidar com chamadas assíncronas.
-Disponibilização de pacote conan e vcpkg em breve
+Este é um client, escrito em C++, referente ao [projeto original brasilApi](https://github.com/BrasilAPI/BrasilAPI). Utiliza o [framework web Drogon](https://drogon.org/) para lidar com chamadas assíncronas.
+
+Disponibilização de pacote conan e vcpkg em breve.
