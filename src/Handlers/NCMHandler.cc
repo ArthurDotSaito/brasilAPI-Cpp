@@ -32,6 +32,9 @@ void NCMHandler::listarTodosNCM(std::function<void(std::variant<NCMResponse, Err
 
           ncmResponse.ncm.push_back(ncm);
         }
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
 
       callback(ncmResponse);
@@ -79,6 +82,9 @@ void NCMHandler::listarPorCodigoNCM(std::string code, std::function<void(std::va
 
           ncmResponse.ncm.push_back(ncm);
         }
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
 
       callback(ncmResponse);
@@ -119,7 +125,11 @@ void NCMHandler::getNCMInfo(std::string code, std::function<void(std::variant<NC
         ncm.setTipoAto(jsonResponse["tipo_ato"].asString());
         ncm.setNumeroAto(jsonResponse["numero_ato"].asString());
         ncm.setAnoAto(jsonResponse["ano_ato"].asString());
+      } else {
+        std::cerr << "Error during JSON parsing: " << responseBody << std::endl;
+        return;
       }
+
       callback(ncm);
     } catch (const BrasilAPIException &e) {
       ErrorResponse errorResponse;
