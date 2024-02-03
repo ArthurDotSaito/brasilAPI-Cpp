@@ -91,3 +91,42 @@ void NCMHandler::listarPorCodigoNCM(std::string code, std::function<void(std::va
     }
   });
 }
+
+void NCMHandler::getNCMInfo(std::string code, std::function<void(std::variant<NCM, ErrorResponse>)> callback) {
+  auto req = drogon::HttpRequest::newHttpRequest();
+  req->setMethod(drogon::HttpMethod::Get);
+  req->setPath("/api/ncm/v1/" + code);
+
+  std::string fullUrl = baseUrl + req->getPath();
+  std::cout << "Iniciando a solicitação para: " << fullUrl << std::endl;
+
+  httpClient->sendRequest(req, [this, callback, fullUrl](drogon::ReqResult result, const drogon::HttpResponsePtr &response) {
+    try {
+      ensureSuccess(response, fullUrl);
+      std::string responseBody = std::string(response->getBody());
+
+      NCM ncm;
+      ncm.calledURL = fullUrl;
+      ncm.jsonResponse = responseBody;
+
+      Json::Value jsonResponse;
+      Json::Reader reader;
+      if (reader.parse(responseBody, jsonResponse)) {
+        ncm.setCodigo(jsonResponse["codigo"].asString());
+        ncm.setDescricao(jsonResponse["descricao"].asString());
+        ncm.setDataInicio(jsonResponse["data_inicio"].asString());
+        ncm.setDataFim(jsonResponse["data_fim"].asString());
+        ncm.setTipoAto(jsonResponse["tipo_ato"].asString());
+        ncm.setNumeroAto(jsonResponse["numero_ato"].asString());
+        ncm.setAnoAto(jsonResponse["ano_ato"].asString());
+      }
+      callback(ncm);
+    } catch (const BrasilAPIException &e) {
+      ErrorResponse errorResponse;
+      errorResponse.errorCode = e.getStatusCode();
+      errorResponse.errorMessage = e.what();
+
+      callback(errorResponse);
+    }
+  });
+}
